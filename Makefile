@@ -10,7 +10,7 @@ PATH_LIBFT = 42_libft
 
 INCLUDES = -I/includes/minishell.h
 
-CFLAGS = -g #-Werror -Wall -Wextra #-fsanitize=address
+CFLAGS = -g -lreadline #-Werror -Wall -Wextra #-fsanitize=address
 
 GCC = gcc
 

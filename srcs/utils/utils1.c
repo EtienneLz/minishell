@@ -1,28 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/22 15:00:05 by elouchez         ###   ########.fr       */
+/*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
+/*   Updated: 2021/12/22 18:29:45 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_lstadd_back(t_token **alst, t_token *new)
 {
-	char	*buffer;
+	t_token *tmp;
 
-	buffer = readline("$> ");
-	while (buffer)
+	if (!(*alst))
+		*alst = new;
+	else
 	{
-		buffer = readline("$> ");
-		printf("cmd = %s", buffer);
+		tmp = *alst;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
 	}
-	free(buffer);
-	write(STDOUT, "So you have chosen death\n", 26);
-	return (0);
+}
+
+t_token	*ft_lstnew(void *content)
+{
+	t_token *dest;
+
+	dest = malloc(sizeof(t_token));
+	if (!dest)
+		return (NULL);
+	if (content == NULL)
+		dest->content = NULL;
+	else
+		dest->content = content;
+	dest->next = NULL;
+	return (dest);
 }
