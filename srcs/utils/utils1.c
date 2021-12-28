@@ -6,11 +6,11 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/22 18:29:45 by elouchez         ###   ########.fr       */
+/*   Updated: 2021/12/28 15:34:45 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	ft_lstadd_back(t_token **alst, t_token *new)
 {

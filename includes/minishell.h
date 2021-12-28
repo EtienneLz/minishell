@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/22 18:30:28 by elouchez         ###   ########.fr       */
+/*   Updated: 2021/12/28 15:16:34 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define STDOUT 1
 # define STDERR 2
 # define BUFFER_SIZE 2048
+# define COMMAND 'c'
+# define OPTION 'o'
 
 typedef struct	s_token
 {

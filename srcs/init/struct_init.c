@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   struct_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/28 16:26:48 by elouchez         ###   ########.fr       */
+/*   Created: 2021/12/28 15:17:12 by elouchez          #+#    #+#             */
+/*   Updated: 2021/12/28 15:37:06 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	init(t_data *data)
 {
-	t_data	*data;
-	char	*buffer;
-	getenv("PATH");
-
-	
-	buffer = "";
-	while (buffer)
-	{
-		buffer = readline("$> ");
-		printf("cmd = %s\n", buffer);
-	}
-	free(buffer);
-	write(STDOUT, "So you have chosen death\n", 26);
-	return (0);
+	data->first = NULL;
 }
