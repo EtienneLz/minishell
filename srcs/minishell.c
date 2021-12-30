@@ -6,26 +6,34 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/28 16:26:48 by elouchez         ###   ########.fr       */
+/*   Updated: 2021/12/30 18:59:59 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static void	reset_var(t_data *data)
+{
+	ft_lstfree(data);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	*data;
+	t_data	data;
 	char	*buffer;
-	getenv("PATH");
 
-	
 	buffer = "";
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	while (buffer)
 	{
 		buffer = readline("$> ");
 		printf("cmd = %s\n", buffer);
+		split_command(&data, buffer);
+		reset_var(&data);
 	}
-	free(buffer);
-	write(STDOUT, "So you have chosen death\n", 26);
+	//free(buffer);
+	write(STDOUT, "So you have chosen death\n", 25);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/28 15:16:34 by elouchez         ###   ########.fr       */
+/*   Updated: 2021/12/30 18:58:47 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,11 @@ typedef struct	s_data
 
 void	echo(char *s, int flag_n);
 void	pwd(void);
+
+
+t_token	*ft_lstnew(char *content);
+void	ft_lstadd_back(t_token **alst, t_token *new);
+void	split_command(t_data *data, char *command);
+void	ft_lstfree(t_data *data);
 
 #endif
