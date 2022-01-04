@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/04 18:39:52 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/04 19:41:55 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static int len_next(char *command, int i)
 			len = get_quoted(command, i - len, command[i]);
 			return (len);
 		}
+		if (command[i] == '<' || command[i] == '>' || command[i] == '|')
+			return (len - 1);
 		len++;
 		i++;
 	}
@@ -106,7 +108,7 @@ void	split_command(t_data *data, char *command)
 		elem = malloc(sizeof(char) * (len + 1));
 		if (!elem)
 			exit(1);
-		while (j <= len)
+		while (j < len)
 		{
 			elem[j] = command[i];
 			i++;
