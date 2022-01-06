@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/06 18:49:18 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:42:28 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	reset_var(t_data *data)
 
 static void	mini_routine(t_data *data)
 {
-	//to be continued...
+	//to be continued....
 }
 
 int	main(int argc, char **argv, char **envp)
