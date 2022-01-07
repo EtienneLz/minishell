@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/06 15:48:02 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:56:55 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,17 @@ typedef struct	s_token
 	struct s_token	*next;
 } 				t_token;
 
+typedef struct	s_export
+{
+	char	**args;
+	int		check;
+	int		valid_args;
+}				t_export;
+
 typedef struct	s_data
 {
 	t_token		*first;
+	t_export	export;
 	char		**envp;
 }				t_data;
 /*
@@ -47,6 +55,8 @@ void	pwd(void);
 void	ft_exit(t_data *data);
 void	export_no_arg(t_data *data);
 void	export_args(t_data *data, char **args);
+void    main_check(t_data *data, char **args);
+void    check_export_args(t_data *data, char **args);
 
 
 t_token	*ft_lstnew(char *content);

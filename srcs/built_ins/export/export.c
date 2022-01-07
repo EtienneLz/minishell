@@ -6,21 +6,11 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:57 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/06 18:01:46 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:04:00 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-void	free_tab(char **str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-		free(str[i]);
-	free(str);
-}
+#include "../../../includes/minishell.h"
 
 char	**copy_env(char **str, char **dest, int *i)
 {
@@ -81,7 +71,6 @@ void	print_export(char **str)
 		printf("%s\n", str[i]);
 		i++;
 	}
-	//free_tab(str);
 }
 
 void	export_no_arg(t_data *data)
@@ -125,6 +114,5 @@ void	export_args(t_data *data, char **args)
 	tmp_env = copy_env(data->envp, tmp_env, &i);
 	tmp_env = copy_env(args, tmp_env, &i);
 	tmp_env[len] = NULL;
-	//free_tab(data->envp);
 	data->envp = tmp_env;
 }

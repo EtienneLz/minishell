@@ -3,7 +3,8 @@ NAME = minishell
 SRCS = srcs/minishell.c \
 		srcs/built_ins/env.c \
 		srcs/built_ins/exit.c \
-		srcs/built_ins/export.c \
+		srcs/built_ins/export/export.c \
+		srcs/built_ins/export/check_export_args.c \
 		srcs/utils/utils_1.c \
 		srcs/parsing/split_command.c \
 
@@ -17,7 +18,7 @@ INCLUDES = -I/includes/minishell.h
 
 CFLAGS = -g #-fsanitize=address #-Werror -Wall -Wextra 
 
-GCC = gcc 
+CC = gcc 
 
 LIB = 42_libft/libft.a -I./usr/include
 
@@ -27,7 +28,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${GCC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean

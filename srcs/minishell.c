@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/06 18:02:11 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:56:26 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,17 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*buffer;
-	char *args[4]; //= {salut=hi,bibou=me,bip=paf};
+	char	*arg[4];
 	//int i = 0;
 
 	data.envp = envp;
-	args[0] = "salut=hi";
-	args[1] = "zibou=me";
-	args[2] = "Bip=paf";
-	args[3] = NULL;
-	//while (args[i])
-	//	i++;
-	//printf("len args = %d\n", i);
-	export_args(&data, args);
+	init(&data);
+	arg[0] = "_sa;lut=hi";
+	arg[1] = "ziBou=m.e";
+	arg[2] = "Bi5p=paf";
+	arg[3] = NULL;
+	main_check(&data, arg);
+	export_args(&data, data.export.args);
 	export_no_arg(&data);
 	/*buffer = "";
 	(void)argc;
