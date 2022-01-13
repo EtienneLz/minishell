@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/05 18:45:58 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 03:17:40 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	is_redirection(char *str)
 	return (0);
 }
 
-static void	checker(t_data *data)
+static int	checker(t_data *data)
 {
 	t_token	*actual;
 	t_token	*next;
@@ -39,13 +39,14 @@ static void	checker(t_data *data)
 		if (actual->content == COMMAND && next->type == STRING)
 			if (next->content[0] == '-')
 				next->type == OPTION;
-		//else if (actual->type != STRING && actual->type == next->type)
-			
+		else if (actual->type != STRING && actual->type == next->type)
+			return (1);
 		actual = actual->next;
 	}
+	return (0);
 }
 
-void	tokenizer(t_data *data)
+int	tokenizer(t_data *data)
 {
 	t_token	*actual;
 	char	type;

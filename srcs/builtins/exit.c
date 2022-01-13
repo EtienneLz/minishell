@@ -6,8 +6,14 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:57:34 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/17 16:08:26 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 02:59:45 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	ft_exit(t_data *data)
+{
+	write(1, "exit\n", 5);
+	exit(0);
+}

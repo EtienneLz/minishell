@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/05 17:58:27 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 03:06:47 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct	s_token
 typedef struct	s_data
 {
 	t_token		*first;
+	int			error;
 }				t_data;
 /*
 ** Built-in functions 
@@ -50,12 +51,14 @@ typedef struct	s_data
 
 void	echo(char *s, int flag_n);
 void	pwd(void);
+void	ft_exit(t_data *data);
 
 
 t_token	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
-void	split_command(t_data *data, char *command);
+int		split_command(t_data *data, char *command);
 void	ft_lstfree(t_data *data);
 void	init(t_data *data);
+int		tokenizer(t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/05 18:00:59 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 03:06:35 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static	void	lst_show(t_data *data)
 	}
 }
 
-void	split_command(t_data *data, char *command)
+int	split_command(t_data *data, char *command)
 {
 	int		i;
 	int		j;
@@ -122,4 +122,5 @@ void	split_command(t_data *data, char *command)
 		}
 	}
 	lst_show(data);
+	return (0);
 }
