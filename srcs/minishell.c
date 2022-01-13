@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/04 17:56:47 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:36:39 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,32 @@
 static void	reset_var(t_data *data)
 {
 	ft_lstfree(data);
+	splitted_args_free(data->splitted_args);
+}
+
+static void	mini_routine(t_data *data, char *buffer)
+{
+	if (split_command(data, buffer))
+		return ;
+	if (tokenizer(data))
+		return ;
+	if (execution(data))
+		return ;
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*buffer;
 
-	buffer = "";
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	while (buffer)
+	init(&data);
+	while (data.buffer)
 	{
-		buffer = readline("$> ");
-		split_command(&data, buffer);
+		data.buffer = readline("$> ");
+		mini_routine(&data, data.buffer);
 		reset_var(&data);
 	}
-	//free(buffer);
-	write(STDOUT, "So you have chosen death\n", 25);
 	return (0);
 }

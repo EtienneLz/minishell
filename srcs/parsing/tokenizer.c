@@ -6,17 +6,74 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/04 19:43:01 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 06:48:10 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	tokenizer(t_data *data)
+static char	is_redirection(t_data *data, char *str)
+{
+	if (!ft_strcmp(str, "|"))
+	{
+		data->nb_pipe++;
+		return (PIPE);
+	}
+	else if (!ft_strcmp(str, "<"))
+		return (L_ARROW);
+	else if (!ft_strcmp(str, ">"))
+		return (R_ARROW);
+	else if (!ft_strcmp(str, "<<"))
+		return (LL_ARROW);
+	else if (!ft_strcmp(str, ">>"))
+		return (RR_ARROW);
+	return (0);
+}
+
+static int	checker(t_data *data)
 {
 	t_token	*actual;
+	t_token	*next;
+
+	actual = data->first;
+	next = actual->next;
+	while (actual && actual->next)
+	{
+		if (actual->type == COMMAND && next->type == STRING)
+			if (next->content[0] == '-')
+				next->type = OPTION;
+		if (actual->type != STRING && actual->type == next->type)
+			return (1);
+		actual = actual->next;
+	}
+	return (0);
+}
+
+int	tokenizer(t_data *data)
+{
+	t_token	*actual;
+	char	type;
 
 	actual = data->first;
 	actual->type = COMMAND;
-	actual = actual->next;
+	while (actual->next)
+	{
+		actual = actual->next;
+		type = is_redirection(data, actual->content);
+		if (type)
+		{
+			actual->type = type;
+			if (actual->next)
+			{
+				if (actual->type == PIPE && is_redirection(data, actual->next->content) == 0)
+					actual->next->type = COMMAND;
+				if (actual->type != PIPE && is_redirection(data, actual->next->content) == 0)
+					actual->next->type = FILE;
+				actual = actual->next;
+			}
+		}
+		else
+			actual->type = STRING;
+	}
+	return (checker(data));
 }

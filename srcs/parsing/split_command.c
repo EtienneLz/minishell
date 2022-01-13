@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/04 19:41:55 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:23:22 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static int	get_quoted(char *command, int i, char quote)
 	i++;
 	while (command[i])
 	{
-		if (command[i] == quote && command[i + 1] == ' ')
+		if (command[i] == quote && (command[i + 1] == ' ' || command[i + 1] == '|' || command[i + 1] == '<' || command[i + 1] == '>'))
 			break ;
 		len++;
 		i++;
 	}
-	return (len);
+	return (len + 1);
 }
 
 static int	skip_spaces(char *command, int i)
@@ -48,7 +48,7 @@ static int len_next(char *command, int i)
 			return (len);
 		}
 		if (command[i] == '<' || command[i] == '>' || command[i] == '|')
-			return (len - 1);
+			return (len);
 		len++;
 		i++;
 	}
@@ -78,19 +78,7 @@ static int	check_char(char *command, int i)
 	return (len);
 }
 
-static	void	lst_show(t_data *data)
-{
-	t_token *actual;
-
-	actual = data->first;
-	while (actual)
-	{
-		printf("%s\n", actual->content);
-		actual = actual->next;
-	}
-}
-
-void	split_command(t_data *data, char *command)
+int	split_command(t_data *data, char *command)
 {
 	int		i;
 	int		j;
@@ -114,12 +102,13 @@ void	split_command(t_data *data, char *command)
 			i++;
 			j++;
 		}
-		//if (len != 0)
-		//{
+		if (len != 0)
+		{
 			elem[j] = '\0';
 			new_token = ft_lstnew(elem);
 			ft_lstadd_back(&data->first, new_token);
-		//}
+		}
 	}
-	lst_show(data);
+	//lst_show(data);
+	return (0);
 }
