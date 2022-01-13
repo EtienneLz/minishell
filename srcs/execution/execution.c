@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 03:18:52 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 10:05:01 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:47:24 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ static char	*get_bin_path(char *command)
 		path = NULL;
 		while (path_split[i])
 		{
-			bin = (char *)ft_calloc(sizeof(char), (ft_strlen(path_split[i]) + ft_strlen(command) + 2));
+			bin = (char *)ft_calloc(sizeof(char), (ft_strlen(path_split[i]) + ft_strlen(command) + 1));
 			if (bin == NULL)
 				break ;
-			ft_strlcat(bin, path_split[i], ft_strlen(bin) + ft_strlen(path_split[i]) + 2);
+			ft_strlcat(bin, path_split[i], ft_strlen(bin) + ft_strlen(path_split[i]) + 1);
 			ft_strlcat(bin, "/", ft_strlen(bin) + 2);
-			ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 2);
+			ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 1);
 			if (access(bin, F_OK) == 0)
 				break ;
 			free(bin);
@@ -105,7 +105,7 @@ static void	execution_ve(t_data *data, char *bin)
 	{
 		if (execve(bin, data->splitted_args[0], NULL) == -1)
 			perror("shell");
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 }
 

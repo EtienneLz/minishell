@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 06:50:54 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:23:22 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,18 +76,6 @@ static int	check_char(char *command, int i)
 	else
 		len = len_next(command, i);
 	return (len);
-}
-
-static	void	lst_show(t_data *data)
-{
-	t_token *actual;
-
-	actual = data->first;
-	while (actual)
-	{
-		printf("%s\n", actual->content);
-		actual = actual->next;
-	}
 }
 
 int	split_command(t_data *data, char *command)

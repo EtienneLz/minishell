@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 10:06:41 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:36:39 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	mini_routine(t_data *data, char *buffer)
 		return ;
 	if (execution(data))
 		return ;
-	reset_var(data);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -41,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
+		reset_var(&data);
 	}
 	return (0);
 }
