@@ -6,6 +6,7 @@ SRCS = srcs/minishell.c \
 		srcs/init/struct_init.c \
 		srcs/builtins/exit.c \
 		srcs/parsing/tokenizer.c \
+		srcs/execution/execution.c \
 
 OBJS = ${SRCS:.c=.o}
 

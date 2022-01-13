@@ -6,24 +6,27 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 03:17:40 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 06:48:10 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	is_redirection(char *str)
+static char	is_redirection(t_data *data, char *str)
 {
 	if (!ft_strcmp(str, "|"))
-			return (PIPE);
-		else if (!ft_strcmp(str, "<"))
-			return (L_ARROW);
-		else if (!ft_strcmp(str, ">"))
-			return (R_ARROW);
-		else if (!ft_strcmp(str, "<<"))
-			return (LL_ARROW);
-		else if (!ft_strcmp(str, ">>"))
-			return (RR_ARROW);
+	{
+		data->nb_pipe++;
+		return (PIPE);
+	}
+	else if (!ft_strcmp(str, "<"))
+		return (L_ARROW);
+	else if (!ft_strcmp(str, ">"))
+		return (R_ARROW);
+	else if (!ft_strcmp(str, "<<"))
+		return (LL_ARROW);
+	else if (!ft_strcmp(str, ">>"))
+		return (RR_ARROW);
 	return (0);
 }
 
@@ -34,12 +37,12 @@ static int	checker(t_data *data)
 
 	actual = data->first;
 	next = actual->next;
-	while (actual)
+	while (actual && actual->next)
 	{
-		if (actual->content == COMMAND && next->type == STRING)
+		if (actual->type == COMMAND && next->type == STRING)
 			if (next->content[0] == '-')
-				next->type == OPTION;
-		else if (actual->type != STRING && actual->type == next->type)
+				next->type = OPTION;
+		if (actual->type != STRING && actual->type == next->type)
 			return (1);
 		actual = actual->next;
 	}
@@ -56,15 +59,15 @@ int	tokenizer(t_data *data)
 	while (actual->next)
 	{
 		actual = actual->next;
-		type = is_redirection(actual->content);
+		type = is_redirection(data, actual->content);
 		if (type)
 		{
 			actual->type = type;
 			if (actual->next)
 			{
-				if (actual->type == PIPE && is_redirection(actual->next->content) == 0)
+				if (actual->type == PIPE && is_redirection(data, actual->next->content) == 0)
 					actual->next->type = COMMAND;
-				if (actual->type != PIPE && is_redirection(actual->next->content) == 0)
+				if (actual->type != PIPE && is_redirection(data, actual->next->content) == 0)
 					actual->next->type = FILE;
 				actual = actual->next;
 			}
@@ -72,4 +75,5 @@ int	tokenizer(t_data *data)
 		else
 			actual->type = STRING;
 	}
+	return (checker(data));
 }

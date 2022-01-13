@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/30 19:03:46 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 06:55:24 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,54 @@ void	ft_lstfree(t_data *data)
 	}
 	free(actual);
 	data->first = NULL;
+}
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+char	***split_arg(t_data *data)
+{
+	int		size;
+	int		i;
+	int		j;
+	t_token	*actual;
+	char 	***ret;
+
+	ret = malloc(sizeof(char**) * (data->nb_pipe + 2));
+	if (!ret)
+		return (NULL);
+	actual = data->first;
+	i = 0;
+	while (i <= data->nb_pipe)
+	{
+		size = 0;
+		j = 0;
+		while (actual && actual->type != PIPE)
+		{
+			size++;
+			actual = actual->next;	
+		}
+		actual = data->first->next;
+		while (actual && actual->type != PIPE)
+		{
+			ret[i] = malloc(sizeof(char*) * (size + 1));
+			ret[i][j] = actual->content;
+			actual = actual->next;
+			j++;
+		}
+		ret[i][j] = NULL;
+		i++;
+	}
+	ret[i] = NULL;
+	return (ret);
 }

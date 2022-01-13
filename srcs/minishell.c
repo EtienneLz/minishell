@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 03:07:36 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 06:47:41 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	mini_routine(t_data *data, char *buffer)
 		return ;
 	if (tokenizer(data))
 		return ;
+	if (execution(data))
+		return ;
 	reset_var(data);
 }
 
@@ -31,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 	char	*buffer;
 
+	buffer = "";
 	(void)argc;
 	(void)argv;
 	(void)envp;
