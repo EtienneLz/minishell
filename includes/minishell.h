@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 06:46:13 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:05:51 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_data
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
+	char		*buffer;
 }				t_data;
 /*
 ** Built-ins functions 
@@ -72,6 +73,8 @@ int		split_command(t_data *data, char *command);
 void	init(t_data *data);
 int		tokenizer(t_data *data);
 int		execution(t_data *data);
+void	minifree(t_data *data);
+void	splitted_args_free(char ***tab);
 
 
 #endif

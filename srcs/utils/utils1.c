@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 06:55:24 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:08:07 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ char	***split_arg(t_data *data)
 			size++;
 			actual = actual->next;	
 		}
-		actual = data->first->next;
+		actual = data->first;
+		ret[i] = malloc(sizeof(char*) * (size + 1));
 		while (actual && actual->type != PIPE)
 		{
-			ret[i] = malloc(sizeof(char*) * (size + 1));
 			ret[i][j] = actual->content;
 			actual = actual->next;
 			j++;
@@ -106,5 +106,17 @@ char	***split_arg(t_data *data)
 		i++;
 	}
 	ret[i] = NULL;
+	/*i = 0;
+	while(ret[i])
+	{
+		j = 0;
+		while (ret[i][j])
+		{
+			printf("-%s\n", ret[i][j]);
+			j++;
+		}
+		i++;
+	}*/
+
 	return (ret);
 }

@@ -1,19 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 12:57:34 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 10:08:47 by elouchez         ###   ########.fr       */
+/*   Created: 2022/01/13 07:35:49 by elouchez          #+#    #+#             */
+/*   Updated: 2022/01/13 10:07:20 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_exit(t_data *data)
+void	splitted_args_free(char ***tab)
 {
-	printf("Merci d'avoir utilise Minishell α1.1.0\n");
-	exit(0);
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	free(tab);
+}
+
+void	minifree(t_data *data)
+{
+	ft_lstfree(data);
+	splitted_args_free(data->splitted_args);
+	free(data->buffer);
 }
