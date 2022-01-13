@@ -22,13 +22,15 @@ void    check_export_args(t_data *data, char **args)
     int j;
     int k;
 
-    i = 0;
+    i = 1;
     k = 0;
     while (args[i])
     {
         j = 0;
-        while (args[i] && !(ft_isalpha(args[i][j])) && args[i][j] != '_')
+        while ((args[i] && !(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '='))
             i++; //ajouter message d'erreur
+		while (cmp_arg(data, args[i]) == 1)
+			i++;
         while (args[i] && args[i][j] && args[i][j] != '=' && (ft_isalnum(args[i][j]) || args[i][j] == '_'))
             j++;
         if (args[i] && args[i][j] && args[i][j] != '=')
@@ -56,4 +58,5 @@ void    main_check(t_data *data, char **args)
         //message erreur + sortie
     check_export_args(data, args);
     data->export.check = 0;
+	//printf("equal = %d\n", data->export.equal);
 }
