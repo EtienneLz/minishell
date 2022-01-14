@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 10:05:51 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 11:49:04 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <linux/limits.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -43,9 +43,20 @@ typedef struct	s_token
 	struct s_token	*next;
 } 				t_token;
 
+typedef struct	s_export
+{
+	char	**args;
+	int		check;
+	int		valid_args;
+	int		equal;
+}				t_export;
+
 typedef struct	s_data
 {
 	t_token		*first;
+	t_export	export;
+	char		**envp;
+	int			envp_i;
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
@@ -54,10 +65,17 @@ typedef struct	s_data
 /*
 ** Built-ins functions 
 */
-
+void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
+void	export_no_arg(t_data *data);
+void	export_args(t_data *data, char **args);
+void    main_check(t_data *data, char **args);
+void    check_export_args(t_data *data, char **args);
+void 	copy_equal(t_data *data);
+char	**copy_args(t_data *data, char **str, char **dest, int *i);
+int		cmp_arg(t_data *data, char *str);
 
 /*
 ** utils functions
@@ -69,12 +87,12 @@ void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
 
-int		split_command(t_data *data, char *command);
 void	init(t_data *data);
 int		tokenizer(t_data *data);
 int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
+int		split_command(t_data *data, char *command);
 
 
 #endif

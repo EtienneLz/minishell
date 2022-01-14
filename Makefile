@@ -1,11 +1,15 @@
 NAME = minishell
 
 SRCS = srcs/minishell.c \
-		srcs/utils/utils1.c \
-		srcs/parsing/split_command.c \
+		srcs/built_ins/env.c \
+		srcs/built_ins/exit.c \
+		srcs/built_ins/export/export.c \
+		srcs/built_ins/export/check_export_args.c \
+		srcs/built_ins/export/if_double.c \
 		srcs/alloc/struct_init.c \
+		srcs/utils/utils_1.c \
+		srcs/parsing/split_command.c \
 		srcs/alloc/exit_free.c \
-		srcs/builtins/exit.c \
 		srcs/parsing/tokenizer.c \
 		srcs/execution/execution.c \
 
