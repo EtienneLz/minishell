@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:50:39 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 13:18:04 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_lstfree(t_data *data)
 	t_token	*tmp;
 
 	actual = data->first;
-	while (actual->next != NULL)
+	while (actual->next)
 	{
 		tmp = actual->next;
 		free(actual);

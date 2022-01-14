@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:32:52 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 17:23:40 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ static int len_next(char *command, int i)
 	return (len);
 }
 
-static int	check_char(char *command, int i)
+static int	check_char(t_data *data, char *command, int i)
 {
 	int	len;
 
 	if (command[i] == '\"' || command[i] == '\'')
+	{
+		data->quote_type = command[i];
 		len = get_quoted(command, i, command[i]);
+	}
 	else if (command[i] == '|')
 		len = 1;
 	else if (command[i] == '>' && command[i + 1] != '>')
@@ -92,23 +95,32 @@ int	split_command(t_data *data, char *command)
 		j = 0;
 		elem = NULL;
 		i = skip_spaces(command, i);
-		len = check_char(command, i);
+		len = check_char(data, command, i);
 		elem = malloc(sizeof(char) * (len + 1));
 		if (!elem)
 			exit(1);
-		while (j < len)
+		while (j < len && command[i])
 		{
 			elem[j] = command[i];
 			i++;
 			j++;
 		}
+		elem[j] = '\0';
 		if (len != 0)
 		{
-			elem[j] = '\0';
 			new_token = ft_lstnew(elem);
+			if (data->quote_type == '\'')
+				new_token->type = STRING_SIMPLE;
+			data->quote_type = '\0';
 			ft_lstadd_back(&data->first, new_token);
 		}
 	}
-	//lst_show(data);
+	t_token *actual;
+	/*actual = data->first;
+	while(actual)
+	{
+		printf("%s\n", actual->content);
+		actual = actual->next;
+	}*/
 	return (0);
 }

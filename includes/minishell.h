@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:49:04 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 17:36:40 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <errno.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -27,6 +28,7 @@
 # define STDERR 2
 # define BUFFER_SIZE 2048
 # define STRING 's'
+# define STRING_SIMPLE 'q'
 # define COMMAND 'c'
 # define OPTION 'o'
 # define FILE 'f'
@@ -61,6 +63,7 @@ typedef struct	s_data
 	int			error;
 	int			nb_pipe;
 	char		*buffer;
+	char		quote_type;
 }				t_data;
 /*
 ** Built-ins functions 

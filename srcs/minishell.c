@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:51:50 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:26:15 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	reset_var(t_data *data)
 {
 	ft_lstfree(data);
-	splitted_args_free(data->splitted_args);
+	//splitted_args_free(data->splitted_args);
 }
 
 static void	mini_routine(t_data *data, char *buffer)

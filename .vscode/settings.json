@@ -4,3 +4,8 @@
 		"readline.h": "c"
 	}
 }
+{
+	"vscode_custom_css.imports": [
+	  "/mnt/nfs/homes/elouchez/.vscode/extensions/webrender.synthwave-x-fluoromachine-0.0.12/synthwave-x-fluoromachine.css"
+	  ]
+}

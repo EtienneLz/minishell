@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 07:35:49 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 10:07:20 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 15:00:06 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	splitted_args_free(char ***tab)
 	while (tab[i])
 	{
 		free(tab[i]);
-		tab[i] = NULL;
 		i++;
 	}
 	free(tab);
