@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:57 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 20:05:12 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/14 16:53:10 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	print_export(t_data *data, char **str)
 		j = 0;
 		if (str[i][0] == '_' && str[i][1] == '=')
 			i++;
+		if (!str[i])
+			break ;
 		write(1, "export ", 7);
 		while (str[i][j] && str[i][j] != '=')
 			ft_putchar_fd(str[i][j++], 1);
@@ -117,6 +119,7 @@ void	export_args(t_data *data, char **args)
 	char	**tmp_env;
 
 	main_check(data, args);
+	free_tab(args);
 	len = 0;
 	while (data->envp[len])
 		len++;
