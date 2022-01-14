@@ -5,6 +5,8 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/exit.c \
 		srcs/built_ins/export/export.c \
 		srcs/built_ins/export/check_export_args.c \
+		srcs/built_ins/export/if_double.c \
+		srcs/init/struct_init.c \
 		srcs/utils/utils_1.c \
 		srcs/parsing/split_command.c \
 

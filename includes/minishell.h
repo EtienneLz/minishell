@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/07 19:56:55 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/13 18:31:19 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct	s_export
 	char	**args;
 	int		check;
 	int		valid_args;
+	int		equal;
 }				t_export;
 
 typedef struct	s_data
@@ -45,10 +46,12 @@ typedef struct	s_data
 	t_token		*first;
 	t_export	export;
 	char		**envp;
+	int			envp_i;
 }				t_data;
 /*
 ** Built-in functions 
 */
+void	init(t_data *data);
 void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
@@ -57,6 +60,9 @@ void	export_no_arg(t_data *data);
 void	export_args(t_data *data, char **args);
 void    main_check(t_data *data, char **args);
 void    check_export_args(t_data *data, char **args);
+void 	copy_equal(t_data *data);
+char	**copy_args(t_data *data, char **str, char **dest, int *i)
+;int		cmp_arg(t_data *data, char *str);
 
 
 t_token	*ft_lstnew(char *content);
