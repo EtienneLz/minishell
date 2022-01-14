@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2021/12/22 18:30:28 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:56:55 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <linux/limits.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../42_libft/libft.h"
@@ -23,6 +23,8 @@
 # define STDOUT 1
 # define STDERR 2
 # define BUFFER_SIZE 2048
+# define COMMAND 'c'
+# define OPTION 'o'
 
 typedef struct	s_token
 {
@@ -31,15 +33,35 @@ typedef struct	s_token
 	struct s_token	*next;
 } 				t_token;
 
+typedef struct	s_export
+{
+	char	**args;
+	int		check;
+	int		valid_args;
+}				t_export;
+
 typedef struct	s_data
 {
 	t_token		*first;
+	t_export	export;
+	char		**envp;
 }				t_data;
 /*
 ** Built-in functions 
 */
-
+void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
+void	ft_exit(t_data *data);
+void	export_no_arg(t_data *data);
+void	export_args(t_data *data, char **args);
+void    main_check(t_data *data, char **args);
+void    check_export_args(t_data *data, char **args);
+
+
+t_token	*ft_lstnew(char *content);
+void	ft_lstadd_back(t_token **alst, t_token *new);
+void	split_command(t_data *data, char *command);
+void	ft_lstfree(t_data *data);
 
 #endif
