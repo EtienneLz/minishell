@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:51:50 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 17:09:54 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,21 @@ static void	mini_routine(t_data *data, char *buffer)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	//char	*arg[3];
+	char	*arg[6];
 
 	init(&data);
-	/*arg[0] = "export";
+	arg[0] = "export";
 	arg[1] = "ZSH=hello";
-	arg[2] = NULL;*/
+	arg[2] = "coucou=hi";
+	arg[3] = "SHLVL";
+	arg[4] = "SHLVL=bip";
+	arg[5] = NULL;
+	main_export(&data, arg);
+	export_no_arg(&data);
 	//main_check(&data, arg);
 	//export_args(&data, arg);
 	//export_no_arg(&data);
-	(void)argc;
+	/*(void)argc;
 	(void)argv;
 	(void)envp;
 	while (data.buffer)
@@ -48,6 +53,6 @@ int	main(int argc, char **argv, char **envp)
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
 		reset_var(&data);
-	}
+	}*/
 	return (0);
 }

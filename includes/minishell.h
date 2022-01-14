@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:49:04 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/14 17:07:47 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
+void	main_export(t_data *data, char **args);
 void	export_no_arg(t_data *data);
 void	export_args(t_data *data, char **args);
 void    main_check(t_data *data, char **args);
