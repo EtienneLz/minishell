@@ -55,10 +55,8 @@ int		cmp_arg(t_data *data, char *str)
 
 	i = 0;
 	j = 0;
-	//printf("%s\n", str);
 	while (data->envp[i])
 	{
-		//printf("i = %d\n", i);
 		if (if_equal(data->envp[i], str) == 1)
 		{
 			if (data->export.equal != 1)
@@ -68,13 +66,11 @@ int		cmp_arg(t_data *data, char *str)
 					if (str[j] == '=')
 					{
 						data->envp[i] = join_arg(data->envp[i], str);
-						//printf("%s\n", data->envp[i]);
 						break ;
 					}
 					j++;
 				}
 			}
-			//printf("i doublon = %d\n", i);
 			return (1);
 		}
 		i++;

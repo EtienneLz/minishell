@@ -21,7 +21,7 @@ PATH_LIBFT = 42_libft
 
 INCLUDES = -I/includes/minishell.h
 
-CFLAGS = -g #-fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -fsanitize=address #-Werror -Wall -Wextra
 
 CC = gcc 
 
