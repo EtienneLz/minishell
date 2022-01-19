@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mseligna <mseligna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 17:07:47 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:19:18 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <signal.h>
-# include <wait.h>
+//# include <wait.h>
 # include "../42_libft/libft.h"
 # define STDIN 0
 # define STDOUT 1
@@ -56,7 +56,6 @@ typedef struct	s_data
 	t_token		*first;
 	t_export	export;
 	char		**envp;
-	int			envp_i;
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
@@ -75,7 +74,6 @@ void	export_args(t_data *data, char **args);
 void    main_check(t_data *data, char **args);
 void    check_export_args(t_data *data, char **args);
 void 	copy_equal(t_data *data);
-char	**copy_args(t_data *data, char **str, char **dest, int *i);
 int		cmp_arg(t_data *data, char *str);
 
 /*
