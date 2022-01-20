@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/19 19:03:54 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:11:08 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ int	main(int argc, char **argv, char **envp)
 
 	init(&data);
 	data.envp = envp;
-	arg[0] = "export";
+	arg[0] = "unset";
 	arg[1] = "ZSH=hello";
-	arg[2] = "coucou=hi";
-	arg[3] = "9SHLVL";
-	arg[4] = "SHLVL=bip";
-	arg[5] = "bouh=sigh";
+	arg[2] = "co(uco";
+	arg[3] = "SHLVL";
+	arg[4] = "9SLVL";
+	arg[5] = "ZSH";
 	arg[6] = NULL;
-	main_export(&data, arg);
+	main_unset(&data, arg);
 	export_no_arg(&data);
 	//main_check(&data, arg);
 	//export_args(&data, arg);

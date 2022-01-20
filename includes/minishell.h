@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/19 15:19:18 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:46:34 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,19 @@ typedef struct	s_export
 	int		equal;
 }				t_export;
 
+typedef struct  s_unset
+{
+	int		is_unset;
+	int		check;
+	int		valid_args;
+	char	**args;
+}				t_unset;
+
 typedef struct	s_data
 {
 	t_token		*first;
 	t_export	export;
+	t_unset		unset;
 	char		**envp;
 	char		***splitted_args;
 	int			error;
@@ -68,18 +77,28 @@ void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
+int		if_equal(t_data *data,char *s1, char *s2);
+
+/*
+** Export functions
+*/
 void	main_export(t_data *data, char **args);
 void	export_no_arg(t_data *data);
 void	export_args(t_data *data, char **args);
-void    main_check(t_data *data, char **args);
+void    export_main_check(t_data *data, char **args);
 void    check_export_args(t_data *data, char **args);
 void 	copy_equal(t_data *data);
-int		cmp_arg(t_data *data, char *str);
+int		cmp_export_arg(t_data *data, char *str);
+
+/*
+** Unset functions
+*/
+void	main_unset(t_data *data, char **args);
+void	unset_main_check(t_data *data, char **args);
 
 /*
 ** utils functions
 */
-
 void	free_tab(char **tab);
 t_token	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);

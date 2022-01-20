@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:57 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/19 16:32:33 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:40:25 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	**copy_env(char **tab, char **dest, int *i)
 	return (dest);
 }
 
-char	**sort_env_atoz(char **str, int len)
+char	**sort_env_atoz(char **tab, int len)
 {
 	char	*tmp;
 	int		i;
@@ -45,17 +45,17 @@ char	**sort_env_atoz(char **str, int len)
 		j = i + 1;
 		while (j < len)
 		{
-			if (ft_strcmp(str[i], str[j]) > 0)
+			if (ft_strcmp(tab[i], tab[j]) > 0)
 			{
-				tmp = str[i];
-				str[i] = str[j];
-				str[j] = tmp;
+				tmp = tab[i];
+				tab[i] = tab[j];
+				tab[j] = tmp;
 			}
 			j++;
 		}
 		i++;
 	}
-	return (str);
+	return (tab);
 }
 
 void	print_export(t_data *data, char **tab)
@@ -114,7 +114,7 @@ void	export_args(t_data *data, char **args)
 	int	i;
 	char	**tmp_env;
 
-	main_check(data, args);
+	export_main_check(data, args);
 	len = 0;
 	while (data->envp[len])
 		len++;
@@ -140,3 +140,7 @@ void	main_export(t_data *data, char **args)
 	else
 		export_no_arg(data);
 }
+ /**
+  * si erreur de malloc (check erreur?)
+  * si tout bon ret export = 0 sinon ret = 1;
+  **/

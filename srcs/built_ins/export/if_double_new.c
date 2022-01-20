@@ -27,7 +27,7 @@ char	*join_arg(char *s1, char *s2)
 	return (dest);
 }
 
-int		if_equal(char *s1, char *s2)
+int		if_equal(t_data *data, char *s1, char *s2)
 {
 	int i;
 	int j;
@@ -36,8 +36,12 @@ int		if_equal(char *s1, char *s2)
 	j = 0;
 	while (s1[i] != '=')
 		i++;
-	while (s2[j] && s2[j] != '=')
-		j++;
+	if (data->unset.is_unset == 0)
+		while (s2[j] && s2[j] != '=')
+			j++;
+	else
+		while (s2[j])
+			j++;
 	if (i == j)
 	{
 		if (ft_strncmp(s1, s2, i) != 0)
@@ -48,7 +52,7 @@ int		if_equal(char *s1, char *s2)
 	return (0);
 }
 
-int		cmp_arg(t_data *data, char *str)
+int		cmp_export_arg(t_data *data, char *str)
 {
 	int i;
 	int j;
@@ -57,7 +61,7 @@ int		cmp_arg(t_data *data, char *str)
 	j = 0;
 	while (data->envp[i])
 	{
-		if (if_equal(data->envp[i], str) == 1)
+		if (if_equal(data, data->envp[i], str) == 1)
 		{
 			if (data->export.equal != 1)
 			{

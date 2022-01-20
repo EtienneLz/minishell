@@ -26,9 +26,9 @@ void    check_export_args(t_data *data, char **args)
     while (args[i])
     {
         j = 0;
-        while ((args[i] && !(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '='))
+        while (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
             i++; //ajouter message d'erreur
-		while (args[i] && cmp_arg(data, args[i]) == 1)
+		while (args[i] && cmp_export_arg(data, args[i]) == 1)
 			i++;
         while (args[i] && args[i][j] && args[i][j] != '=' && (ft_isalnum(args[i][j]) || args[i][j] == '_'))
             j++;
@@ -46,16 +46,19 @@ void    check_export_args(t_data *data, char **args)
     data->export.check = 1;
 }
 
-void    main_check(t_data *data, char **args)
+void    export_main_check(t_data *data, char **args)
 {
     int i = 1;
 	while (args[i])
-		cmp_arg(data, args[i++]);
+		cmp_export_arg(data, args[i++]);
 	data->export.equal = 1;
     check_export_args(data, args);
-    data->export.args = malloc((data->export.valid_args + 1) * sizeof(char *));
-    //if (!tmp)
-        //message erreur + sortie
-    check_export_args(data, args);
+    if (data->export.valid_args > 0)
+    {
+        data->export.args = malloc((data->export.valid_args + 1) * sizeof(char *));
+        //if (!tmp)
+            //message erreur + sortie
+        check_export_args(data, args);
+    }
     data->export.check = 0;
 }

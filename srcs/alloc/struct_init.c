@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:17:12 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/19 18:55:51 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:39:26 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,8 @@ void	init(t_data *data)
 	data->export.valid_args = 0;
 	data->export.check = 0;
 	data->export.equal = 0;
+	data->unset.is_unset = 0;
+	data->unset.check = 0;
+	data->unset.valid_args = 0;
+	data->unset.args = NULL;
 }
