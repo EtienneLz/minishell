@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/20 15:46:34 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/21 18:25:41 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_export
 	int		check;
 	int		valid_args;
 	int		equal;
+	int		ret;
 }				t_export;
 
 typedef struct  s_unset
@@ -57,13 +58,20 @@ typedef struct  s_unset
 	int		check;
 	int		valid_args;
 	char	**args;
+	int		ret;
 }				t_unset;
+
+typedef struct  s_cd
+{
+	int	ret;
+}				t_cd;
 
 typedef struct	s_data
 {
 	t_token		*first;
 	t_export	export;
 	t_unset		unset;
+	t_cd		cd;
 	char		**envp;
 	char		***splitted_args;
 	int			error;
@@ -78,6 +86,7 @@ void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
 int		if_equal(t_data *data,char *s1, char *s2);
+int		main_cd(t_data * data, char **args);
 
 /*
 ** Export functions

@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/20 16:11:08 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/21 19:03:25 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,26 @@ static void	mini_routine(t_data *data, char *buffer)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*arg[7];
+	char	*arg[3];
+	int i = 0;
+	int ret;
 
 	init(&data);
 	data.envp = envp;
-	arg[0] = "unset";
-	arg[1] = "ZSH=hello";
-	arg[2] = "co(uco";
-	arg[3] = "SHLVL";
-	arg[4] = "9SLVL";
-	arg[5] = "ZSH";
-	arg[6] = NULL;
-	main_unset(&data, arg);
-	export_no_arg(&data);
+	arg[0] = "cd";
+	arg[1] = "..";
+	//arg[2] = "co(uco";
+	//arg[3] = "SHLVL";
+	//arg[4] = "9SLVL";
+	//arg[5] = "ZSH";
+	arg[2] = NULL;
+	main_cd(&data, arg);
+	printf("ret = %d\n", data.cd.ret);
+	pwd();
+//	while (data.envp[i])
+//		printf("%s\n", data.envp[i++]);
+	//main_unset(&data, arg);
+	//export_no_arg(&data);
 	//main_check(&data, arg);
 	//export_args(&data, arg);
 	//export_no_arg(&data);

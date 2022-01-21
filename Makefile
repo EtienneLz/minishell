@@ -1,6 +1,8 @@
 NAME = minishell
 
 SRCS = srcs/minishell.c \
+		srcs/built_ins/pwd.c \
+		srcs/built_ins/cd.c \
 		srcs/built_ins/env.c \
 		srcs/built_ins/exit.c \
 		srcs/built_ins/export/export.c \
