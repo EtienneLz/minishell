@@ -23,7 +23,7 @@ INCLUDES = -I/includes/minishell.h
 
 CFLAGS = -g #-Werror -Wall -Wextra #-fsanitize=address
 
-GCC = gcc 
+CC = gcc 
 
 LIB = 42_libft/libft.a -I./usr/include
 
@@ -33,7 +33,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${GCC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean

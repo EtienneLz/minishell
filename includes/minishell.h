@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 17:36:40 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/21 18:01:49 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,16 @@ typedef struct	s_export
 	int		equal;
 }				t_export;
 
+typedef struct	s_pipe
+{
+	int			tube[2];
+}				t_pipe;
+
 typedef struct	s_data
 {
 	t_token		*first;
 	t_export	export;
+	t_pipe		pipe;
 	char		**envp;
 	int			envp_i;
 	char		***splitted_args;

@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 03:18:52 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 17:37:55 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/21 22:22:30 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,34 @@ static char	*get_bin_path(char *command)
 		free(path);
 		path = NULL;
 		return (NULL);
+	}
+}
+
+static int	exe_pipe(t_data *data)
+{
+	pid_t	pid;
+	int		pipefd[2];
+
+	pipe(pipefd);
+	pid = fork();
+	if (pid == 0)
+	{
+		ft_close(pipefd[1]);
+		dup2(pipefd[0], STDIN);
+		mini->pipin = pipefd[0];
+		mini->pid = -1;
+		mini->parent = 0;
+		mini->no_exec = 0;
+		return (2);
+	}
+	else
+	{
+		ft_close(pipefd[0]);
+		dup2(pipefd[1], STDOUT);
+		mini->pipout = pipefd[1];
+		mini->pid = pid;
+		mini->last = 0;
+		return (1);
 	}
 }
 
