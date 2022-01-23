@@ -8,6 +8,7 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/export/if_double.c \
 		srcs/alloc/struct_init.c \
 		srcs/utils/utils_1.c \
+		srcs/utils/utils_2.c \
 		srcs/parsing/split_command.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/tokenizer.c \

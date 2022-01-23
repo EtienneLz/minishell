@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+         #
+#    By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/13 18:49:11 by elouchez          #+#    #+#              #
-#    Updated: 2022/01/14 11:30:47 by elouchez         ###   ########.fr        #
+#    Updated: 2022/01/23 11:42:58 by mseligna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ RM  = rm -f
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	ar rc -o ${NAME} ${OBJS}
+	libtool -o ${NAME} ${OBJS}
 	ranlib ${NAME}
 
 bonus:		${OBJSBONUS} ${OBJS}
