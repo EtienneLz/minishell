@@ -6,23 +6,42 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:29 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/22 20:27:55 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/24 23:44:39 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*void	change_pwd_vars(t_data *data, char *pwd)
+void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 {
 	char	*find;
 	char	*find_old;
 	int		i;
+	int		checkpwd;
+	int		old;
 
 	find = "PWD";
 	find_old = "OLDPWD";
+	i = 0;
+	checkpwd = 0;
+	old = 0;
 	while (data->envp[i])
-
-}*/
+	{
+		if (strncmp(data->envp[i], find, 3) == 0)
+		{
+			data->envp[i] = join_arg(data->envp[i], pwd);
+			checkpwd = 1;
+		}
+		if (strncmp(data->envp[i], find_old, 6) == 0)
+		{
+			data->envp[i] = join_arg(data->envp[i], oldpwd);
+			old = i;
+		}
+		i++;
+	}
+	if (checkpwd == 0)
+		data->envp[old] = join_arg(data->envp[i], "=");
+}
 
 char	*cd_join(char *dir, char *arg, char *new_dir)
 {
@@ -46,7 +65,7 @@ char	*cd_join(char *dir, char *arg, char *new_dir)
 	return (new_dir);
 }
 
-char	*if_tilde(char *arg)
+char	*if_tilde(t_data *data, char *arg)
 {
 	char	*home;
 	char	*new_dir;
@@ -55,27 +74,35 @@ char	*if_tilde(char *arg)
 
 	i = 0;
 	j = 0;
-	home = getenv("HOME");
 	if (ft_strlen(arg) == 1 || (arg[0] == 'c' && arg[1] == 'd'))
-		return (home);
-	new_dir = malloc(ft_strlen(home) + ft_strlen(arg));
+		return (data->cd.home);
+	new_dir = malloc(ft_strlen(data->cd.home) + ft_strlen(arg));
 	//if (!new_dir)
 			//erreur
-	new_dir = cd_join(home, arg, new_dir);
+	new_dir = cd_join(data->cd.home, arg, new_dir);
 	return (new_dir);
 }
 
-void	do_cd(t_data *data, char **args)
+void	do_cd(t_data *data, char **args, int len)
 {
 	char path[PATH_MAX];
+	char	*pwd;
 	char *str;
 
 	getcwd(path, PATH_MAX);
+	pwd = getenv("PWD");
+	if (len == 1)
+	{
+		str = if_tilde(data, args[0]);
+		data->cd.ret = chdir(str);
+	}
+	else
+	{
 	if (args[1][0] == '/')
 		data->cd.ret = chdir(args[1]);
 	else if (args[1][0] == '~')
 	{
-		str = if_tilde(args[1]);
+		str = if_tilde(data, args[1]);
 		data->cd.ret = chdir(str);
 	}
 	else
@@ -88,9 +115,11 @@ void	do_cd(t_data *data, char **args)
 		if(data->cd.ret != 0)
 			perror("minishell");
 	}
+	}
 	//if (data->cd.ret != 0)
 	//	return ;//message d'erreur, chemin non existant
-	//change_pwd_vars(data, path);
+	getcwd(path, PATH_MAX);
+	change_pwd_vars(data, pwd, path);
 }
 
 int	main_cd(t_data * data, char **args)
@@ -101,12 +130,6 @@ int	main_cd(t_data * data, char **args)
 	len = 0;
 	while (args[len])
 		len++;
-	if (len == 1)
-	{
-		new_dir = if_tilde(args[0]);
-		data->cd.ret = chdir(new_dir);
-	}
-	if (args[1] != NULL)
-		do_cd(data, args);
+	do_cd(data, args, len);
 	return (data->cd.ret);
 }

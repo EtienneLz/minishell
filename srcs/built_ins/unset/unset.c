@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:57:12 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/20 16:13:09 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/24 23:35:21 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ char	**copy_unset_env(t_data *data, char **dest, int *i)
 	while (j < len)
 	{
 		k = 0;
-		while (data->unset.args[k] && if_equal(data, data->envp[j], data->unset.args[k]) == 0)
+		if (data->unset.args[k] && if_equal(data, data->envp[j], data->unset.args[k]) == 1)
 			k++;
-		if (!data->unset.args[k])
+		else
 		{
 			dest[*i] = malloc((ft_strlen(data->envp[j]) + 1) * sizeof(char));
 			//if (!dest[*i])

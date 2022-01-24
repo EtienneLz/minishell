@@ -14,8 +14,13 @@ char	*join_arg(char *s1, char *s2)
 	m = 0;
 	while (s1[n] != '=')
 		n++;
-	while (s2[m] != '=')
+	while (s2[m] && s2[m] != '=')
 		m++;
+	if (s2[m] != '=')
+	{
+		m = 0;
+		n += 1;
+	}
 	dest = malloc((n + (ft_strlen(s2) - m) + 1) * sizeof(char));
 	if (dest == NULL)
 		return (NULL);

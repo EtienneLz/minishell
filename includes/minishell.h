@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/21 18:25:41 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/24 22:27:18 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ typedef struct  s_unset
 
 typedef struct  s_cd
 {
-	int	ret;
+	int		ret;
+	char	*home;
 }				t_cd;
 
 typedef struct	s_data
@@ -87,6 +88,7 @@ void	pwd(void);
 void	ft_exit(t_data *data);
 int		if_equal(t_data *data,char *s1, char *s2);
 int		main_cd(t_data * data, char **args);
+char	*join_arg(char *s1, char *s2);
 
 /*
 ** Export functions

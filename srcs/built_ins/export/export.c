@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:57 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/20 15:40:25 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/24 22:45:55 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,18 +119,21 @@ void	export_args(t_data *data, char **args)
 	while (data->envp[len])
 		len++;
 	i = 0;
-	while (data->export.args[i])
-		i++;
-	len += i;
-	i = 0;
-	tmp_env = malloc((len + 1) * sizeof(char*));
-	//if (!x_env)
-		//return (NULL);
-	tmp_env = copy_env(data->envp, tmp_env, &i);
-	tmp_env = copy_env(data->export.args, tmp_env, &i);
-	tmp_env[len] = NULL;
-	data->envp = tmp_env;
-	free_tab(data->export.args);
+	if (data->export.args != NULL)
+	{
+		while (data->export.args[i])
+			i++;
+		len += i;
+		i = 0;
+		tmp_env = malloc((len + 1) * sizeof(char*));
+		//if (!x_env)
+			//return (NULL);
+		tmp_env = copy_env(data->envp, tmp_env, &i);
+		tmp_env = copy_env(data->export.args, tmp_env, &i);
+		tmp_env[len] = NULL;
+		data->envp = tmp_env;
+		free_tab(data->export.args);
+	}
 }
 
 void	main_export(t_data *data, char **args)

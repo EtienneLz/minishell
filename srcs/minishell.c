@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/22 20:28:17 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/24 23:36:55 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,32 @@ static void	mini_routine(t_data *data, char *buffer)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*arg[4];
-	int i = 0;
-	int ret;
+	char	*arg[3];
+	char 	*cd[2];
+	//int i = 0;
+	//int ret;
 
 	init(&data);
 	data.envp = envp;
-	arg[0] = "cd";
-	arg[1] = "../..";
-	arg[2] = "co(uco";
+	data.cd.home = getenv("HOME");
+	arg[0] = "unset";
+	arg[1] = "PWD";
+	//arg[2] = "co(uco";
 	//arg[3] = "SHLVL";
 	//arg[4] = "9SLVL";
 	//arg[5] = "ZSH";
-	arg[3] = NULL;
-	main_cd(&data, arg);
-	printf("ret = %d\n", data.cd.ret);
-	pwd();
+	arg[2] = NULL;
+	cd[0] = "cd";
+	cd[1] = NULL;
+	main_unset(&data, arg);
+	main_cd(&data, cd);
+	//export_no_arg(&data);
+	//printf("%s\n", getenv("PWD"));
+	//while (data.envp[i])
+	//	printf("%s\n", data.envp[i++]);
+	export_no_arg(&data);
+	//main_cd(&data, cd);
+	//printf("ret = %d\n", data.cd.ret);
 	//export_no_arg(&data);
 //	while (data.envp[i])
 //		printf("%s\n", data.envp[i++]);
