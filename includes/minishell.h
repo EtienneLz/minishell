@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/21 18:01:49 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/23 12:28:18 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <signal.h>
-# include <wait.h>
+# include <sys/wait.h>
 # include "../42_libft/libft.h"
 # define STDIN 0
 # define STDOUT 1
@@ -55,19 +55,24 @@ typedef struct	s_export
 
 typedef struct	s_pipe
 {
-	int			tube[2];
+	int			pipe_in;
+	int			pipe_out;
+	int			parent;
+	int			pid;
 }				t_pipe;
 
 typedef struct	s_data
 {
 	t_token		*first;
+	t_token		*actual;
 	t_export	export;
-	t_pipe		pipe;
 	char		**envp;
 	int			envp_i;
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
+	int			command_nb;
+	int			pid;
 	char		*buffer;
 	char		quote_type;
 }				t_data;
@@ -102,6 +107,7 @@ int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
-
+int		check_pipe(t_token	*actual);
+t_token	*to_next_command(t_token *actual);
 
 #endif

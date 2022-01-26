@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 03:18:52 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/21 22:22:30 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/23 13:18:59 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,32 +87,54 @@ static char	*get_bin_path(char *command)
 	}
 }
 
+static void	child(t_data *data, int fd[2], int *fdd)
+{
+	close(fd[0]);
+	close(0);
+	dup(*fdd);
+	close(*fdd);
+}
+
 static int	exe_pipe(t_data *data)
 {
-	pid_t	pid;
-	int		pipefd[2];
+	int		fd[2];
+	int		fdd;
+	char	*bin;
 
-	pipe(pipefd);
-	pid = fork();
-	if (pid == 0)
+	fd[0] = -1;
+	fd[1] = -1;
+	fdd = -1;
+	if (pipe(fd))
+		return (-1);
+	data->pid = fork();
+	if (data->pid < 0)
 	{
-		ft_close(pipefd[1]);
-		dup2(pipefd[0], STDIN);
-		mini->pipin = pipefd[0];
-		mini->pid = -1;
-		mini->parent = 0;
-		mini->no_exec = 0;
-		return (2);
+		close(fd[0]);
+		close(fd[1]);
+		close(fdd);
+		return (-1);
 	}
-	else
+	else if (!data->pid)
 	{
-		ft_close(pipefd[0]);
-		dup2(pipefd[1], STDOUT);
-		mini->pipout = pipefd[1];
-		mini->pid = pid;
-		mini->last = 0;
-		return (1);
+		child(data, fd, &fdd);
+		bin = get_bin_path(data->first->content);
+			if (bin == NULL)
+				bin = data->first->content;
+		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+		{
+			if (errno == 14)
+				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+			else
+				perror("minishell");
+		}
+		printf("%d\n", data->command_nb);
+		data->command_nb++;
+		exit(EXIT_SUCCESS);
 	}
+	wait(&data->pid);
+	close(fdd);
+	close(fd[1]);
+	return (fd[0]);
 }
 
 static void	execution_ve(t_data *data, char *bin)
@@ -145,15 +167,30 @@ static void	execution_ve(t_data *data, char *bin)
 int	execution(t_data *data)
 {
 	char	*bin;
-	if (check_built_in(data))
-		return (0);
-	else
+
+	data->actual = data->first;
+	data->splitted_args = split_arg(data);
+	while (data->actual)
 	{
-		data->splitted_args = split_arg(data);
-		bin = get_bin_path(data->first->content);
-		if (bin == NULL && data->first->content[0] == '.' && data->first->content[1] == '/')
-			bin = data->first->content;
-		execution_ve(data, bin);
+		if (data->actual->type == COMMAND)
+		{
+			//printf("%s\n", data->actual->content);
+			if (check_pipe(data->actual))
+			{
+				exe_pipe(data);
+			}
+			else
+			{
+				if (check_built_in(data))
+					break ;
+				bin = get_bin_path(data->first->content);
+				if (bin == NULL)
+					bin = data->first->content;
+				execution_ve(data, bin);
+			}
+			data->command_nb++;
+		}
+		data->actual = data->actual->next;
 	}
 	return (0);
 }
