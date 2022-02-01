@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 15:34:25 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/01 18:05:33 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:19:10 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,12 +115,12 @@ int	split_command(t_data *data, char *command)
 			ft_lstadd_back(&data->first, new_token);
 		}
 	}
-	t_token *actual;
+	/*t_token *actual;
 	actual = data->first;
 	while(actual)
 	{
 		printf("%s\n", actual->content);
 		actual = actual->next;
-	}
+	}*/
 	return (0);
 }
