@@ -87,54 +87,51 @@ static char	*get_bin_path(char *command)
 	}
 }
 
-static void	child(t_data *data, int fd[2], int *fdd)
+static int	child(t_data *data)
 {
-	close(fd[0]);
-	close(0);
-	dup(*fdd);
-	close(*fdd);
-}
-
-static int	exe_pipe(t_data *data)
-{
-	int		fd[2];
-	int		fdd;
 	char	*bin;
-
-	fd[0] = -1;
-	fd[1] = -1;
-	fdd = -1;
-	if (pipe(fd))
-		return (-1);
 	data->pid = fork();
-	if (data->pid < 0)
+	if (data->pid == 0)
 	{
-		close(fd[0]);
-		close(fd[1]);
-		close(fdd);
-		return (-1);
-	}
-	else if (!data->pid)
-	{
-		child(data, fd, &fdd);
-		bin = get_bin_path(data->first->content);
-			if (bin == NULL)
-				bin = data->first->content;
+		bin = get_bin_path(data->splitted_args[data->command_nb][0]);
+		if (bin == NULL)
+			bin = data->splitted_args[data->command_nb][0];
 		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
 		{
 			if (errno == 14)
 				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
 			else
 				perror("minishell");
+			return (1);
 		}
-		printf("%d\n", data->command_nb);
-		data->command_nb++;
-		exit(EXIT_SUCCESS);
 	}
-	wait(&data->pid);
-	close(fdd);
-	close(fd[1]);
-	return (fd[0]);
+	else
+		return (0);
+}
+
+static int	exe_pipe(t_data *data, int *fdin, int *fdout)
+{
+	int		fd[2];
+	char	*bin;
+
+	if (data->command_nb == data->nb_pipe)
+		*fdout = dup(data->tmpout);
+	else
+	{
+		if (pipe(fd))
+			return (-1);
+		*fdin = fd[0];
+		*fdout = fd[1];
+	}
+	dup2(*fdout, STDOUT);
+	close(*fdout);
+		/*if (!data->splitted_args[data->command_nb])
+			break ;*/
+	child(data);
+	data->command_nb++;
+	data->actual = to_next_command(data->actual);
+	
+	return (0);
 }
 
 static void	execution_ve(t_data *data, char *bin)
@@ -153,10 +150,10 @@ static void	execution_ve(t_data *data, char *bin)
 	}
 	else
 	{
-		if (execve(bin, data->splitted_args[0], NULL) == -1)
+		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
 		{
 			if (errno == 14)
-				printf("minishell: command not found: %s\n", data->splitted_args[0][0]);
+				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
 			else
 				perror("minishell");
 		}
@@ -167,30 +164,45 @@ static void	execution_ve(t_data *data, char *bin)
 int	execution(t_data *data)
 {
 	char	*bin;
+	int		fdin;
+	int		fdout;
 
+	data->tmpin = dup(STDIN);
+	data->tmpout = dup (STDOUT);
+	fdin = dup(data->tmpin);
 	data->actual = data->first;
 	data->splitted_args = split_arg(data);
 	while (data->actual)
 	{
 		if (data->actual->type == COMMAND)
 		{
-			//printf("%s\n", data->actual->content);
 			if (check_pipe(data->actual))
 			{
-				exe_pipe(data);
+				while (data->command_nb < data->nb_pipe + 1)
+				{
+					dup2(fdin, STDIN);
+					close(fdin);
+					exe_pipe(data, &fdin, &fdout);
+				}
+				dup2(data->tmpin, STDIN);
+				dup2(data->tmpout, STDOUT);
+				close(data->tmpin);
+				close(data->tmpout);
+				wait(&data->pid);
 			}
 			else
 			{
 				if (check_built_in(data))
 					break ;
-				bin = get_bin_path(data->first->content);
+				bin = get_bin_path(data->actual->content);
 				if (bin == NULL)
-					bin = data->first->content;
+					bin = data->actual->content;
 				execution_ve(data, bin);
 			}
 			data->command_nb++;
 		}
-		data->actual = data->actual->next;
+		if (data->actual)
+			data->actual = data->actual->next;
 	}
 	return (0);
 }

@@ -14,18 +14,22 @@
 
 static void	reset_var(t_data *data)
 {
+	free(data->buffer);
 	ft_lstfree(data);
-	//splitted_args_free(data->splitted_args);
+	splitted_args_free(data->splitted_args);
+	init(data);
 }
 
-static void	mini_routine(t_data *data, char *buffer)
+static int	mini_routine(t_data *data, char *buffer)
 {
+	if (buffer[0] == '\0')
+		return (1);
 	if (split_command(data, buffer))
-		return ;
+		return (0);
 	if (tokenizer(data))
-		return ;
+		return (0);
 	if (execution(data))
-		return ;
+		return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -46,8 +50,8 @@ int	main(int argc, char **argv, char **envp)
 	while (data.buffer)
 	{
 		data.buffer = readline("$> ");
-		mini_routine(&data, data.buffer);
-		reset_var(&data);
+		if (!mini_routine(&data, data.buffer))
+			reset_var(&data);
 	}
 	return (0);
 }

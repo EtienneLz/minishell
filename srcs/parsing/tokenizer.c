@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 17:12:02 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/31 22:40:09 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ static int	checker(t_data *data)
 			if (next->content[0] == '-')
 				next->type = OPTION;
 		if ((actual->type != STRING || actual->type != STRING_SIMPLE)&& actual->type == next->type)
-		{
-			printf("dddddd\n");
 			return (1);
-		}
 		actual = next;
 		next = actual->next;
 	}

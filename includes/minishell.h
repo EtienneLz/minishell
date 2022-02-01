@@ -73,6 +73,8 @@ typedef struct	s_data
 	int			nb_pipe;
 	int			command_nb;
 	int			pid;
+	int			tmpin;
+	int			tmpout;
 	char		*buffer;
 	char		quote_type;
 }				t_data;

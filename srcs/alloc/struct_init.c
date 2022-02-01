@@ -15,6 +15,7 @@
 void	init(t_data *data)
 {
 	data->first = NULL;
+	data->actual = NULL;
 	data->error = 0;
 	data->nb_pipe = 0;
 	data->splitted_args = NULL;
