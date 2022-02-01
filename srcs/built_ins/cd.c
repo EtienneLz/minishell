@@ -40,7 +40,7 @@ void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 		i++;
 	}
 	if (checkpwd == 0)
-		data->envp[old] = join_arg(data->envp[i], "=");
+		data->envp[old] = join_arg(data->envp[old], "=");
 }
 
 char	*cd_join(char *dir, char *arg, char *new_dir)
