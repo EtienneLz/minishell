@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/14 11:51:50 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/23 13:18:27 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,25 @@
 
 static void	reset_var(t_data *data)
 {
-	ft_lstfree(data);
-	splitted_args_free(data->splitted_args);
+	if (data->buffer)
+		free(data->buffer);
+	if (data->first)
+		ft_lstfree(data);
+	if (data->splitted_args)
+		splitted_args_free(data->splitted_args);
+	init(data);
 }
 
-static void	mini_routine(t_data *data, char *buffer)
+static int	mini_routine(t_data *data, char *buffer)
 {
+	if (buffer[0] == '\0')
+		return (1);
 	if (split_command(data, buffer))
-		return ;
+		return (0);
 	if (tokenizer(data))
-		return ;
+		return (0);
 	if (execution(data))
-		return ;
+		return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -43,11 +50,12 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
+	data.buffer = malloc(1);
 	while (data.buffer)
 	{
+		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
-		reset_var(&data);
 	}
 	return (0);
 }

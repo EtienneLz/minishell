@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 06:48:10 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/31 22:40:09 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ static int	checker(t_data *data)
 		if (actual->type == COMMAND && next->type == STRING)
 			if (next->content[0] == '-')
 				next->type = OPTION;
-		if (actual->type != STRING && actual->type == next->type)
+		if ((actual->type != STRING || actual->type != STRING_SIMPLE)&& actual->type == next->type)
 			return (1);
-		actual = actual->next;
+		actual = next;
+		next = actual->next;
 	}
 	return (0);
 }
@@ -72,8 +73,14 @@ int	tokenizer(t_data *data)
 				actual = actual->next;
 			}
 		}
-		else
+		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
+	/*actual = data->first;
+	while(actual)
+	{
+		printf("%c\n", actual->type);
+		actual = actual->next;
+	}*/
 	return (checker(data));
 }

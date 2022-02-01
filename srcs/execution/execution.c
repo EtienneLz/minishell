@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 03:18:52 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/13 12:47:24 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/01/23 13:18:59 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ static char	*get_bin_path(char *command)
 		path = NULL;
 		while (path_split[i])
 		{
-			bin = (char *)ft_calloc(sizeof(char), (ft_strlen(path_split[i]) + ft_strlen(command) + 1));
+			bin = (char *)ft_calloc(sizeof(char), (ft_strlen(path_split[i]) + ft_strlen(command) + 2));
 			if (bin == NULL)
 				break ;
-			ft_strlcat(bin, path_split[i], ft_strlen(bin) + ft_strlen(path_split[i]) + 1);
+			ft_strlcat(bin, path_split[i], ft_strlen(bin) + ft_strlen(path_split[i]) + 2);
 			ft_strlcat(bin, "/", ft_strlen(bin) + 2);
-			ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 1);
+			ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 2);
 			if (access(bin, F_OK) == 0)
 				break ;
 			free(bin);
@@ -85,6 +85,51 @@ static char	*get_bin_path(char *command)
 		path = NULL;
 		return (NULL);
 	}
+}
+
+static int	child(t_data *data)
+{
+	char	*bin;
+	data->pid = fork();
+	if (data->pid == 0)
+	{
+		bin = get_bin_path(data->splitted_args[data->command_nb][0]);
+		if (bin == NULL)
+			bin = data->splitted_args[data->command_nb][0];
+		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+		{
+			if (errno == 14)
+				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+			else
+				perror("minishell");
+			return (1);
+		}
+	}
+	else
+		return (0);
+}
+
+static int	exe_pipe(t_data *data, int *fdin, int *fdout)
+{
+	int		fd[2];
+	char	*bin;
+
+	if (data->command_nb == data->nb_pipe)
+		*fdout = dup(data->tmpout);
+	else
+	{
+		if (pipe(fd))
+			return (-1);
+		*fdin = fd[0];
+		*fdout = fd[1];
+	}
+	dup2(*fdout, STDOUT);
+	close(*fdout);
+	child(data);
+	data->command_nb++;
+	data->actual = to_next_command(data->actual);
+	
+	return (0);
 }
 
 static void	execution_ve(t_data *data, char *bin)
@@ -103,8 +148,13 @@ static void	execution_ve(t_data *data, char *bin)
 	}
 	else
 	{
-		if (execve(bin, data->splitted_args[0], NULL) == -1)
-			perror("shell");
+		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+		{
+			if (errno == 14)
+				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+			else
+				perror("minishell");
+		}
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -112,13 +162,45 @@ static void	execution_ve(t_data *data, char *bin)
 int	execution(t_data *data)
 {
 	char	*bin;
-	if (check_built_in(data))
-		return (0);
-	else
+	int		fdin;
+	int		fdout;
+
+	data->tmpin = dup(STDIN);
+	data->tmpout = dup (STDOUT);
+	fdin = dup(data->tmpin);
+	data->actual = data->first;
+	data->splitted_args = split_arg(data);
+	while (data->actual)
 	{
-		data->splitted_args = split_arg(data);
-		bin = get_bin_path(data->first->content);
-		execution_ve(data, bin);
+		if (data->actual->type == COMMAND)
+		{
+			if (check_pipe(data->actual))
+			{
+				while (data->command_nb < data->nb_pipe + 1)
+				{
+					dup2(fdin, STDIN);
+					close(fdin);
+					exe_pipe(data, &fdin, &fdout);
+				}
+				dup2(data->tmpin, STDIN);
+				dup2(data->tmpout, STDOUT);
+				close(data->tmpin);
+				close(data->tmpout);
+				waitpid(data->pid, NULL, 0);
+			}
+			else
+			{
+				if (check_built_in(data))
+					break ;
+				bin = get_bin_path(data->actual->content);
+				if (bin == NULL)
+					bin = data->actual->content;
+				execution_ve(data, bin);
+			}
+			data->command_nb++;
+		}
+		if (data->actual)
+			data->actual = data->actual->next;
 	}
 	return (0);
 }

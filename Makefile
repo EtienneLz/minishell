@@ -8,6 +8,7 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/export/if_double.c \
 		srcs/alloc/struct_init.c \
 		srcs/utils/utils_1.c \
+		srcs/utils/utils_2.c \
 		srcs/parsing/split_command.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/tokenizer.c \
@@ -23,7 +24,7 @@ INCLUDES = -I/includes/minishell.h
 
 CFLAGS = -g #-Werror -Wall -Wextra #-fsanitize=address
 
-GCC = gcc 
+CC = gcc 
 
 LIB = 42_libft/libft.a -I./usr/include
 
@@ -33,7 +34,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${GCC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean
