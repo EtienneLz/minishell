@@ -20,7 +20,7 @@ static void	reset_var(t_data *data)
 		ft_lstfree(data);
 	if (data->splitted_args)
 		splitted_args_free(data->splitted_args);
-	init(data);
+	reset(data);
 }
 
 static int	mini_routine(t_data *data, char *buffer)
@@ -49,7 +49,8 @@ int	main(int argc, char **argv, char **envp)
 	//export_no_arg(&data);
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	data.envp = envp;
+	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
 	while (data.buffer)
 	{

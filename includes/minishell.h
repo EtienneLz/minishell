@@ -53,6 +53,21 @@ typedef struct	s_export
 	int		equal;
 }				t_export;
 
+typedef struct  s_unset
+{
+	int		is_unset;
+	int		check;
+	int		valid_args;
+	char	**args;
+	int		ret;
+}				t_unset;
+
+typedef struct  s_cd
+{
+	int		ret;
+	char	*home;
+}				t_cd;
+
 typedef struct	s_data
 {
 	t_token		*first;
@@ -60,6 +75,8 @@ typedef struct	s_data
 	t_export	export;
 	char		**envp;
 	int			envp_i;
+	t_unset		unset;
+	t_cd		cd;
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
@@ -69,7 +86,9 @@ typedef struct	s_data
 	int			tmpout;
 	char		*buffer;
 	char		quote_type;
+	int			ret;
 }				t_data;
+
 /*
 ** Built-ins functions 
 */
@@ -77,18 +96,36 @@ void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
-void	export_no_arg(t_data *data);
-void	export_args(t_data *data, char **args);
-void    main_check(t_data *data, char **args);
-void    check_export_args(t_data *data, char **args);
-void 	copy_equal(t_data *data);
 char	**copy_args(t_data *data, char **str, char **dest, int *i);
-int		cmp_arg(t_data *data, char *str);
 
 /*
 ** utils functions
 */
 
+int		if_equal(t_data *data,char *s1, char *s2);
+int		main_cd(t_data * data, char **args);
+char	*join_arg(char *s1, char *s2);
+
+/*
+** Export functions
+*/
+void	main_export(t_data *data, char **args);
+void	export_no_arg(t_data *data);
+void	export_args(t_data *data, char **args);
+void    export_main_check(t_data *data, char **args);
+void    check_export_args(t_data *data, char **args);
+void 	copy_equal(t_data *data);
+int		cmp_export_arg(t_data *data, char *str);
+
+/*
+** Unset functions
+*/
+void	main_unset(t_data *data, char **args);
+void	unset_main_check(t_data *data, char **args);
+
+/*
+** utils functions
+*/
 void	free_tab(char **tab);
 t_token	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
@@ -96,6 +133,7 @@ void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
 
 void	init(t_data *data);
+void	reset(t_data *data);
 int		tokenizer(t_data *data);
 int		execution(t_data *data);
 void	minifree(t_data *data);
