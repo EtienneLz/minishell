@@ -28,4 +28,6 @@ void	init(t_data *data)
 	data->envp_i = 0;
 	data->command_nb = 0;
 	data->pid = 0;
+	data->tmpin = 0;
+	data->tmpout = 0;
 }

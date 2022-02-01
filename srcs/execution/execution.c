@@ -125,8 +125,6 @@ static int	exe_pipe(t_data *data, int *fdin, int *fdout)
 	}
 	dup2(*fdout, STDOUT);
 	close(*fdout);
-		/*if (!data->splitted_args[data->command_nb])
-			break ;*/
 	child(data);
 	data->command_nb++;
 	data->actual = to_next_command(data->actual);
@@ -188,7 +186,7 @@ int	execution(t_data *data)
 				dup2(data->tmpout, STDOUT);
 				close(data->tmpin);
 				close(data->tmpout);
-				wait(&data->pid);
+				waitpid(data->pid, NULL, 0);
 			}
 			else
 			{

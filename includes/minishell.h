@@ -53,14 +53,6 @@ typedef struct	s_export
 	int		equal;
 }				t_export;
 
-typedef struct	s_pipe
-{
-	int			pipe_in;
-	int			pipe_out;
-	int			parent;
-	int			pid;
-}				t_pipe;
-
 typedef struct	s_data
 {
 	t_token		*first;

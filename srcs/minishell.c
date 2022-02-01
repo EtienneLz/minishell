@@ -14,9 +14,12 @@
 
 static void	reset_var(t_data *data)
 {
-	free(data->buffer);
-	ft_lstfree(data);
-	splitted_args_free(data->splitted_args);
+	if (data->buffer)
+		free(data->buffer);
+	if (data->first)
+		ft_lstfree(data);
+	if (data->splitted_args)
+		splitted_args_free(data->splitted_args);
 	init(data);
 }
 
@@ -47,11 +50,12 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
+	data.buffer = malloc(1);
 	while (data.buffer)
 	{
+		reset_var(&data);
 		data.buffer = readline("$> ");
-		if (!mini_routine(&data, data.buffer))
-			reset_var(&data);
+		mini_routine(&data, data.buffer);
 	}
 	return (0);
 }
