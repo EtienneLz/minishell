@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:29 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/24 23:44:39 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/25 20:06:22 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 		i++;
 	}
 	if (checkpwd == 0)
-		data->envp[old] = join_arg(data->envp[i], "=");
+		data->envp[old] = join_arg(data->envp[old], "=");
 }
 
 char	*cd_join(char *dir, char *arg, char *new_dir)
