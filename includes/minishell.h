@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <errno.h> 
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -87,6 +88,11 @@ typedef struct	s_data
 	char		*buffer;
 	char		quote_type;
 	int			ret;
+	int			nb_infiles;
+	char		**infile;
+	int			nb_outfiles;
+	char		**outfile;
+	int			last_out;
 }				t_data;
 
 /*
@@ -134,7 +140,7 @@ char	***split_arg(t_data *data);
 
 void	init(t_data *data);
 void	reset(t_data *data);
-int		tokenizer(t_data *data);
+int		lexer(t_data *data);
 int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);

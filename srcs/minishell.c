@@ -29,7 +29,7 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (1);
 	if (split_command(data, buffer))
 		return (0);
-	if (tokenizer(data))
+	if (lexer(data))
 		return (0);
 	if (execution(data))
 		return (0);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/01 18:47:14 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/05 04:48:47 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,60 @@ static char	is_redirection(t_data *data, char *str)
 		return (PIPE);
 	}
 	else if (!ft_strcmp(str, "<"))
+	{
+		data->nb_infiles++;
 		return (L_ARROW);
+	}
 	else if (!ft_strcmp(str, ">"))
+	{
+		data->nb_outfiles++;
 		return (R_ARROW);
+	}
 	else if (!ft_strcmp(str, "<<"))
 		return (LL_ARROW);
 	else if (!ft_strcmp(str, ">>"))
+	{
+		data->nb_outfiles++;
 		return (RR_ARROW);
+	}
 	return (0);
+}
+
+static void	infiles_name(t_data *data)
+{
+	t_token	*actual;
+	int		i;
+	int		j;
+
+	data->infile = malloc(sizeof(char*) * (data->nb_infiles + 1));
+	data->outfile = malloc(sizeof(char*) * (data->nb_outfiles + 2));
+	actual = data->first;
+	i = 0;
+	j = 0;
+	while (actual)
+	{
+		if ((actual->type == R_ARROW || actual->type == RR_ARROW) && actual->next)
+		{
+			data->outfile[j] = actual->next->content;
+			if (actual->type == RR_ARROW)
+				data->last_out = 2;
+			else
+				data->last_out = 1;
+			if (actual->next->next && (is_redirection(data, actual->next->next->content) == 0))
+				actual->next->next->type = COMMAND;
+			j++;
+		}
+		else if ((actual->type == L_ARROW || actual->type == LL_ARROW) && actual->next)
+		{
+			data->infile[i] = actual->next->content;
+			if (actual->next->next && (is_redirection(data, actual->next->next->content) == 0))
+				actual->next->next->type = COMMAND;
+			i++;
+		}
+		actual = actual->next;
+	}
+	data->infile[i] = NULL;
+	data->outfile[j] = NULL;
 }
 
 static int	checker(t_data *data)
@@ -50,13 +96,16 @@ static int	checker(t_data *data)
 	return (0);
 }
 
-int	tokenizer(t_data *data)
+int	lexer(t_data *data)
 {
 	t_token	*actual;
 	char	type;
 
 	actual = data->first;
-	actual->type = COMMAND;
+	if (is_redirection(data, actual->content) == 0)
+		actual->type = COMMAND;
+	else
+		actual->type = is_redirection(data, actual->content);
 	while (actual->next)
 	{
 		actual = actual->next;
@@ -66,20 +115,23 @@ int	tokenizer(t_data *data)
 			actual->type = type;
 			if (actual->next)
 			{
+
 				if (actual->type == PIPE && is_redirection(data, actual->next->content) == 0)
 					actual->next->type = COMMAND;
-				if (actual->type != PIPE && is_redirection(data, actual->next->content) == 0)
-					actual->next->type = FILE;
+				else
+					actual->next->type = STRING;
 				actual = actual->next;
 			}
 		}
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
+	if (data->nb_infiles || data->nb_outfiles)
+		infiles_name(data);
 	/*actual = data->first;
 	while(actual)
 	{
-		printf("%c\n", actual->type);
+		printf("lslsls %c\n", actual->type);
 		actual = actual->next;
 	}*/
 	return (checker(data));
