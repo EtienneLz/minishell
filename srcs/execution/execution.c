@@ -117,17 +117,18 @@ static int	outfile_func(t_data *data, int *fdout)
 	i = 0;
 	while (i < data->nb_outfiles - 1)
 	{
-		fd = open(data->outfile[i], O_CREAT | O_WRONLY, S_IRWXO);
-		close(fd);
+		fd = open(data->outfile[i], O_CREAT | O_RDWR |
+			O_APPEND, 0644);
+		if (fd == -1)
+			perror("fd");
+		else
+			close(fd);
 		i++;
 	}
 	if (data->last_out == 1)
-		fd = open(data->outfile[i], O_CREAT | O_WRONLY, S_IRWXO);
+		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
-		fd = open(data->outfile[i], O_APPEND | O_CREAT | O_WRONLY, S_IRWXO);
-	printf("%s\n", data->outfile[i]);
-	if (fd < 0)
-		printf("fwfgw\n");
+		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_APPEND, 0644);
 	return (fd);
 }
 
@@ -157,7 +158,6 @@ static int	exe_pipe(t_data *data, int *fdin, int *fdout)
 	child(data);
 	data->command_nb++;
 	data->actual = to_next_command(data->actual);
-	
 	return (0);
 }
 

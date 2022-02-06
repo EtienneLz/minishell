@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/05 04:30:03 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/06 22:38:42 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ char	***split_arg(t_data *data)
 		return (NULL);
 	actual = data->first;
 	i = 0;
+	while (actual && actual->type != COMMAND)
+		actual = actual->next;
 	while (i <= data->nb_pipe + 1)
 	{
 		if (i != 0)
@@ -113,11 +115,14 @@ char	***split_arg(t_data *data)
 			size++;
 			actual = actual->next;	
 		}
-		actual = data->first;
 		if (i != 0)
 			actual = to_pipe(data, actual, i);
 		else
+		{
 			actual = data->first;
+			while (actual && actual->type != COMMAND)
+				actual = actual->next;
+		}
 		ret[i] = malloc(sizeof(char*) * (size + 2));
 		while (actual && actual->type != PIPE)
 		{
@@ -144,7 +149,6 @@ char	***split_arg(t_data *data)
 		j = 0;
 		i++;
 	}*/
-
 	return (ret);
 }
 

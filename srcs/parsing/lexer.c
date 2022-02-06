@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/05 04:48:47 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/06 22:38:15 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,31 @@ static char	is_redirection(t_data *data, char *str)
 	}
 	else if (!ft_strcmp(str, "<"))
 	{
-		data->nb_infiles++;
 		return (L_ARROW);
 	}
 	else if (!ft_strcmp(str, ">"))
 	{
-		data->nb_outfiles++;
 		return (R_ARROW);
 	}
 	else if (!ft_strcmp(str, "<<"))
 		return (LL_ARROW);
 	else if (!ft_strcmp(str, ">>"))
 	{
-		data->nb_outfiles++;
 		return (RR_ARROW);
 	}
 	return (0);
+}
+
+static void	counter(t_data *data, char type)
+{
+	if (type == L_ARROW)
+		data->nb_infiles++;
+	else if (type == LL_ARROW)
+		data->nb_infiles++;
+	else if (type == R_ARROW)
+		data->nb_outfiles++;
+	else if (type == RR_ARROW)
+		data->nb_outfiles++;
 }
 
 static void	infiles_name(t_data *data)
@@ -102,10 +111,9 @@ int	lexer(t_data *data)
 	char	type;
 
 	actual = data->first;
-	if (is_redirection(data, actual->content) == 0)
+	actual->type = is_redirection(data, actual->content);
+	if (actual->type == 0)
 		actual->type = COMMAND;
-	else
-		actual->type = is_redirection(data, actual->content);
 	while (actual->next)
 	{
 		actual = actual->next;
@@ -116,7 +124,7 @@ int	lexer(t_data *data)
 			if (actual->next)
 			{
 
-				if (actual->type == PIPE && is_redirection(data, actual->next->content) == 0)
+				if (actual->type == PIPE && actual->type == 0)
 					actual->next->type = COMMAND;
 				else
 					actual->next->type = STRING;
@@ -126,13 +134,12 @@ int	lexer(t_data *data)
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	if (data->nb_infiles || data->nb_outfiles)
-		infiles_name(data);
-	/*actual = data->first;
-	while(actual)
+	actual = data->first;
+	while (actual)
 	{
-		printf("lslsls %c\n", actual->type);
+		counter(data, actual->type);
 		actual = actual->next;
-	}*/
+	}
+	infiles_name(data);
 	return (checker(data));
 }
