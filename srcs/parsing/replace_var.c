@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_free.c                                        :+:      :+:    :+:   */
+/*   replace_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/13 07:35:49 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/01 18:41:45 by elouchez         ###   ########.fr       */
+/*   Created: 2022/01/14 12:13:55 by elouchez          #+#    #+#             */
+/*   Updated: 2022/02/01 18:46:57 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	splitted_args_free(char ***tab)
+int	replace_var(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-void	minifree(t_data *data)
-{
-	ft_lstfree(data);
-	splitted_args_free(data->splitted_args);
-	free(data->buffer);
+	
 }

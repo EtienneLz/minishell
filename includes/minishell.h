@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/24 22:27:18 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/23 12:28:18 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <errno.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
 # include <signal.h>
-//# include <wait.h>
+# include <sys/wait.h>
 # include "../42_libft/libft.h"
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
 # define BUFFER_SIZE 2048
 # define STRING 's'
+# define STRING_SIMPLE 'q'
 # define COMMAND 'c'
 # define OPTION 'o'
 # define FILE 'f'
@@ -49,7 +51,6 @@ typedef struct	s_export
 	int		check;
 	int		valid_args;
 	int		equal;
-	int		ret;
 }				t_export;
 
 typedef struct  s_unset
@@ -70,15 +71,24 @@ typedef struct  s_cd
 typedef struct	s_data
 {
 	t_token		*first;
+	t_token		*actual;
 	t_export	export;
+	char		**envp;
+	int			envp_i;
 	t_unset		unset;
 	t_cd		cd;
-	char		**envp;
 	char		***splitted_args;
 	int			error;
 	int			nb_pipe;
+	int			command_nb;
+	int			pid;
+	int			tmpin;
+	int			tmpout;
 	char		*buffer;
+	char		quote_type;
+	int			ret;
 }				t_data;
+
 /*
 ** Built-ins functions 
 */
@@ -86,6 +96,12 @@ void	env(t_data *data);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);
+char	**copy_args(t_data *data, char **str, char **dest, int *i);
+
+/*
+** utils functions
+*/
+
 int		if_equal(t_data *data,char *s1, char *s2);
 int		main_cd(t_data * data, char **args);
 char	*join_arg(char *s1, char *s2);
@@ -117,11 +133,13 @@ void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
 
 void	init(t_data *data);
+void	reset(t_data *data);
 int		tokenizer(t_data *data);
 int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
-
+int		check_pipe(t_token	*actual);
+t_token	*to_next_command(t_token *actual);
 
 #endif

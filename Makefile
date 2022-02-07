@@ -1,21 +1,22 @@
 NAME = minishell
 
 SRCS = srcs/minishell.c \
-		srcs/built_ins/pwd.c \
-		srcs/built_ins/cd.c \
 		srcs/built_ins/env.c \
 		srcs/built_ins/exit.c \
 		srcs/built_ins/export/export.c \
+		srcs/alloc/struct_init.c \
+		srcs/utils/utils_1.c \
+		srcs/utils/utils_2.c \
+		srcs/built_ins/pwd.c \
+		srcs/built_ins/cd.c \
 		srcs/built_ins/export/check_export_args_new.c \
 		srcs/built_ins/export/if_double_new.c \
 		srcs/built_ins/unset/unset.c \
 		srcs/built_ins/unset/unset_check_args.c \
-		srcs/alloc/struct_init.c \
-		srcs/utils/utils_1.c \
 		srcs/parsing/split_command.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/tokenizer.c \
-		srcs/execution/execution.c \
+		srcs/execution/execution.c 
 
 OBJS = ${SRCS:.c=.o}
 
@@ -25,7 +26,7 @@ PATH_LIBFT = 42_libft
 
 INCLUDES = -I/includes/minishell.h
 
-CFLAGS = -g -fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g #-Werror -Wall -Wextra #-fsanitize=address
 
 CC = gcc 
 

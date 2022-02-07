@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/24 23:36:55 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/01/23 13:18:27 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,49 @@
 
 static void	reset_var(t_data *data)
 {
-	ft_lstfree(data);
-	splitted_args_free(data->splitted_args);
+	if (data->buffer)
+		free(data->buffer);
+	if (data->first)
+		ft_lstfree(data);
+	if (data->splitted_args)
+		splitted_args_free(data->splitted_args);
+	reset(data);
 }
 
-static void	mini_routine(t_data *data, char *buffer)
+static int	mini_routine(t_data *data, char *buffer)
 {
+	if (buffer[0] == '\0')
+		return (1);
 	if (split_command(data, buffer))
-		return ;
+		return (0);
 	if (tokenizer(data))
-		return ;
+		return (0);
 	if (execution(data))
-		return ;
+		return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*arg[3];
-	char 	*cd[2];
-	//int i = 0;
-	//int ret;
+	//char	*arg[3];
 
 	init(&data);
-	data.envp = envp;
-	data.cd.home = getenv("HOME");
-	arg[0] = "unset";
-	arg[1] = "PWD";
-	//arg[2] = "co(uco";
-	//arg[3] = "SHLVL";
-	//arg[4] = "9SLVL";
-	//arg[5] = "ZSH";
-	arg[2] = NULL;
-	cd[0] = "cd";
-	cd[1] = NULL;
-	main_unset(&data, arg);
-	main_cd(&data, cd);
-	//export_no_arg(&data);
-	//printf("%s\n", getenv("PWD"));
-	//while (data.envp[i])
-	//	printf("%s\n", data.envp[i++]);
-	export_no_arg(&data);
-	//main_cd(&data, cd);
-	//printf("ret = %d\n", data.cd.ret);
-	//export_no_arg(&data);
-//	while (data.envp[i])
-//		printf("%s\n", data.envp[i++]);
-	//main_unset(&data, arg);
-	//export_no_arg(&data);
+	/*arg[0] = "export";
+	arg[1] = "ZSH=hello";
+	arg[2] = NULL;*/
 	//main_check(&data, arg);
 	//export_args(&data, arg);
 	//export_no_arg(&data);
-	/*(void)argc;
+	(void)argc;
 	(void)argv;
-	(void)envp;
+	data.envp = envp;
+	data.cd.home = getenv("HOME");
+	data.buffer = malloc(1);
 	while (data.buffer)
 	{
+		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
-		reset_var(&data);
-	}*/
+	}
 	return (0);
 }

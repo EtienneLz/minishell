@@ -6,7 +6,7 @@
 #    By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/13 18:49:11 by elouchez          #+#    #+#              #
-#    Updated: 2022/01/19 16:05:19 by mseligna         ###   ########.fr        #
+#    Updated: 2022/01/23 11:42:58 by mseligna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,11 @@ RM  = rm -f
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	libtool -o ${NAME} ${OBJS}
+	ar rc -o ${NAME} ${OBJS}
 	ranlib ${NAME}
 
 bonus:		${OBJSBONUS} ${OBJS}
-	libtool -o ${NAME} ${OBJS} ${OBJSBONUS}
+	ar rc -o ${NAME} ${OBJS} ${OBJSBONUS}
 	ranlib ${NAME}
 
 clean:
