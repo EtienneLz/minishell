@@ -19,4 +19,3 @@ void	pwd(void)
 	getcwd(path, PATH_MAX);
 	ft_putendl_fd(path, STDOUT);
 }
-//get PWD env variable not PATH

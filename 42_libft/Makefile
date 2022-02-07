@@ -33,11 +33,11 @@ RM  = rm -f
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	ar rc -o ${NAME} ${OBJS}
+	libtool -o ${NAME} ${OBJS}
 	ranlib ${NAME}
 
 bonus:		${OBJSBONUS} ${OBJS}
-	ar rc -o ${NAME} ${OBJS} ${OBJSBONUS}
+	libtool -o ${NAME} ${OBJS} ${OBJSBONUS}
 	ranlib ${NAME}
 
 clean:

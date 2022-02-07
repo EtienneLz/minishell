@@ -39,9 +39,14 @@ void    check_unset_args(t_data *data, char **args)
     k = 0;
     while (args[i])
     {
+        printf(" i = %d\n", i);
         j = 0;
         while (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
+        {
+            if (data->unset.check == 0 && args[i][0] != '_')
+                printf("minishell: unset: `%s': not a valid identifier\n", args[i]);
             i++; //ajouter message d'erreur
+        }
         while (args[i] && args[i][j] && (ft_isalnum(args[i][j]) || args[i][j] == '_'))
             j++;
         if (args[i] && !args[i][j] && cmp_unset_arg(data, args[i]) == 1)
@@ -52,8 +57,8 @@ void    check_unset_args(t_data *data, char **args)
                 data->unset.valid_args++;
 			i++;
         }
-		else if (args[i] && args[i][j])
-			i++;//message d'erreur
+		else if (args[i])
+			i++;
     }
     data->unset.check = 1;
 }
@@ -62,7 +67,6 @@ void    check_unset_args(t_data *data, char **args)
 void	unset_main_check(t_data *data, char **args)
 {
 	check_unset_args(data, args);
-	//printf("ok\n");
 	if (data->unset.valid_args != 0)
 	{
 		data->unset.args = malloc((data->unset.valid_args + 1) * sizeof(char *));

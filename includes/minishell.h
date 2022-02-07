@@ -92,7 +92,7 @@ typedef struct	s_data
 /*
 ** Built-ins functions 
 */
-void	env(t_data *data);
+void	env(t_data *data, char **args);
 void	echo(char *s, int flag_n);
 void	pwd(void);
 void	ft_exit(t_data *data);

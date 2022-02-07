@@ -12,10 +12,15 @@
 
 #include "../../includes/minishell.h"
 
-void	env(t_data *data)
+void	env(t_data *data, char **args)
 {
 	int	i;
 
+	if (args[1] != NULL)
+	{
+		printf("env: %s: No such file or directory", args[1]);
+		return ;
+	}
 	i = 0;
 	while (data->envp[i])
 		printf("%s\n", data->envp[i++]);

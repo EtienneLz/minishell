@@ -38,16 +38,23 @@ static int	mini_routine(t_data *data, char *buffer)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	//char	*arg[3];
+	char	*arg[6];
 
 	init(&data);
-	/*arg[0] = "export";
+	data.envp = envp;
+	arg[0] = "unset";
 	arg[1] = "ZSH=hello";
-	arg[2] = NULL;*/
+	arg[2] = "56labla";
+	arg[3] = "_=87";
+	arg[4] = "lk:po=54";
+	arg[5] = NULL;
+	main_export(&data, arg);
+	export_no_arg(&data);
+	//pwd();
 	//main_check(&data, arg);
 	//export_args(&data, arg);
 	//export_no_arg(&data);
-	(void)argc;
+	/*(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
@@ -57,6 +64,6 @@ int	main(int argc, char **argv, char **envp)
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
-	}
+	}*/
 	return (0);
 }
