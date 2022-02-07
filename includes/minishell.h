@@ -87,6 +87,7 @@ typedef struct	s_data
 	char		*buffer;
 	char		quote_type;
 	int			ret;
+	int			last_ret;
 }				t_data;
 
 /*
@@ -95,7 +96,7 @@ typedef struct	s_data
 void	env(t_data *data, char **args);
 void	echo(char *s, int flag_n);
 void	pwd(void);
-void	ft_exit(t_data *data);
+void	ft_exit(t_data *data, char **args);
 char	**copy_args(t_data *data, char **str, char **dest, int *i);
 
 /*
