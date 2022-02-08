@@ -12,32 +12,28 @@
 
 #include "../../includes/minishell.h"
 
-static int	check_built_in(t_data *data)
+static int	check_built_in(t_data *data, char *command)
 {
-	char 	*command;
 	int		ret;
 
 	ret = 1;
-	command = data->first->content;
-	/*if (ft_strcmp(command, "cd"))
-		cd(data);
-	else if (ft_strcmp(command, "echo"))
+	if (!ft_strcmp(command, "cd"))
+		main_cd(data, data->splitted_args[data->command_nb]);
+	/*else if (!ft_strcmp(command, "echo"))
 	{
 		if (data->first->next->type == OPTION)
 			echo(data, 1);
 		else
 			echo(data, 0);
-	}
-	else if (ft_strcmp(command, "env"))
+	}*/
+	else if (!ft_strcmp(command, "env"))
 		env(data);
-	else */if (!ft_strcmp(command, "exit"))
-		ft_exit(data, 0);
-	/*else if (ft_strcmp(command, "pwd"))
+	else if (!ft_strcmp(command, "pwd"))
 		pwd();
-	else if (ft_strcmp(command, "unset"))
-		unset(data);
-	else if (ft_strcmp(command, "export"))
-		export(data);*/
+	else if (!ft_strcmp(command, "unset"))
+		main_unset(data, data->splitted_args[data->command_nb]);
+	else if (!ft_strcmp(command, "export"))
+		main_export(data, data->splitted_args[data->command_nb]);
 	else
 		ret = 0;
 	return (ret);
@@ -93,20 +89,46 @@ static int	child(t_data *data)
 	g_pid = fork();
 	if (g_pid == 0)
 	{
-		bin = get_bin_path(data->splitted_args[data->command_nb][0]);
-		if (bin == NULL)
-			bin = data->splitted_args[data->command_nb][0];
-		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+		if (!check_built_in(data, data->splitted_args[data->command_nb][0]))
 		{
-			if (errno == 14)
-				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
-			else
-				perror("minishell");
-			return (1);
+			bin = get_bin_path(data->splitted_args[data->command_nb][0]);
+			if (bin == NULL)
+				bin = data->splitted_args[data->command_nb][0];
+			if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+			{
+				if (errno == 14)
+					printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+				else
+					perror("minishell");
+				return (1);
+			}
 		}
 	}
 	else
 		return (0);
+}
+
+static int	outfile_func(t_data *data, int *fdout)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	while (i < data->nb_outfiles - 1)
+	{
+		fd = open(data->outfile[i], O_CREAT | O_RDWR |
+			O_APPEND, 0644);
+		if (fd == -1)
+			perror("fd");
+		else
+			close(fd);
+		i++;
+	}
+	if (data->last_out == 1)
+		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	else
+		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_APPEND, 0644);
+	return (fd);
 }
 
 static int	exe_pipe(t_data *data, int *fdin, int *fdout)
@@ -115,7 +137,14 @@ static int	exe_pipe(t_data *data, int *fdin, int *fdout)
 	char	*bin;
 
 	if (data->command_nb == data->nb_pipe)
-		*fdout = dup(data->tmpout);
+	{
+		if (data->nb_outfiles)
+			*fdout = outfile_func(data, fdout);
+		else
+		{
+			*fdout = dup(data->tmpout);
+		}
+	}
 	else
 	{
 		if (pipe(fd))
@@ -128,35 +157,7 @@ static int	exe_pipe(t_data *data, int *fdin, int *fdout)
 	child(data);
 	data->command_nb++;
 	data->actual = to_next_command(data->actual);
-	
 	return (0);
-}
-
-static void	execution_ve(t_data *data, char *bin)
-{
-	pid_t	pid;
-	int		status;
-
-	status = 0;
-	pid = fork();
-	if (pid == -1)
-		perror("fork");
-	else if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		kill(pid, SIGTERM);
-	}
-	else
-	{
-		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
-		{
-			if (errno == 14)
-				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
-			else
-				perror("minishell");
-		}
-		exit(EXIT_SUCCESS);
-	}
 }
 
 int	execution(t_data *data)
@@ -166,38 +167,28 @@ int	execution(t_data *data)
 	int		fdout;
 
 	data->tmpin = dup(STDIN);
-	data->tmpout = dup (STDOUT);
-	fdin = dup(data->tmpin);
+	data->tmpout = dup(STDOUT);
+	if (data->nb_infiles > 0)
+		fdin = open(data->infile[0], O_RDONLY);
+	else
+		fdin = dup(data->tmpin);
 	data->actual = data->first;
 	data->splitted_args = split_arg(data);
 	while (data->actual)
 	{
 		if (data->actual->type == COMMAND)
 		{
-			if (check_pipe(data->actual))
+			while (data->command_nb < data->nb_pipe + 1)
 			{
-				while (data->command_nb < data->nb_pipe + 1)
-				{
-					dup2(fdin, STDIN);
-					close(fdin);
-					exe_pipe(data, &fdin, &fdout);
-				}
-				dup2(data->tmpin, STDIN);
-				dup2(data->tmpout, STDOUT);
-				close(data->tmpin);
-				close(data->tmpout);
-				waitpid(g_pid, NULL, 0);
+				dup2(fdin, STDIN);
+				close(fdin);
+				exe_pipe(data, &fdin, &fdout);
 			}
-			else
-			{
-				if (check_built_in(data))
-					break ;
-				bin = get_bin_path(data->actual->content);
-				if (bin == NULL)
-					bin = data->actual->content;
-				execution_ve(data, bin);
-			}
-			data->command_nb++;
+			dup2(data->tmpin, STDIN);
+			dup2(data->tmpout, STDOUT);
+			close(data->tmpin);
+			close(data->tmpout);
+			waitpid(g_pid, NULL, 0);
 		}
 		if (data->actual)
 			data->actual = data->actual->next;

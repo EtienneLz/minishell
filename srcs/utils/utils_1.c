@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/01 18:50:48 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/08 17:36:26 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ char	***split_arg(t_data *data)
 		return (NULL);
 	actual = data->first;
 	i = 0;
+	while (actual && actual->type != COMMAND)
+		actual = actual->next;
 	while (i <= data->nb_pipe + 1)
 	{
 		if (i != 0)
@@ -108,6 +110,8 @@ char	***split_arg(t_data *data)
 		j = 0;
 		while (actual && actual->type != PIPE)
 		{
+			if (actual->type == RR_ARROW || actual->type == R_ARROW || actual->type == LL_ARROW || actual->type == L_ARROW)
+				break ;
 			size++;
 			actual = actual->next;	
 		}
@@ -115,10 +119,13 @@ char	***split_arg(t_data *data)
 		if (i != 0)
 			actual = to_pipe(data, actual, i);
 		else
-			actual = data->first;
+			while (actual && actual->type != COMMAND)
+				actual = actual->next;
 		ret[i] = malloc(sizeof(char*) * (size + 2));
 		while (actual && actual->type != PIPE)
 		{
+			if (actual->type == RR_ARROW || actual->type == R_ARROW || actual->type == LL_ARROW || actual->type == L_ARROW)
+				break ;
 			ret[i][j] = actual->content;
 			actual = actual->next;
 			j++;
@@ -127,6 +134,20 @@ char	***split_arg(t_data *data)
 		i++;
 	}
 	ret[i] = NULL;
+	i = 0;
+	j = 0;
+	/*printf("bonjour\n");
+	while (ret[i])
+	{
+		while(ret[i][j])
+		{
+			printf("ss%s ", ret[i][j]);
+			j++;
+		}
+		printf("\n");
+		j = 0;
+		i++;
+	}*/
 	return (ret);
 }
 

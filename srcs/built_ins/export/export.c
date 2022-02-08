@@ -125,7 +125,7 @@ void	export_args(t_data *data, char **args)
 			i++;
 		len += i;
 		i = 0;
-		tmp_env = malloc((len + 1) * sizeof(char*));
+		tmp_env = malloc((len + 1) * sizeof(char *));
 		//if (!x_env)
 			//return (NULL);
 		tmp_env = copy_env(data->envp, tmp_env, &i);

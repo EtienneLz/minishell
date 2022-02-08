@@ -15,8 +15,9 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/unset/unset_check_args.c \
 		srcs/parsing/split_command.c \
 		srcs/alloc/exit_free.c \
-		srcs/parsing/tokenizer.c \
-		srcs/execution/execution.c 
+		srcs/parsing/lexer.c \
+		srcs/execution/execution.c \
+		srcs/parsing/expansion.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -28,7 +29,7 @@ INCLUDES = -I/includes/minishell.h
 
 CFLAGS = -g #-fsanitize=address #-Werror -Wall -Wextra
 
-CC = gcc 
+CC = clang 
 
 LIB = 42_libft/libft.a -I./usr/include
 

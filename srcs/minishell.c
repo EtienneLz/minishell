@@ -28,11 +28,14 @@ static int	mini_routine(t_data *data, char *buffer)
 	if (buffer[0] == '\0')
 		return (1);
 	if (split_command(data, buffer))
-		return (0);
-	if (tokenizer(data))
-		return (0);
+		return (2);
+	if (lexer(data))
+		return (3);
+	//expand(data);
+	check_exit(data);
 	if (execution(data))
-		return (0);
+		return (4);
+	return (0);
 }
 
 void	do_sig(int sig)
@@ -78,6 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	data.buffer = malloc(1);
 	signal(SIGQUIT, do_sig);
 	signal(SIGINT, do_sig);
+	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
 		signal(SIGQUIT, do_sig);
@@ -85,6 +89,9 @@ int	main(int argc, char **argv, char **envp)
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
+		//printf("%d\n", d);
+		if (data.buffer)
+			add_history(data.buffer);
 	}
 	return (0);
 }
