@@ -6,11 +6,19 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:29 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/24 23:44:39 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:37:24 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void    cd_error(t_data *data, char *str)
+{
+    ft_putstr_fd("minishell: cd: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd(": No such file or directory\n", 2);
+    data->last_ret = 1;
+}
 
 void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 {
@@ -98,28 +106,29 @@ void	do_cd(t_data *data, char **args, int len)
 	}
 	else
 	{
-	if (args[1][0] == '/')
-		data->cd.ret = chdir(args[1]);
-	else if (args[1][0] == '~')
-	{
-		str = if_tilde(data, args[1]);
-		data->cd.ret = chdir(str);
+		if (args[1][0] == '/')
+			data->cd.ret = chdir(args[1]);
+		else if (args[1][0] == '~')
+		{
+			str = if_tilde(data, args[1]);
+			data->cd.ret = chdir(str);
+		}
+		else
+		{
+			str = malloc(ft_strlen(path) + ft_strlen(args[1]) + 2);
+			//if (!str)
+				//erreur
+			str = cd_join(path, args[1], str);
+			data->cd.ret = chdir(str);
+		}
 	}
+	if(data->cd.ret != 0)
+		cd_error(data, args[1]);
 	else
 	{
-		str = malloc(ft_strlen(path) + ft_strlen(args[1]) + 2);
-		//if (!str)
-			//erreur
-		str = cd_join(path, args[1], str);
-		data->cd.ret = chdir(str);
-		if(data->cd.ret != 0)
-			perror("minishell");
+		getcwd(path, PATH_MAX);
+		change_pwd_vars(data, pwd, path);
 	}
-	}
-	//if (data->cd.ret != 0)
-	//	return ;//message d'erreur, chemin non existant
-	getcwd(path, PATH_MAX);
-	change_pwd_vars(data, pwd, path);
 }
 
 int	main_cd(t_data * data, char **args)
@@ -128,6 +137,7 @@ int	main_cd(t_data * data, char **args)
 	char	*new_dir;
 
 	len = 0;
+	data->last_ret = 0;
 	while (args[len])
 		len++;
 	do_cd(data, args, len);

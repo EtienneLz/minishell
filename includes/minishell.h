@@ -82,12 +82,13 @@ typedef struct	s_data
 	int			error;
 	int			nb_pipe;
 	int			command_nb;
-	int			pid;
+	//int			pid;
 	int			tmpin;
 	int			tmpout;
 	char		*buffer;
 	char		quote_type;
 	int			ret;
+	int			last_ret;
 	int			nb_infiles;
 	char		**infile;
 	int			nb_outfiles;
@@ -96,13 +97,14 @@ typedef struct	s_data
 	char		*tmp_var;
 }				t_data;
 
+int  g_pid;
 /*
 ** Built-ins functions 
 */
-void	env(t_data *data);
-void	echo(char *s, int flag_n);
-void	pwd(void);
-void	ft_exit(t_data *data);
+void	ft_env(t_data *data, char **args);
+void	ft_echo(t_data *data, char **args, int flag_n);
+void	ft_pwd(t_data *data);
+void	ft_exit(t_data *data, char **args);
 char	**copy_args(t_data *data, char **str, char **dest, int *i);
 
 /*

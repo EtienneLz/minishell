@@ -1,5 +1,13 @@
 #include "../../../includes/minishell.h"
 
+void    unset_error(t_data *data, char *str)
+{
+    ft_putstr_fd("minishell: unset: `", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("': not a valid identifier\n", 2);
+    data->last_ret = 1;
+}
+
 int		cmp_unset_arg(t_data *data, char *str)
 {
 	int i;
@@ -39,9 +47,14 @@ void    check_unset_args(t_data *data, char **args)
     k = 0;
     while (args[i])
     {
+        printf(" i = %d\n", i);
         j = 0;
         while (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
+        {
+            if (data->unset.check == 0 && args[i][0] != '_')
+                unset_error(data, args[i]);
             i++; //ajouter message d'erreur
+        }
         while (args[i] && args[i][j] && (ft_isalnum(args[i][j]) || args[i][j] == '_'))
             j++;
         if (args[i] && !args[i][j] && cmp_unset_arg(data, args[i]) == 1)
@@ -52,8 +65,8 @@ void    check_unset_args(t_data *data, char **args)
                 data->unset.valid_args++;
 			i++;
         }
-		else if (args[i] && args[i][j])
-			i++;//message d'erreur
+		else if (args[i])
+			i++;
     }
     data->unset.check = 1;
 }
@@ -62,7 +75,6 @@ void    check_unset_args(t_data *data, char **args)
 void	unset_main_check(t_data *data, char **args)
 {
 	check_unset_args(data, args);
-	//printf("ok\n");
 	if (data->unset.valid_args != 0)
 	{
 		data->unset.args = malloc((data->unset.valid_args + 1) * sizeof(char *));

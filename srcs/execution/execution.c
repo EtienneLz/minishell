@@ -86,8 +86,8 @@ static char	*get_bin_path(char *command)
 static int	child(t_data *data)
 {
 	char	*bin;
-	data->pid = fork();
-	if (data->pid == 0)
+	g_pid = fork();
+	if (g_pid == 0)
 	{
 		if (!check_built_in(data, data->splitted_args[data->command_nb][0]))
 		{
@@ -188,7 +188,7 @@ int	execution(t_data *data)
 			dup2(data->tmpout, STDOUT);
 			close(data->tmpin);
 			close(data->tmpout);
-			waitpid(data->pid, NULL, 0);
+			waitpid(g_pid, NULL, 0);
 		}
 		if (data->actual)
 			data->actual = data->actual->next;

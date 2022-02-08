@@ -46,8 +46,11 @@ void	unset_args(t_data *data, char **args)
 	int	i;
 	char	**tmp_env;
 
+	len = 0;
 	data->unset.is_unset = 1;
 	unset_main_check(data, args);
+	if (data->unset.args != NULL)
+	{
 	while (data->envp[len])
 		len++;
 	i = 0;
@@ -63,6 +66,7 @@ void	unset_args(t_data *data, char **args)
 	data->envp = tmp_env;
 	free_tab(data->unset.args);
 	data->unset.is_unset = 0;
+	}
 }
 
 /**
@@ -72,6 +76,7 @@ void	unset_args(t_data *data, char **args)
 
 void	main_unset(t_data *data, char **args)
 {
+	data->last_ret = 0;
 	if (args[1] != NULL)
 		unset_args(data, args);
 }

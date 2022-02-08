@@ -38,19 +38,54 @@ static int	mini_routine(t_data *data, char *buffer)
 	return (0);
 }
 
+void	do_sig(int sig)
+{
+	printf("pid = %d\n", g_pid);
+	if (g_pid == 0)
+	{
+		if (sig == SIGQUIT)
+			printf("quit yay!\n");
+		if (sig == SIGINT)
+			printf("quit C\n");
+	}
+	else
+	{
+		if (sig == SIGQUIT)
+			printf("no quit\n");
+		if (sig == SIGINT)
+			printf("quit\n");
+	}
+	//return ;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
+	char	*arg[6];
+	char *str;
 
 	init(&data);
+	/*data.envp = envp;
+	arg[0] = "unset";
+	arg[1] = "ZSH=hello";
+	arg[2] = "56labla";
+	arg[3] = "papi=poop";
+	arg[4] = "lk:po=54";
+	arg[5] = NULL;
+	main_export(&data, arg);
+	export_no_arg(&data);*/
 	(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
+	signal(SIGQUIT, do_sig);
+	signal(SIGINT, do_sig);
 	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
+		signal(SIGQUIT, do_sig);
+		signal(SIGINT, do_sig);
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
