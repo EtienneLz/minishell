@@ -31,7 +31,7 @@ static int	check_built_in(t_data *data)
 	else if (ft_strcmp(command, "env"))
 		env(data);
 	else */if (!ft_strcmp(command, "exit"))
-		ft_exit(data);
+		ft_exit(data, 0);
 	/*else if (ft_strcmp(command, "pwd"))
 		pwd();
 	else if (ft_strcmp(command, "unset"))
@@ -90,8 +90,8 @@ static char	*get_bin_path(char *command)
 static int	child(t_data *data)
 {
 	char	*bin;
-	data->pid = fork();
-	if (data->pid == 0)
+	g_pid = fork();
+	if (g_pid == 0)
 	{
 		bin = get_bin_path(data->splitted_args[data->command_nb][0]);
 		if (bin == NULL)
@@ -186,7 +186,7 @@ int	execution(t_data *data)
 				dup2(data->tmpout, STDOUT);
 				close(data->tmpin);
 				close(data->tmpout);
-				waitpid(data->pid, NULL, 0);
+				waitpid(g_pid, NULL, 0);
 			}
 			else
 			{

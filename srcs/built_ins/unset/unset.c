@@ -76,6 +76,7 @@ void	unset_args(t_data *data, char **args)
 
 void	main_unset(t_data *data, char **args)
 {
+	data->last_ret = 0;
 	if (args[1] != NULL)
 		unset_args(data, args);
 }

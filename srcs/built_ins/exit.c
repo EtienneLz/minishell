@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:57:34 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/07 21:18:10 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/02/08 17:31:28 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		if_zero(char *str)
 	else
 		if (str[1] == '0')
 			return (0);
+	return(2);
 }
 
 void	non_numeric_arg(t_data *data, char *arg)
@@ -72,15 +73,15 @@ void	ft_exit(t_data *data, char **args)
 			i = 0;
 			while (args[1][i])
 			{
-				if (i == 0 && (args[1][i] == '-' || args[1][i] == '+')
+				if (i == 0 && (args[1][i] == '-' || args[1][i] == '+'))
 					i++;
 				if (!(ft_isdigit(args[1][i])))
-					non_numeric_arg(data, args[1])
+					non_numeric_arg(data, args[1]);
 				i++;
 			}
 			nb = ft_atoi(args[1]);
 			if (nb == 0)
-				non_numeric_arg(args[1]);
+				non_numeric_arg(data, args[1]);
 			else if (nb > 255 || nb < 0)
 			{
 				ft_putstr_fd("exit", 1);

@@ -1,5 +1,13 @@
 #include "../../../includes/minishell.h"
 
+void    export_error(t_data *data, char *str)
+{
+    ft_putstr_fd("minishell: export: `", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("': not a valid identifier\n", 2);
+    data->last_ret = 1;
+}
+
 void    get_valid_args(t_data *data, char *str, int *i)
 {
     int len;
@@ -29,7 +37,7 @@ void    check_export_args(t_data *data, char **args)
         if (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
         {
             if (data->export.check == 0 && args[i][0] != '_')
-                printf("minishell: export: `%s': not a valid identifier\n", args[i]);
+                export_error(data, args[i]);
             i++;
         }
 		else if (args[i] && cmp_export_arg(data, args[i]) == 1)

@@ -12,13 +12,22 @@
 
 #include "../../includes/minishell.h"
 
-void	env(t_data *data, char **args)
+void    env_error(t_data *data, char *str)
+{
+    ft_putstr_fd("env: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd(": No such file or directory\n", 2);
+    data->last_ret = 127;
+}
+
+void	ft_env(t_data *data, char **args)
 {
 	int	i;
 
+	data->last_ret = 0;
 	if (args[1] != NULL)
 	{
-		printf("env: %s: No such file or directory", args[1]);
+		env_error(data, args[1]);
 		return ;
 	}
 	i = 0;

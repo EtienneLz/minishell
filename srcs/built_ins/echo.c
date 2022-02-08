@@ -12,16 +12,18 @@
 
 #include "../../includes/minishell.h"
 
-void	echo(char *s, int flag_n)
+void	ft_echo(t_data *data, char **args, int flag_n)
 {
 	int	i;
 
-	i = 0;
-	if (s == NULL && flag_n == 0)
+	i = 1;
+	data->last_ret = 0;
+	if (args[1] == NULL && flag_n == 0)
 		ft_putstr_fd("\n", 1);
 	else
 	{
-		ft_putstr_fd(s, 1);
+		while (args[i])
+			ft_putstr_fd(args[i++], 1);
 		if (!flag_n)
 			ft_putstr_fd("\n", 1);
 	}

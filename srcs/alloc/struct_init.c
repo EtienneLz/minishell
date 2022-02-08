@@ -27,7 +27,7 @@ void	init(t_data *data)
 	data->export.equal = 0;
 	data->envp_i = 0;
 	data->command_nb = 0;
-	data->pid = 0;
+	g_pid = 0;
 	data->tmpin = 0;
 	data->tmpout = 0;
 	data->unset.is_unset = 0;
@@ -53,7 +53,7 @@ void	reset(t_data *data)
 	data->export.equal = 0;
 	data->envp_i = 0;
 	data->command_nb = 0;
-	data->pid = 0;
+	g_pid = 0;
 	data->tmpin = 0;
 	data->tmpout = 0;
 	data->unset.is_unset = 0;

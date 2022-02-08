@@ -6,11 +6,19 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 12:56:29 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/07 19:06:30 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:37:24 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void    cd_error(t_data *data, char *str)
+{
+    ft_putstr_fd("minishell: cd: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd(": No such file or directory\n", 2);
+    data->last_ret = 1;
+}
 
 void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 {
@@ -115,7 +123,7 @@ void	do_cd(t_data *data, char **args, int len)
 		}
 	}
 	if(data->cd.ret != 0)
-		printf("minishell: cd: %s: No such file or directory\n", args[1]);
+		cd_error(data, args[1]);
 	else
 	{
 		getcwd(path, PATH_MAX);
@@ -129,6 +137,7 @@ int	main_cd(t_data * data, char **args)
 	char	*new_dir;
 
 	len = 0;
+	data->last_ret = 0;
 	while (args[len])
 		len++;
 	do_cd(data, args, len);

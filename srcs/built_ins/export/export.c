@@ -138,6 +138,7 @@ void	export_args(t_data *data, char **args)
 
 void	main_export(t_data *data, char **args)
 {
+	data->last_ret = 0;
 	if(args[1] != NULL)
 		export_args(data, args);
 	else

@@ -1,5 +1,13 @@
 #include "../../../includes/minishell.h"
 
+void    unset_error(t_data *data, char *str)
+{
+    ft_putstr_fd("minishell: unset: `", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("': not a valid identifier\n", 2);
+    data->last_ret = 1;
+}
+
 int		cmp_unset_arg(t_data *data, char *str)
 {
 	int i;
@@ -44,7 +52,7 @@ void    check_unset_args(t_data *data, char **args)
         while (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
         {
             if (data->unset.check == 0 && args[i][0] != '_')
-                printf("minishell: unset: `%s': not a valid identifier\n", args[i]);
+                unset_error(data, args[i]);
             i++; //ajouter message d'erreur
         }
         while (args[i] && args[i][j] && (ft_isalnum(args[i][j]) || args[i][j] == '_'))
