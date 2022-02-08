@@ -12,13 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-static int	check_built_in(t_data *data)
+static int	check_built_in(t_data *data, char *command)
 {
-	char 	*command;
 	int		ret;
 
-	ret = 1;
-	command = data->first->content;
+	//ret = 1;
 	/*if (ft_strcmp(command, "cd"))
 		cd(data);
 	else if (ft_strcmp(command, "echo"))
@@ -30,15 +28,13 @@ static int	check_built_in(t_data *data)
 	}
 	else if (ft_strcmp(command, "env"))
 		env(data);
-	else */if (!ft_strcmp(command, "exit"))
-		ft_exit(data);
 	/*else if (ft_strcmp(command, "pwd"))
 		pwd();
 	else if (ft_strcmp(command, "unset"))
 		unset(data);
 	else if (ft_strcmp(command, "export"))
 		export(data);*/
-	else
+	//else
 		ret = 0;
 	return (ret);
 }
@@ -93,16 +89,19 @@ static int	child(t_data *data)
 	data->pid = fork();
 	if (data->pid == 0)
 	{
-		bin = get_bin_path(data->splitted_args[data->command_nb][0]);
-		if (bin == NULL)
-			bin = data->splitted_args[data->command_nb][0];
-		if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+		if (!check_built_in(data, data->splitted_args[data->command_nb][0]))
 		{
-			if (errno == 14)
-				printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
-			else
-				perror("minishell");
-			return (1);
+			bin = get_bin_path(data->splitted_args[data->command_nb][0]);
+			if (bin == NULL)
+				bin = data->splitted_args[data->command_nb][0];
+			if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
+			{
+				if (errno == 14)
+					printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+				else
+					perror("minishell");
+				return (1);
+			}
 		}
 	}
 	else

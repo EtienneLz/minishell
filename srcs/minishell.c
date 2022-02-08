@@ -31,6 +31,7 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (0);
 	if (lexer(data))
 		return (0);
+	check_exit(data);
 	if (execution(data))
 		return (0);
 }

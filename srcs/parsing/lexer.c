@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/06 22:38:15 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/08 09:15:30 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	checker(t_data *data)
 		if (actual->type == COMMAND && next->type == STRING)
 			if (next->content[0] == '-')
 				next->type = OPTION;
-		if ((actual->type != STRING || actual->type != STRING_SIMPLE)&& actual->type == next->type)
+		if ((actual->type != STRING || actual->type != STRING_SIMPLE) && actual->type == next->type)
 			return (1);
 		actual = next;
 		next = actual->next;
@@ -124,7 +124,7 @@ int	lexer(t_data *data)
 			if (actual->next)
 			{
 
-				if (actual->type == PIPE && actual->type == 0)
+				if (actual->type == PIPE && actual->next->type == 0)
 					actual->next->type = COMMAND;
 				else
 					actual->next->type = STRING;
@@ -137,6 +137,7 @@ int	lexer(t_data *data)
 	actual = data->first;
 	while (actual)
 	{
+		//printf("t = %c\n", actual->type);
 		counter(data, actual->type);
 		actual = actual->next;
 	}

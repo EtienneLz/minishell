@@ -137,6 +137,7 @@ t_token	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
+void	check_exit(t_data *data);
 
 void	init(t_data *data);
 void	reset(t_data *data);
