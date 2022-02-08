@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <errno.h> 
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -87,6 +88,12 @@ typedef struct	s_data
 	char		*buffer;
 	char		quote_type;
 	int			ret;
+	int			nb_infiles;
+	char		**infile;
+	int			nb_outfiles;
+	char		**outfile;
+	int			last_out;
+	char		*tmp_var;
 }				t_data;
 
 /*
@@ -131,15 +138,17 @@ t_token	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
+void	check_exit(t_data *data);
 
 void	init(t_data *data);
 void	reset(t_data *data);
-int		tokenizer(t_data *data);
+int		lexer(t_data *data);
 int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
 int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
+void 	expand(t_data *data);
 
 #endif

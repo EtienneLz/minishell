@@ -35,6 +35,10 @@ void	init(t_data *data)
 	data->unset.valid_args = 0;
 	data->unset.args = NULL;
 	data->cd.home = NULL;
+	data->nb_infiles = 0;
+	data->nb_outfiles = 0;
+	data->last_out = 0;
+	data->tmp_var = NULL;
 }
 
 void	reset(t_data *data)
@@ -60,4 +64,8 @@ void	reset(t_data *data)
 	data->unset.check = 0;
 	data->unset.valid_args = 0;
 	data->unset.args = NULL;
+	data->nb_infiles = 0;
+	data->nb_outfiles = 0;
+	data->last_out = 0;
+	data->tmp_var = NULL;
 }

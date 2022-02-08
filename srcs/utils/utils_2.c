@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/08 09:32:08 by elouchez          #+#    #+#             */
+/*   Updated: 2022/02/08 09:32:08 by elouchez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	check_pipe(t_token	*actual)
@@ -30,4 +42,18 @@ t_token	*to_next_command(t_token *actual)
 		act = act->next;
 	}
 	return (act);
+}
+
+void	check_exit(t_data *data)
+{
+	t_token	*actual;
+
+	actual = data->first;
+	while (actual)
+	{
+		if (actual->type == COMMAND)
+			if (!ft_strcmp(actual->content, "exit"))
+				ft_exit(data);
+		actual = actual->next;
+	}
 }
