@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 18:27:36 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/08 09:37:33 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/08 17:36:26 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,9 @@ char	***split_arg(t_data *data)
 		i++;
 	}
 	ret[i] = NULL;
-	/*i = 0;
+	i = 0;
 	j = 0;
+	/*printf("bonjour\n");
 	while (ret[i])
 	{
 		while(ret[i][j])

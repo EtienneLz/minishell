@@ -16,25 +16,25 @@ static int	check_built_in(t_data *data, char *command)
 {
 	int		ret;
 
-	//ret = 1;
-	/*if (ft_strcmp(command, "cd"))
-		cd(data);
-	else if (ft_strcmp(command, "echo"))
+	ret = 1;
+	if (!ft_strcmp(command, "cd"))
+		main_cd(data, data->splitted_args[data->command_nb]);
+	/*else if (!ft_strcmp(command, "echo"))
 	{
 		if (data->first->next->type == OPTION)
 			echo(data, 1);
 		else
 			echo(data, 0);
-	}
-	else if (ft_strcmp(command, "env"))
+	}*/
+	else if (!ft_strcmp(command, "env"))
 		env(data);
-	/*else if (ft_strcmp(command, "pwd"))
+	else if (!ft_strcmp(command, "pwd"))
 		pwd();
-	else if (ft_strcmp(command, "unset"))
-		unset(data);
-	else if (ft_strcmp(command, "export"))
-		export(data);*/
-	//else
+	else if (!ft_strcmp(command, "unset"))
+		main_unset(data, data->splitted_args[data->command_nb]);
+	else if (!ft_strcmp(command, "export"))
+		main_export(data, data->splitted_args[data->command_nb]);
+	else
 		ret = 0;
 	return (ret);
 }

@@ -28,36 +28,35 @@ static int	mini_routine(t_data *data, char *buffer)
 	if (buffer[0] == '\0')
 		return (1);
 	if (split_command(data, buffer))
-		return (0);
+		return (2);
 	if (lexer(data))
-		return (0);
+		return (3);
+	//expand(data);
 	check_exit(data);
 	if (execution(data))
-		return (0);
+		return (4);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	//char	*arg[3];
 
 	init(&data);
-	/*arg[0] = "export";
-	arg[1] = "ZSH=hello";
-	arg[2] = NULL;*/
-	//main_check(&data, arg);
-	//export_args(&data, arg);
-	//export_no_arg(&data);
 	(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
+	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
+		//printf("%d\n", d);
+		if (data.buffer)
+			add_history(data.buffer);
 	}
 	return (0);
 }

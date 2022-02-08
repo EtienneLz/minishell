@@ -93,6 +93,7 @@ typedef struct	s_data
 	int			nb_outfiles;
 	char		**outfile;
 	int			last_out;
+	char		*tmp_var;
 }				t_data;
 
 /*
@@ -148,5 +149,6 @@ void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
 int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
+void 	expand(t_data *data);
 
 #endif

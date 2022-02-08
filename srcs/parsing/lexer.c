@@ -6,7 +6,7 @@
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:27:37 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/08 09:15:30 by elouchez         ###   ########.fr       */
+/*   Updated: 2022/02/08 17:35:57 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,13 @@ int	lexer(t_data *data)
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	actual = data->first;
+	/*actual = data->first;
 	while (actual)
 	{
 		//printf("t = %c\n", actual->type);
 		counter(data, actual->type);
 		actual = actual->next;
-	}
+	}*/
 	infiles_name(data);
-	return (checker(data));
+	return (0);
 }

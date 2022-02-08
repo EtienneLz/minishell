@@ -38,6 +38,7 @@ void	init(t_data *data)
 	data->nb_infiles = 0;
 	data->nb_outfiles = 0;
 	data->last_out = 0;
+	data->tmp_var = NULL;
 }
 
 void	reset(t_data *data)
@@ -66,4 +67,5 @@ void	reset(t_data *data)
 	data->nb_infiles = 0;
 	data->nb_outfiles = 0;
 	data->last_out = 0;
+	data->tmp_var = NULL;
 }
