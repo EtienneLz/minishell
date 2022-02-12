@@ -19,7 +19,7 @@ int		if_zero(char *str)
 	if (ft_strlen(str) == 1)
 	{
 		if (str[0] != '0')
-			return (-1);
+ 			return (-1);
 		else
 			return (0);
 	}

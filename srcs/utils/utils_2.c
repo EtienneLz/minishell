@@ -47,13 +47,50 @@ t_token	*to_next_command(t_token *actual)
 void	check_exit(t_data *data)
 {
 	t_token	*actual;
+	int		i;
 
 	actual = data->first;
+	i = 0;
 	while (actual)
 	{
 		if (actual->type == COMMAND)
+		{
+			i++;
 			if (!ft_strcmp(actual->content, "exit"))
-				ft_exit(data);
+				ft_exit(data, data->splitted_args[i - 1]);
+		}
 		actual = actual->next;
 	}
+}
+
+char	*check_quotes(char *str)
+{
+	int		i;
+	int		len;
+	char	quote;
+	char	*dest;
+
+	i = 0;
+	quote = 0;
+	len = ft_strlen(str) + 1;
+	if (str[0] == '\"')
+		quote = '\"';
+	else if (str[0] == '\'')
+		quote = '\'';
+	if (quote)
+	{
+		len--;
+		i = 1;
+	}
+	if (str[len - 2] == quote)
+		len--;
+	dest = malloc(sizeof(char) * len);
+	while (i < len - 1)
+	{
+		dest[i - 1] = str[i];
+		i++;
+	}
+	dest[i - 1] = '\0';
+	free(str);
+	return (dest);
 }

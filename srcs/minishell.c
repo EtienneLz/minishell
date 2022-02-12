@@ -31,7 +31,8 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (2);
 	if (lexer(data))
 		return (3);
-	//expand(data);
+	expand(data);
+	data->splitted_args = split_arg(data);
 	check_exit(data);
 	if (execution(data))
 		return (4);
@@ -65,27 +66,14 @@ int	main(int argc, char **argv, char **envp)
 	char *str;
 
 	init(&data);
-	/*data.envp = envp;
-	arg[0] = "unset";
-	arg[1] = "ZSH=hello";
-	arg[2] = "56labla";
-	arg[3] = "papi=poop";
-	arg[4] = "lk:po=54";
-	arg[5] = NULL;
-	main_export(&data, arg);
-	export_no_arg(&data);*/
 	(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
-	signal(SIGQUIT, do_sig);
-	signal(SIGINT, do_sig);
 	data.buffer[0] = '\0';
-	while (data.buffer)
+	while (data.buffer && data.exit == 0)
 	{
-		signal(SIGQUIT, do_sig);
-		signal(SIGINT, do_sig);
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);
