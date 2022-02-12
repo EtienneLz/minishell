@@ -134,13 +134,13 @@ int	lexer(t_data *data)
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	/*actual = data->first;
+	actual = data->first;
 	while (actual)
 	{
 		//printf("t = %c\n", actual->type);
 		counter(data, actual->type);
 		actual = actual->next;
-	}*/
+	}
 	infiles_name(data);
 	return (0);
 }

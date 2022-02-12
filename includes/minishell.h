@@ -39,34 +39,34 @@
 # define RR_ARROW 'x'
 # define LL_ARROW 'y'
 
-typedef struct	s_token
+typedef struct		s_token
 {
 	char			*content;
 	char			type;
 	struct s_token	*next;
-} 				t_token;
+} 					t_token;
 
 typedef struct	s_export
 {
-	char	**args;
-	int		check;
-	int		valid_args;
-	int		equal;
+	char		**args;
+	int			check;
+	int			valid_args;
+	int			equal;
 }				t_export;
 
 typedef struct  s_unset
 {
-	int		is_unset;
-	int		check;
-	int		valid_args;
-	char	**args;
-	int		ret;
+	int			is_unset;
+	int			check;
+	int			valid_args;
+	char		**args;
+	int			ret;
 }				t_unset;
 
 typedef struct  s_cd
 {
-	int		ret;
-	char	*home;
+	int			ret;
+	char		*home;
 }				t_cd;
 
 typedef struct	s_data
@@ -82,7 +82,6 @@ typedef struct	s_data
 	int			error;
 	int			nb_pipe;
 	int			command_nb;
-	//int			pid;
 	int			tmpin;
 	int			tmpout;
 	char		*buffer;
@@ -152,5 +151,6 @@ int		split_command(t_data *data, char *command);
 int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
 void 	expand(t_data *data);
+char	*check_quotes(char *str);
 
 #endif

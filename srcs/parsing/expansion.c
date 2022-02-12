@@ -47,7 +47,7 @@ static char *check_exist(t_data *data, char *var)
     {
         if (!ft_strncmp(var, data->envp[i], ft_strlen(var)))
         {
-            ret = malloc(sizeof(char) * ft_strlen(data->envp[i]));
+            ret = malloc(sizeof(char) * (ft_strlen(data->envp[i]) + 1));
             ft_strcpy(ret, data->envp[i]);
     	    return (ret);
         }
@@ -64,7 +64,7 @@ static char  *size_var(t_data *data, char *var)
 
     i = 0;
     var_name = malloc(sizeof(char) * (ft_strlen(var) + 2));
-    while (var[i + 1])
+    while (var[i + 1] && var[i + 1] != ' ')
     {
         var_name[i] = var[i + 1];
         i++;
@@ -72,8 +72,7 @@ static char  *size_var(t_data *data, char *var)
     var_name[i] = '=';
     var_name[i + 1] = '\0';
     convert_var = check_exist(data, var_name);
-    //printf("check %s\n", var_name);
-    if (!convert_var)   
+    if (!convert_var)
     {
         convert_var = malloc(sizeof(char));
         convert_var = "";
@@ -89,8 +88,14 @@ static char *unsplit(char **split_str)
     int     size;
     char    *str;
 
-    i = 0;
-    size = 0;
+    i = 1;
+    str = ft_strdup(split_str[0]);
+    while (split_str[i])
+    {
+        str = ft_strjoin_free(str, split_str[i]);
+        i++;
+    }
+    /*size = 0;
     while (split_str[i])
     {
         size += ft_strlen(split_str[i]);
@@ -111,7 +116,7 @@ static char *unsplit(char **split_str)
             j++;
         }
         i++;
-    }
+    }*/
     //printf("%s\n", str);
     return (str);
 }
@@ -121,9 +126,10 @@ static void check_var(t_data *data, char *str, t_token *actual)
     char    **split_str;
     char    *replaced;
     int     i;
+    int     j;
 
     i = 0;
-    split_str = ft_split(str, ' ');
+    split_str = ft_split_noskip(str, '$');
     while (split_str[i])
     {
         if (split_str[i][0] == '$')
@@ -146,7 +152,14 @@ void expand(t_data *data)
     while (actual)
     {
         if (actual->type == STRING)
+        {
+            if (actual->content[0] == '\"')
+                actual->content = check_quotes(actual->content);
             check_var(data, actual->content, actual);
+        }
+        else if (actual->type == STRING_SIMPLE)
+            if (actual->content[0] == '\'')
+                actual->content = check_quotes(actual->content);
         actual = actual->next;
     }
 }

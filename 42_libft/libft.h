@@ -55,5 +55,6 @@ char			*ft_itoa(int n);
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char			**ft_split(char const *s, char c);
 char			**ft_split_noskip(char const *s, char c);
+char	        *ft_strjoin_free(char *s1, char *s2);
 
 #endif

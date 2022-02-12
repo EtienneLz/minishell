@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_free.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/13 07:35:49 by elouchez          #+#    #+#             */
-/*   Updated: 2022/02/08 11:51:24 by elouchez         ###   ########.fr       */
+/*   Created: 2022/02/11 02:22:03 by elouchez          #+#    #+#             */
+/*   Updated: 2022/02/11 02:22:03 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-void	splitted_args_free(char ***tab)
+char	*ft_strjoin_free(char *s1, char *s2)
 {
-	int	i;
+	char	*dest;
+	int		i;
+	int		j;
 
 	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-void	minifree(t_data *data)
-{
-	if (data->first)
-		ft_lstfree(data);
-	if (data->splitted_args)
-		splitted_args_free(data->splitted_args);
-	free(data->buffer);
-	if (data->outfile)
-		free_tab(data->outfile);
-	if (data->infile)
-		free_tab(data->infile);
+	j = 0;
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
+	dest = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (dest == NULL)
+		return (NULL);
+	while (s1[i])
+		dest[j++] = s1[i++];
+	i = 0;
+	while (s2[i])
+		dest[j++] = s2[i++];
+	dest[j] = '\0';
+    free(s1);
+	return (dest);
 }

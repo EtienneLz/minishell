@@ -134,9 +134,9 @@ char	***split_arg(t_data *data)
 		i++;
 	}
 	ret[i] = NULL;
-	i = 0;
+	/*i = 0;
 	j = 0;
-	/*printf("bonjour\n");
+	printf("bonjour\n");
 	while (ret[i])
 	{
 		while(ret[i][j])

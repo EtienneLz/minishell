@@ -27,9 +27,9 @@ static int	check_built_in(t_data *data, char *command)
 			echo(data, 0);
 	}*/
 	else if (!ft_strcmp(command, "env"))
-		env(data);
+		ft_env(data, data->splitted_args[data->command_nb]);
 	else if (!ft_strcmp(command, "pwd"))
-		pwd();
+		ft_pwd(data);
 	else if (!ft_strcmp(command, "unset"))
 		main_unset(data, data->splitted_args[data->command_nb]);
 	else if (!ft_strcmp(command, "export"))
@@ -96,13 +96,14 @@ static int	child(t_data *data)
 				bin = data->splitted_args[data->command_nb][0];
 			if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
 			{
-				if (errno == 14)
+				if (errno == 2)
 					printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
 				else
 					perror("minishell");
-				return (1);
+				exit(0);
 			}
 		}
+		return (0);
 	}
 	else
 		return (0);
@@ -173,7 +174,7 @@ int	execution(t_data *data)
 	else
 		fdin = dup(data->tmpin);
 	data->actual = data->first;
-	data->splitted_args = split_arg(data);
+	//data->splitted_args = split_arg(data);
 	while (data->actual)
 	{
 		if (data->actual->type == COMMAND)

@@ -35,15 +35,17 @@ static unsigned int	ft_get_nb_strs(char const *s, char c)
 		return (0);
 	i = 0;
 	nb_strs = 0;
-	while (s[i] && s[i] == c)
+	while (s[i] == c)
 		i++;
 	while (s[i])
 	{
 		if (s[i] == c)
 		{
 			nb_strs++;
-			while (s[i] && s[i] == c)
+			while (s[i] && s[i] != ' ')
 				i++;
+			if (s[i] && s[i] == ' ')
+				nb_strs++;
 			continue ;
 		}
 		i++;
@@ -61,6 +63,16 @@ static void	ft_get_next_str(char **next_str, unsigned int *next_str_len,
 	*next_str += *next_str_len;
 	*next_str_len = 0;
 	i = 0;
+	
+	if ((*next_str)[i] && (*next_str)[i] == c)
+	{
+		while ((*next_str)[i] && (*next_str)[i] != ' ')
+		{
+			(*next_str_len)++;
+			i++;
+		}
+		return ;
+	}
 	while ((*next_str)[i])
 	{
 		if ((*next_str)[i] == c)
@@ -97,5 +109,11 @@ char	**ft_split_noskip(char const *s, char c)
 		i++;
 	}
 	tab[i] = NULL;
+	/*i = 0;
+	while(tab[i])
+	{
+		printf("i%d: %s%%\n", i, tab[i]);
+		i++;
+	}*/
 	return (tab);
 }
