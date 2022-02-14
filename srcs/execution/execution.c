@@ -103,7 +103,7 @@ static int	child(t_data *data)
 				exit(0);
 			}
 		}
-		return (0);
+		exit(0);
 	}
 	else
 		return (0);
