@@ -32,7 +32,6 @@
 # define STRING_SIMPLE 'q'
 # define COMMAND 'c'
 # define OPTION 'o'
-# define FILE 'f'
 # define PIPE 'p'
 # define R_ARROW 'r'
 # define L_ARROW 'l'
@@ -94,6 +93,7 @@ typedef struct	s_data
 	char		**outfile;
 	int			last_out;
 	char		*tmp_var;
+	int			heredoc;
 }				t_data;
 
 int  g_pid;
@@ -104,14 +104,12 @@ void	ft_env(t_data *data, char **args);
 void	ft_echo(t_data *data, char **args, int flag_n);
 void	ft_pwd(t_data *data);
 void	ft_exit(t_data *data, char **args);
-char	**copy_args(t_data *data, char **str, char **dest, int *i);
-
+int		main_cd(t_data * data, char **args);
 /*
 ** utils functions
 */
 
 int		if_equal(t_data *data,char *s1, char *s2);
-int		main_cd(t_data * data, char **args);
 char	*join_arg(char *s1, char *s2);
 
 /*
@@ -152,5 +150,8 @@ int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
 void 	expand(t_data *data);
 char	*check_quotes(char *str);
+char	*line_prompt(char *prompt);
+void	print_error(t_data *data, char *error_str);
+char	is_redirection(char *str);
 
 #endif

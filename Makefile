@@ -17,7 +17,8 @@ SRCS = srcs/minishell.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/lexer.c \
 		srcs/execution/execution.c \
-		srcs/parsing/expansion.c
+		srcs/parsing/expansion.c \
+		srcs/error/error.c \
 
 OBJS = ${SRCS:.c=.o}
 

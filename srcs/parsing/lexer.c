@@ -12,11 +12,10 @@
 
 #include "../../includes/minishell.h"
 
-static char	is_redirection(t_data *data, char *str)
+char	is_redirection(char *str)
 {
 	if (!ft_strcmp(str, "|"))
 	{
-		data->nb_pipe++;
 		return (PIPE);
 	}
 	else if (!ft_strcmp(str, "<"))
@@ -41,11 +40,14 @@ static void	counter(t_data *data, char type)
 	if (type == L_ARROW)
 		data->nb_infiles++;
 	else if (type == LL_ARROW)
-		data->nb_infiles++;
+		data->heredoc++;
 	else if (type == R_ARROW)
 		data->nb_outfiles++;
 	else if (type == RR_ARROW)
 		data->nb_outfiles++;
+	else if (type == PIPE)
+		data->nb_pipe++;
+	
 }
 
 static void	infiles_name(t_data *data)
@@ -74,7 +76,8 @@ static void	infiles_name(t_data *data)
 		}
 		else if ((actual->type == L_ARROW || actual->type == LL_ARROW) && actual->next)
 		{
-			data->infile[i] = actual->next->content;
+			if (actual->type == L_ARROW)
+				data->infile[i] = actual->next->content;
 			if (actual->next->next && (is_redirection(data, actual->next->next->content) == 0))
 				actual->next->next->type = COMMAND;
 			i++;
@@ -111,13 +114,13 @@ int	lexer(t_data *data)
 	char	type;
 
 	actual = data->first;
-	actual->type = is_redirection(data, actual->content);
+	actual->type = is_redirection(actual->content);
 	if (actual->type == 0)
 		actual->type = COMMAND;
 	while (actual->next)
 	{
 		actual = actual->next;
-		type = is_redirection(data, actual->content);
+		type = is_redirection(actual->content);
 		if (type)
 		{
 			actual->type = type;
@@ -139,6 +142,12 @@ int	lexer(t_data *data)
 	{
 		//printf("t = %c\n", actual->type);
 		counter(data, actual->type);
+		if (is_redirection(actual->content) && !actual->next)
+		{
+			print_error(data, "syntax error near unexpected token `newline\'\n");
+			return (1);
+		}
+			
 		actual = actual->next;
 	}
 	infiles_name(data);

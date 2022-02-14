@@ -94,3 +94,21 @@ char	*check_quotes(char *str)
 	free(str);
 	return (dest);
 }
+
+int	nb_next_cmd(t_token	*actual)
+{
+	char	redir;
+	int		i;
+
+	i = 0;
+	redir = is_redirection(actual->type);
+	while (actual && (redir == PIPE || actual->type == STRING
+		|| actual->type == STRING_SIMPLE || actual->type == OPTION
+		|| actual->type == COMMAND))
+	{
+		if (actual->type == COMMAND)
+			i++;
+		actual = actual->next;
+	}
+	return (i);
+}

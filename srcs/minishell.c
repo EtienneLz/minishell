@@ -31,6 +31,8 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (2);
 	if (lexer(data))
 		return (3);
+	//if (data->heredoc > 0)
+	//	ft_heredoc(data);
 	expand(data);
 	data->splitted_args = split_arg(data);
 	check_exit(data);
@@ -59,6 +61,16 @@ void	do_sig(int sig)
 	//return ;
 }
 
+char	*line_prompt(char *prompt)
+{
+	char	*buffer;
+
+	buffer = malloc(1);
+	buffer = "";
+	buffer = readline(prompt);
+	return (buffer);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -72,10 +84,10 @@ int	main(int argc, char **argv, char **envp)
 	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
 	data.buffer[0] = '\0';
-	while (data.buffer && data.exit == 0)
+	while (data.buffer)
 	{
 		reset_var(&data);
-		data.buffer = readline("$> ");
+		data.buffer = line_prompt("$> ");
 		mini_routine(&data, data.buffer);
 		//printf("%d\n", d);
 		if (data.buffer)

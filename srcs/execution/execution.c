@@ -103,7 +103,7 @@ static int	child(t_data *data)
 				exit(0);
 			}
 		}
-		return (0);
+		exit(0);
 	}
 	else
 		return (0);
@@ -166,6 +166,7 @@ int	execution(t_data *data)
 	char	*bin;
 	int		fdin;
 	int		fdout;
+	int		nb_next_cmd;
 
 	data->tmpin = dup(STDIN);
 	data->tmpout = dup(STDOUT);
@@ -179,11 +180,13 @@ int	execution(t_data *data)
 	{
 		if (data->actual->type == COMMAND)
 		{
-			while (data->command_nb < data->nb_pipe + 1)
+			nb_next_cmd = nb_next_cmd(actual);
+			while (data->actual->type == COMMAND && nb_next_cmd)
 			{
 				dup2(fdin, STDIN);
 				close(fdin);
 				exe_pipe(data, &fdin, &fdout);
+				nb_next_cmd--;
 			}
 			dup2(data->tmpin, STDIN);
 			dup2(data->tmpout, STDOUT);
