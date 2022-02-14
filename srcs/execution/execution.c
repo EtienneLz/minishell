@@ -27,9 +27,9 @@ static int	check_built_in(t_data *data, char *command)
 			echo(data, 0);
 	}*/
 	else if (!ft_strcmp(command, "env"))
-		env(data);
+		ft_env(data, 0);
 	else if (!ft_strcmp(command, "pwd"))
-		pwd();
+		ft_pwd(data);
 	else if (!ft_strcmp(command, "unset"))
 		main_unset(data, data->splitted_args[data->command_nb]);
 	else if (!ft_strcmp(command, "export"))

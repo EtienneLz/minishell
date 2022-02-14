@@ -40,21 +40,34 @@ static int	mini_routine(t_data *data, char *buffer)
 
 void	do_sig(int sig)
 {
-	printf("pid = %d\n", g_pid);
-	if (g_pid == 0)
+	//printf("pid = %d\n", g_pid);
+	//signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	if (g_pid != 0)
 	{
+		//if (!(kill(g_pid, sig)))
+		//{
 		if (sig == SIGQUIT)
-			printf("quit yay!\n");
+			printf("quit \\\n");
 		if (sig == SIGINT)
 			printf("quit C\n");
+		//}
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
+		//signal(SIGQUIT, SIG_IGN);
+		//printf("pid = %d\n", g_pid);
 		if (sig == SIGQUIT)
-			printf("no quit\n");
+		{
+			printf("do nothing");
+			//return ;
+		}
 		if (sig == SIGINT)
-			printf("quit\n");
+			printf("$>");
 	}
+	//signal(SIGQUIT, do_sig);
+	//signal(SIGINT, do_sig);
 	//return ;
 }
 
@@ -79,13 +92,13 @@ int	main(int argc, char **argv, char **envp)
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
 	data.buffer = malloc(1);
-	signal(SIGQUIT, do_sig);
-	signal(SIGINT, do_sig);
+	//signal(SIGQUIT, do_sig);
+	//signal(SIGINT, do_sig);
 	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
-		signal(SIGQUIT, do_sig);
-		signal(SIGINT, do_sig);
+		//signal(SIGQUIT, do_sig);
+		//signal(SIGINT, do_sig);
 		reset_var(&data);
 		data.buffer = readline("$> ");
 		mini_routine(&data, data.buffer);

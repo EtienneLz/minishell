@@ -53,7 +53,7 @@ void	check_exit(t_data *data)
 	{
 		if (actual->type == COMMAND)
 			if (!ft_strcmp(actual->content, "exit"))
-				ft_exit(data);
+				ft_exit(data, 0);
 		actual = actual->next;
 	}
 }

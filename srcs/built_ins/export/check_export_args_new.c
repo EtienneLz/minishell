@@ -55,7 +55,7 @@ void    check_export_args(t_data *data, char **args)
             }
             else if (args[i])
                 if (data->export.check == 0)
-                    printf("minishell: export: `%s': not a valid identifier\n", args[i]);
+                    export_error(data, args[i]);
             i++;
         }
     }
