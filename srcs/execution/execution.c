@@ -109,7 +109,7 @@ static int	child(t_data *data)
 					perror("minishell");
 				printf("errno1 = %d\n", errno);
 				data->last_ret = errno;
-				kill(g_pid, SIGTERM);
+				//kill(g_pid, SIGTERM);
 				//exit(0);
 			}
 			printf("errno2 = %d\n", errno);
