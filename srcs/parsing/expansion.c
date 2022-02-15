@@ -134,9 +134,14 @@ static void check_var(t_data *data, char *str, t_token *actual)
     {
         if (split_str[i][0] == '$')
         {
-            replaced = size_var(data, split_str[i]);
-            free(split_str[i]);
-            split_str[i] = replaced;
+            if (ft_strlen(split_str[i]) == 2 && split_str[i][1] == '?')
+                split_str[i] = ft_itoa(data->last_ret);
+            else
+            {
+                replaced = size_var(data, split_str[i]);
+                free(split_str[i]);
+                split_str[i] = replaced;
+            }
         }
         i++;
     }

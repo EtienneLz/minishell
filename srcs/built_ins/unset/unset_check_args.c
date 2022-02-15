@@ -47,7 +47,6 @@ void    check_unset_args(t_data *data, char **args)
     k = 0;
     while (args[i])
     {
-        printf(" i = %d\n", i);
         j = 0;
         while (args[i] && ((!(ft_isalpha(args[i][j])) && args[i][j] != '_') || (args[i][0] == '_' && args[i][1] == '=')))
         {
