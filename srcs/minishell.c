@@ -35,7 +35,9 @@ static int	mini_routine(t_data *data, char *buffer)
 	//	ft_heredoc(data);
 	expand(data);
 	data->splitted_args = split_arg(data);
+	structure(data);
 	check_exit(data);
+	data->pid = malloc(sizeof(int) * data->nb_command);
 	if (execution(data))
 		return (4);
 	return (0);

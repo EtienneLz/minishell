@@ -40,6 +40,7 @@ void	init(t_data *data)
 	data->nb_outfiles = 0;
 	data->last_out = 0;
 	data->tmp_var = NULL;
+	data->nb_command = 0;
 }
 
 void	reset(t_data *data)
@@ -70,4 +71,5 @@ void	reset(t_data *data)
 	data->last_out = 0;
 	data->tmp_var = NULL;
 	data->heredoc = 0;
+	data->nb_command = 0;
 }

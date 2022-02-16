@@ -24,6 +24,7 @@ void	ft_lstadd_back(t_token **alst, t_token *new)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 }
 
@@ -40,6 +41,17 @@ t_token	*ft_lstnew(char *content)
 	else
 		dest->content = content;
 	dest->next = NULL;
+	dest->prev = NULL;
+	dest->next_in = NULL;
+	dest->next_out = NULL;
+	dest->next_d_out = NULL;
+	dest->prev_in = NULL;
+	dest->prev_out = NULL;
+	dest->prev_d_out = NULL;
+	dest->prev_pipe = 0;
+	dest->next_pipe = 0;
+	dest->args = NULL;
+	dest->id = 0;
 	return (dest);
 }
 

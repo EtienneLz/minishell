@@ -101,7 +101,7 @@ int	nb_next_cmd(t_token	*actual)
 	int		i;
 
 	i = 0;
-	redir = is_redirection(actual->type);
+	redir = is_redirection(actual->content);
 	while (actual && (redir == PIPE || actual->type == STRING
 		|| actual->type == STRING_SIMPLE || actual->type == OPTION
 		|| actual->type == COMMAND))

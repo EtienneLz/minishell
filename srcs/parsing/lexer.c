@@ -47,6 +47,8 @@ static void	counter(t_data *data, char type)
 		data->nb_outfiles++;
 	else if (type == PIPE)
 		data->nb_pipe++;
+	else if (type == COMMAND)
+		data->nb_command++;
 	
 }
 
@@ -70,7 +72,7 @@ static void	infiles_name(t_data *data)
 				data->last_out = 2;
 			else
 				data->last_out = 1;
-			if (actual->next->next && (is_redirection(data, actual->next->next->content) == 0))
+			if (actual->next->next && (is_redirection(actual->next->next->content) == 0))
 				actual->next->next->type = COMMAND;
 			j++;
 		}
@@ -78,7 +80,7 @@ static void	infiles_name(t_data *data)
 		{
 			if (actual->type == L_ARROW)
 				data->infile[i] = actual->next->content;
-			if (actual->next->next && (is_redirection(data, actual->next->next->content) == 0))
+			if (actual->next->next && (is_redirection(actual->next->next->content) == 0))
 				actual->next->next->type = COMMAND;
 			i++;
 		}

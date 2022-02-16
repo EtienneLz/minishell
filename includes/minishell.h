@@ -40,8 +40,19 @@
 
 typedef struct		s_token
 {
+	struct s_token	*prev;
 	char			*content;
 	char			type;
+	int				id;
+	char			**args;
+	char			*prev_out;
+	char			*prev_d_out;
+	char			*prev_in;
+	char			*next_out;
+	char			*next_d_out;
+	char			*next_in;
+	int				prev_pipe;
+	int				next_pipe;
 	struct s_token	*next;
 } 					t_token;
 
@@ -81,6 +92,7 @@ typedef struct	s_data
 	int			error;
 	int			nb_pipe;
 	int			command_nb;
+	int			nb_command;
 	int			tmpin;
 	int			tmpout;
 	char		*buffer;
@@ -94,6 +106,8 @@ typedef struct	s_data
 	int			last_out;
 	char		*tmp_var;
 	int			heredoc;
+	int			pipes[2];
+	pid_t		*pid;
 }				t_data;
 
 int  g_pid;
@@ -153,5 +167,8 @@ char	*check_quotes(char *str);
 char	*line_prompt(char *prompt);
 void	print_error(t_data *data, char *error_str);
 char	is_redirection(char *str);
+int		is_arrow(char *str);
+int		is_string(char type);
+void	structure(t_data *data);
 
 #endif
