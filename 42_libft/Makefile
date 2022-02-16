@@ -34,7 +34,7 @@ RM  = rm -f
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	libtool -o ${NAME} ${OBJS}
+	ar rc -o ${NAME} ${OBJS}
 	ranlib ${NAME}
 
 bonus:		${OBJSBONUS} ${OBJS}

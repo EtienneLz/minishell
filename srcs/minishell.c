@@ -75,15 +75,29 @@ void	do_sig(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*arg[6];
-	char *str;
+	char	*arg[3];
+	char	*unset[3];
 
 	init(&data);
 	(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
-	data.buffer = malloc(1);
+	unset[0] = "unset";
+	//unset[1] = "OLDPWD=bijour";
+	unset[1] = "PWD=niiice";
+	unset[2] = NULL;
+	//main_unset(&data, unset);
+	main_export(&data, unset);
+	//printf("mawie = %s\n", getenv("mawie"));
+	//printf("zsh = %s\n", getenv("ZSH"));
+	arg[0] = "cd";
+	arg[1] = "-";
+	arg[2] = NULL;
+	main_cd(&data, arg);
+	ft_pwd(&data);
+	export_no_arg(&data);
+	/*data.buffer = malloc(1);
 	//signal(SIGQUIT, do_sig);
 	//signal(SIGINT, do_sig);
 	data.buffer[0] = '\0';
@@ -97,6 +111,6 @@ int	main(int argc, char **argv, char **envp)
 		//printf("%d\n", d);
 		if (data.buffer)
 			add_history(data.buffer);
-	}
+	}*/
 	return (0);
 }

@@ -111,7 +111,7 @@ char	**copy_args(t_data *data, char **str, char **dest, int *i);
 */
 
 int		if_equal(t_data *data,char *s1, char *s2);
-int		main_cd(t_data * data, char **args);
+void	main_cd(t_data * data, char **args);
 char	*join_arg(char *s1, char *s2);
 
 /*
@@ -140,6 +140,8 @@ void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
 void	check_exit(t_data *data);
+char	*treat_var(char *var);
+char	*check_exist(t_data *data, char *var);
 
 void	init(t_data *data);
 void	reset(t_data *data);

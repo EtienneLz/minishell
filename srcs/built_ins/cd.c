@@ -14,9 +14,14 @@
 
 void    cd_error(t_data *data, char *str)
 {
-    ft_putstr_fd("minishell: cd: ", 2);
-    ft_putstr_fd(str, 2);
-    ft_putstr_fd(": No such file or directory\n", 2);
+	if (!str)
+		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+	else
+	{
+    	ft_putstr_fd("minishell: cd: ", 2);
+    	ft_putstr_fd(str, 2);
+    	ft_putstr_fd(": No such file or directory\n", 2);
+	}
     data->last_ret = 1;
 }
 
@@ -91,6 +96,18 @@ char	*if_tilde(t_data *data, char *arg)
 	return (new_dir);
 }
 
+char	*get_env_val(t_data *data, char *str)
+{
+	char	*ret;
+	char	*tmp;
+
+	tmp = check_exist(data, str);
+	if (!tmp)
+		return (tmp);
+	ret = treat_var(tmp);
+	return (ret);
+}
+
 void	do_cd(t_data *data, char **args, int len)
 {
 	char path[PATH_MAX];
@@ -98,7 +115,7 @@ void	do_cd(t_data *data, char **args, int len)
 	char *str;
 
 	getcwd(path, PATH_MAX);
-	pwd = getenv("PWD");
+	pwd = get_env_val(data, "PWD");
 	if (len == 1)
 	{
 		str = if_tilde(data, args[0]);
@@ -108,30 +125,38 @@ void	do_cd(t_data *data, char **args, int len)
 	{
 		if (args[1][0] == '/')
 			data->cd.ret = chdir(args[1]);
-		else if (args[1][0] == '~')
-		{
-			str = if_tilde(data, args[1]);
-			data->cd.ret = chdir(str);
-		}
 		else
 		{
-			str = malloc(ft_strlen(path) + ft_strlen(args[1]) + 2);
-			//if (!str)
-				//erreur
-			str = cd_join(path, args[1], str);
-			data->cd.ret = chdir(str);
+			if (args[1][0] == '~')
+				str = if_tilde(data, args[1]);
+			else if (args[1][0] == '-' && args[1][1] == '\0')
+				str = get_env_val(data, "OLDPWD");
+			else
+			{
+				str = malloc(ft_strlen(path) + ft_strlen(args[1]) + 2);
+				//if (!str)
+					//erreur
+				str = cd_join(path, args[1], str);
+			}
+			if (!str)
+				data->cd.ret = 1;
+			else
+				data->cd.ret = chdir(str);
 		}
 	}
-	if(data->cd.ret != 0)
+	if(data->cd.ret != 0 && !(args[1][0] == '-' && args[1][1] == '\0'))
 		cd_error(data, args[1]);
+	else if (data->cd.ret != 0)
+		cd_error(data, str);
 	else
 	{
 		getcwd(path, PATH_MAX);
 		change_pwd_vars(data, pwd, path);
+		data->last_ret = 0;
 	}
 }
 
-int	main_cd(t_data * data, char **args)
+void	main_cd(t_data *data, char **args)
 {
 	int	len;
 	char	*new_dir;
@@ -140,6 +165,11 @@ int	main_cd(t_data * data, char **args)
 	data->last_ret = 0;
 	while (args[len])
 		len++;
-	do_cd(data, args, len);
-	return (data->cd.ret);
+	if (len > 2)
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		data->last_ret = 1;
+	}
+	else
+		do_cd(data, args, len);
 }

@@ -20,11 +20,11 @@ char	**copy_unset_env(t_data *data, char **dest, int *i)
 
 	j = 0;
 	len = 0;
+	k = 0;
 	while (data->envp[len])
 		len++;
 	while (j < len)
 	{
-		k = 0;
 		if (data->unset.args[k] && if_equal(data, data->envp[j], data->unset.args[k]) == 1)
 			k++;
 		else

@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static char *treat_var(t_data *data, char *var)
+char *treat_var(char *var)
 {
     int     i;
     int     size;
@@ -36,7 +36,7 @@ static char *treat_var(t_data *data, char *var)
     return (ret);
 }
 
-static char *check_exist(t_data *data, char *var)
+char *check_exist(t_data *data, char *var)
 {
     int     i;
     char    *ret;
@@ -78,7 +78,7 @@ static char  *size_var(t_data *data, char *var)
         convert_var = "";
         return (convert_var);
     }
-    return (treat_var(data, convert_var));
+    return (treat_var(convert_var));
 } 
 
 static char *unsplit(char **split_str)
