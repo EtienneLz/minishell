@@ -140,28 +140,26 @@ static void	redirection2(t_token *actual)
 		close (fd);
 }
 
-static int	child(t_data *data, t_token *actual)
+static int	child(t_data *data, t_token *actual, int i)
 {
 	char	*bin;
+	int		fd;
 
 	if (actual->prev_in || actual->prev_out || actual->prev_d_out)
 		redirection(actual);
 	if (actual->prev_pipe)
 	{
-		dup2(data->pipes[0], STDIN);
-		close(data->pipes[0]);
+		dup2(to_prev_command(actual)->pipes[0] , STDIN);
 	}
 	if (actual->next_pipe)
 	{
-		dup2(data->pipes[1], STDOUT);
-		close (data->pipes[1]);
+		if (dup2(actual->pipes[1], STDOUT) < 0)
+			printf("error\n");
+		close(actual->pipes[1]);
+		close(actual->pipes[0]);
 	}
 	else if (actual->next_out || actual->next_d_out)
 		redirection2(actual);
-	else
-	{
-		dup2(data->tmpout, STDOUT);
-	}
 	bin = get_bin_path(actual->args[0]);
 	if (bin == NULL)
 		bin = actual->args[0];
@@ -194,21 +192,27 @@ static int	parent(t_data *data, t_token *actual)
 	i = 0;
 	ex = 0;
 	status = 0;
-	if (actual->id == data->nb_command - 1)
+	if (actual->prev_pipe)
+		close(to_prev_command(actual)->pipes[0]);
+	if (actual->next_pipe || actual->prev_pipe)
 	{
+		close(actual->pipes[1]);
+		if (actual->id == data->nb_command - 1)
+		{
 		//dup2(data->pipes[1], 0);
 		//close(data->pipes[0]);
-		while (i < data->nb_command)
-		{
-			printf("here %d\n", i);
-			waitpid(data->pid[i], &status, 0);
-			if (i == data->nb_command - 1)
+			while (i < data->nb_command)
 			{
-				ex = WIFEXITED(status);
-				if (ex > -1)
-					ret = WEXITSTATUS(status);
+				//printf("%d\n", i);
+				waitpid(data->pid[i], &status, 0);
+				if (i == data->nb_command - 1)
+				{
+					ex = WIFEXITED(status);
+					if (ex > -1)
+						ret = WEXITSTATUS(status);
+				}
+				i++;
 			}
-			i++;
 		}
 	}
 	return (ret);
@@ -220,14 +224,13 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 	int		error;
 
 	error = 0;
-	printf("%d\n", actual->next_pipe);
-	if (actual->next_pipe)
-		error = pipe(data->pipes);
+	if (actual->next_pipe || actual->prev_pipe)
+		error = pipe(actual->pipes);
 	if (error != 0)
 		return (1);
 	data->pid[i] = fork();
 	if (data->pid[i] == 0)
-		child(data, actual);
+		child(data, actual, i);
 	else
 		parent(data, actual);
 	return (0);
@@ -236,12 +239,12 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 int	execution(t_data *data)
 {
 	char	*bin;
-	int		fdin;
+	/*int		fdin;
 	int		fdout;
 
 	data->tmpin = dup(STDIN);
 	data->tmpout = dup(STDOUT);
-	fdin = dup(data->tmpin);
+	fdin = dup(data->tmpin);*/
 	data->actual = data->first;
 	if (data->actual->type != COMMAND)
 		data->actual = to_next_command(data->actual);
@@ -253,10 +256,10 @@ int	execution(t_data *data)
 		if (!data->actual)
 			break;
 	}
-	dup2(data->tmpin, STDIN);
+	/*dup2(data->tmpin, STDIN);
 	dup2(data->tmpout, STDOUT);
 	close(data->tmpin);
-	close(data->tmpout);
+	close(data->tmpout);*/
 	free(data->pid);
 	return (0);
 }

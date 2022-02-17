@@ -83,11 +83,11 @@ void	structure(t_data *data)
 		actual = to_next_command(actual);
 	}
 	args_associate(data);
-	actual = data->first;
+	/*actual = data->first;
 	while (actual)
 	{
 		if (actual->type == COMMAND)
-			printf("%s next: %d prev: %d\n", actual->content, actual->next_pipe, actual->prev_pipe);
+			printf("%s next: %s prev: %s\n", actual->content, actual->next_out, actual->prev_out);
 		actual = actual->next;
-	}
+	}*/
 }

@@ -33,3 +33,16 @@ int	is_string(char type)
 		return (1);
 	return (0);
 }
+
+t_token	*to_prev_command(t_token *actual)
+{
+	t_token	*act;
+
+	act = actual;
+	if (act->prev == NULL)
+		return (NULL);
+	act = act->prev;
+	while (act && act->type != COMMAND)
+		act = act->prev;
+	return (act);
+}

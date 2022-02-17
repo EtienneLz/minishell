@@ -53,6 +53,7 @@ typedef struct		s_token
 	char			*next_in;
 	int				prev_pipe;
 	int				next_pipe;
+	int				pipes[2];
 	struct s_token	*next;
 } 					t_token;
 
@@ -106,7 +107,7 @@ typedef struct	s_data
 	int			last_out;
 	char		*tmp_var;
 	int			heredoc;
-	int			pipes[2];
+	//int			pipes[2];
 	pid_t		*pid;
 }				t_data;
 
@@ -170,5 +171,6 @@ char	is_redirection(char *str);
 int		is_arrow(char *str);
 int		is_string(char type);
 void	structure(t_data *data);
+t_token	*to_prev_command(t_token *actual);
 
 #endif
