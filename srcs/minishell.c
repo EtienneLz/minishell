@@ -16,10 +16,7 @@ static void	reset_var(t_data *data)
 {
 	if (data->buffer)
 		free(data->buffer);
-	if (data->first)
-		ft_lstfree(data);
-	if (data->splitted_args)
-		splitted_args_free(data->splitted_args);
+	minifree(data);
 	reset(data);
 }
 

@@ -16,6 +16,7 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 {
 	if (dir)
 	{
+		printf("ddddd\n");
 		if (to_copy->type == L_ARROW)
 			actual->prev_in = ft_strdup(to_copy->next->content);
 		//if (to_copy->type == LL_ARROW)
@@ -83,11 +84,12 @@ void	structure(t_data *data)
 		actual = to_next_command(actual);
 	}
 	args_associate(data);
-	/*actual = data->first;
+	actual = data->first;
 	while (actual)
 	{
-		if (actual->type == COMMAND)
-			printf("%s next: %s prev: %s\n", actual->content, actual->next_out, actual->prev_out);
+		printf("%c\n", actual->type);
+		//if (actual->type == COMMAND)
+		//	printf("%s next: %d prev: %d\n", actual->content, actual->next_pipe, actual->prev_pipe);
 		actual = actual->next;
-	}*/
+	}
 }

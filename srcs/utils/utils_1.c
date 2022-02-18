@@ -123,9 +123,17 @@ char	***split_arg(t_data *data)
 		while (actual && actual->type != PIPE)
 		{
 			if (actual->type == RR_ARROW || actual->type == R_ARROW || actual->type == LL_ARROW || actual->type == L_ARROW)
-				break ;
-			size++;
-			actual = actual->next;	
+			{
+				if (actual->next && actual->next->next)
+					actual = actual->next->next;
+				else
+					break ;
+			}
+			else
+			{
+				size++;
+				actual = actual->next;
+			}	
 		}
 		actual = data->first;
 		if (i != 0)
@@ -137,10 +145,18 @@ char	***split_arg(t_data *data)
 		while (actual && actual->type != PIPE)
 		{
 			if (actual->type == RR_ARROW || actual->type == R_ARROW || actual->type == LL_ARROW || actual->type == L_ARROW)
-				break ;
-			ret[i][j] = actual->content;
-			actual = actual->next;
-			j++;
+			{
+				if (actual->next && actual->next->next)
+					actual = actual->next->next;
+				else
+					break ;
+			}
+			else
+			{
+				ret[i][j] = actual->content;
+				actual = actual->next;
+				j++;
+			}
 		}
 		ret[i][j] = NULL;
 		i++;
@@ -148,7 +164,6 @@ char	***split_arg(t_data *data)
 	ret[i] = NULL;
 	/*i = 0;
 	j = 0;
-	printf("bonjour\n");
 	while (ret[i])
 	{
 		while(ret[i][j])
