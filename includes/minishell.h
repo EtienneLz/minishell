@@ -39,14 +39,14 @@
 # define RR_ARROW 'x'
 # define LL_ARROW 'y'
 
-typedef struct		s_token
+typedef struct s_token
 {
 	char			*content;
 	char			type;
 	struct s_token	*next;
-} 					t_token;
+}				t_token;
 
-typedef struct	s_export
+typedef struct s_export
 {
 	char		**args;
 	int			check;
@@ -54,7 +54,7 @@ typedef struct	s_export
 	int			equal;
 }				t_export;
 
-typedef struct  s_unset
+typedef struct s_unset
 {
 	int			is_unset;
 	int			check;
@@ -63,13 +63,13 @@ typedef struct  s_unset
 	int			ret;
 }				t_unset;
 
-typedef struct  s_cd
+typedef struct s_cd
 {
 	int			ret;
 	char		*home;
 }				t_cd;
 
-typedef struct	s_data
+typedef struct s_data
 {
 	t_token		*first;
 	t_token		*actual;
@@ -96,39 +96,50 @@ typedef struct	s_data
 	char		*tmp_var;
 }				t_data;
 
-int  g_pid;
+int	g_pid;
+/*
+** Errors functions 
+*/
+void	cd_error(t_data *data, char *str);
+void	unset_error(t_data *data, char *str);
+void	export_error(t_data *data, char *str);
+
 /*
 ** Built-ins functions 
 */
-void	ft_env(t_data *data, char **args);
-void	ft_echo(t_data *data, char **args, int flag_n);
-void	ft_pwd(t_data *data);
+int		ft_env(t_data *data, char **args);
+int		ft_echo(t_data *data, char **args, int flag_n);
+int		ft_pwd(t_data *data);
 void	ft_exit(t_data *data, char **args);
-char	**copy_args(t_data *data, char **str, char **dest, int *i);
 
 /*
-** utils functions
+** utils built-ins functions
 */
-
-int		if_equal(t_data *data,char *s1, char *s2);
-void	main_cd(t_data * data, char **args);
+int		if_equal(t_data *data, char *s1, char *s2);
 char	*join_arg(char *s1, char *s2);
+
+/*
+** Cd functions
+*/
+void	main_cd(t_data *data, char **args);
+void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd);
+char	*cd_join(char *dir, char *arg, char *new_dir);
+char	*if_tilde(t_data *data, char *arg);
 
 /*
 ** Export functions
 */
-void	main_export(t_data *data, char **args);
-void	export_no_arg(t_data *data);
-void	export_args(t_data *data, char **args);
-void    export_main_check(t_data *data, char **args);
-void    check_export_args(t_data *data, char **args);
-void 	copy_equal(t_data *data);
+int		main_export(t_data *data, char **args);
+void	export_main_check(t_data *data, char **args);
+char	**copy_env(char **tab, char **dest, int *i);
+char	**sort_env_atoz(char **tab, int len);
+void	copy_equal(t_data *data);
 int		cmp_export_arg(t_data *data, char *str);
 
 /*
 ** Unset functions
 */
-void	main_unset(t_data *data, char **args);
+int		main_unset(t_data *data, char **args);
 void	unset_main_check(t_data *data, char **args);
 
 /*
@@ -152,7 +163,7 @@ void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
 int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
-void 	expand(t_data *data);
+void	expand(t_data *data);
 char	*check_quotes(char *str);
 
 #endif

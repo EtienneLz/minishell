@@ -12,14 +12,14 @@
 
 #include "../../includes/minishell.h"
 
-int		if_zero(char *str)
+int	if_zero(char *str)
 {
 	if (ft_strlen(str) > 2)
 		return (-1);
 	if (ft_strlen(str) == 1)
 	{
 		if (str[0] != '0')
- 			return (-1);
+			return (-1);
 		else
 			return (0);
 	}
@@ -28,7 +28,7 @@ int		if_zero(char *str)
 	else
 		if (str[1] == '0')
 			return (0);
-	return(2);
+	return (2);
 }
 
 void	non_numeric_arg(t_data *data, char *arg)
@@ -43,8 +43,8 @@ void	non_numeric_arg(t_data *data, char *arg)
 
 void	ft_exit(t_data *data, char **args)
 {
-	int i;
-	long long nb;
+	int			i;
+	long long	nb;
 
 	i = 0;
 	while (args[i])

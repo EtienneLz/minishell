@@ -12,11 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-void	ft_pwd(t_data *data)
+int	ft_pwd(t_data *data)
 {
-	char path[PATH_MAX];
+	char	path[PATH_MAX];
 
-	data->last_ret = 0;
 	getcwd(path, PATH_MAX);
 	ft_putendl_fd(path, STDOUT);
+	return (0);
 }

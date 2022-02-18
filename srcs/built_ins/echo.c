@@ -12,12 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-void	ft_echo(t_data *data, char **args, int flag_n)
+int	ft_echo(t_data *data, char **args, int flag_n)
 {
 	int	i;
 
 	i = 1;
-	data->last_ret = 0;
 	if (args[1] == NULL && flag_n == 0)
 		ft_putstr_fd("\n", 1);
 	else
@@ -27,4 +26,5 @@ void	ft_echo(t_data *data, char **args, int flag_n)
 		if (!flag_n)
 			ft_putstr_fd("\n", 1);
 	}
+	return (0);
 }

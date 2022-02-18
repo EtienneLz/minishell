@@ -12,21 +12,29 @@
 
 #include "../../../includes/minishell.h"
 
-char	**copy_unset_env(t_data *data, char **dest, int *i)
+static int	exclude_equal(t_data *data, char *str)
 {
-	int		j;
-	int		k;
-	int		len;
+	int	i;
+
+	i = 0;
+	while (data->unset.args[i])
+	{
+		if (if_equal(data, str, data->unset.args[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static char	**copy_unset_env(t_data *data, char **dest, int *i)
+{
+	int	j;
 
 	j = 0;
-	len = 0;
-	k = 0;
-	while (data->envp[len])
-		len++;
-	while (j < len)
+	while (data->envp[j])
 	{
-		if (data->unset.args[k] && if_equal(data, data->envp[j], data->unset.args[k]) == 1)
-			k++;
+		if (exclude_equal(data, data->envp[j]))
+			j++;
 		else
 		{
 			dest[*i] = malloc((ft_strlen(data->envp[j]) + 1) * sizeof(char));
@@ -34,16 +42,16 @@ char	**copy_unset_env(t_data *data, char **dest, int *i)
 			//	return (NULL);
 			ft_strcpy(dest[*i], data->envp[j]);
 			(*i)++;
+			j++;
 		}
-		j++;
 	}
 	return (dest);
 }
 
-void	unset_args(t_data *data, char **args)
+static void	unset_args(t_data *data, char **args)
 {
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 	char	**tmp_env;
 
 	len = 0;
@@ -51,21 +59,21 @@ void	unset_args(t_data *data, char **args)
 	unset_main_check(data, args);
 	if (data->unset.args != NULL)
 	{
-	while (data->envp[len])
-		len++;
-	i = 0;
-	while (data->unset.args[i])
-		i++;
-	len -= i;
-	i = 0;
-	tmp_env = malloc((len + 1) * sizeof(char*));
-	//if (!x_env)
-		//return (NULL);
-	tmp_env = copy_unset_env(data, tmp_env, &i);
-	tmp_env[len] = NULL;
-	data->envp = tmp_env;
-	free_tab(data->unset.args);
-	data->unset.is_unset = 0;
+		while (data->envp[len])
+			len++;
+		i = 0;
+		while (data->unset.args[i])
+			i++;
+		len -= i;
+		i = 0;
+		tmp_env = malloc((len + 1) * sizeof(char *));
+		//if (!x_env)
+			//return (NULL);
+		tmp_env = copy_unset_env(data, tmp_env, &i);
+		tmp_env[len] = NULL;
+		data->envp = tmp_env;
+		free_tab(data->unset.args);
+		data->unset.is_unset = 0;
 	}
 }
 
@@ -74,9 +82,10 @@ void	unset_args(t_data *data, char **args)
   * si tout bon ret export = 0 sinon ret = 1;
   **/
 
-void	main_unset(t_data *data, char **args)
+int	main_unset(t_data *data, char **args)
 {
 	data->last_ret = 0;
 	if (args[1] != NULL)
 		unset_args(data, args);
+	return (data->last_ret);
 }

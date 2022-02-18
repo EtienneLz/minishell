@@ -46,6 +46,7 @@ clean:
 
 fclean: clean
 	${RM} ${NAME}
+	rm -f libft.a
 
 re : fclean all
 

@@ -1,5 +1,18 @@
 #include "../../../includes/minishell.h"
 
+static void	join_arg_bis(char *s1, char *s2, int *n, int *m)
+{
+	while (s1[*n] != '=')
+		(*n)++;
+	while (s2[*m] && s2[*m] != '=')
+		(*m)++;
+	if (s2[*m] != '=')
+	{
+		*m = 0;
+		*n += 1;
+	}
+}
+
 char	*join_arg(char *s1, char *s2)
 {
 	char	*dest;
@@ -12,15 +25,7 @@ char	*join_arg(char *s1, char *s2)
 	j = 0;
 	n = 0;
 	m = 0;
-	while (s1[n] != '=')
-		n++;
-	while (s2[m] && s2[m] != '=')
-		m++;
-	if (s2[m] != '=')
-	{
-		m = 0;
-		n += 1;
-	}
+	join_arg_bis(s1, s2, &n, &m);
 	dest = malloc((n + (ft_strlen(s2) - m) + 1) * sizeof(char));
 	if (dest == NULL)
 		return (NULL);
@@ -32,10 +37,10 @@ char	*join_arg(char *s1, char *s2)
 	return (dest);
 }
 
-int		if_equal(t_data *data, char *s1, char *s2)
+int	if_equal(t_data *data, char *s1, char *s2)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -57,10 +62,10 @@ int		if_equal(t_data *data, char *s1, char *s2)
 	return (0);
 }
 
-int		cmp_export_arg(t_data *data, char *str)
+int	cmp_export_arg(t_data *data, char *str)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -69,7 +74,6 @@ int		cmp_export_arg(t_data *data, char *str)
 		if (if_equal(data, data->envp[i], str) == 1)
 		{
 			if (data->export.equal != 1)
-			{
 				while (str[j])
 				{
 					if (str[j] == '=')
@@ -79,7 +83,6 @@ int		cmp_export_arg(t_data *data, char *str)
 					}
 					j++;
 				}
-			}
 			return (1);
 		}
 		i++;
