@@ -14,7 +14,7 @@
 
 void	ft_lstadd_back(t_token **alst, t_token *new)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!(*alst))
 		*alst = new;
@@ -29,7 +29,7 @@ void	ft_lstadd_back(t_token **alst, t_token *new)
 
 t_token	*ft_lstnew(char *content)
 {
-	t_token *dest;
+	t_token	*dest;
 
 	dest = malloc(sizeof(t_token));
 	if (!dest)

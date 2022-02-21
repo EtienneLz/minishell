@@ -38,7 +38,37 @@ void	non_numeric_arg(t_data *data, char *arg)
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	data->last_ret = 255;
+	minifree(data);
 	exit(1);
+}
+
+void	ft_do_exit(t_data *data, int nb)
+{
+	ft_putstr_fd("exit\n", 1);
+	data->last_ret = nb;
+	minifree(data);
+	exit(0);
+}
+
+void	ft_exit_bis(t_data *data, char **args, int i)
+{
+	long long	nb;
+
+	while (args[1][i])
+	{
+		if (i == 0 && (args[1][i] == '-' || args[1][i] == '+'))
+			i++;
+		if (!(ft_isdigit(args[1][i])))
+			non_numeric_arg(data, args[1]);
+		i++;
+	}
+	nb = ft_atoi(args[1]);
+	if (nb == 0)
+		non_numeric_arg(data, args[1]);
+	else if (nb > 255 || nb < 0)
+		ft_do_exit(data, nb % 256);
+	else
+		ft_do_exit(data, nb);
 }
 
 void	ft_exit(t_data *data, char **args)
@@ -50,11 +80,7 @@ void	ft_exit(t_data *data, char **args)
 	while (args[i])
 		i++;
 	if (i == 1)
-	{
-		ft_putstr_fd("exit\n", 1);
-		data->last_ret = 0;
-		exit(0);
-	}
+		ft_do_exit(data, 0);
 	if (i > 2)
 	{
 		ft_putstr_fd("exit\n", 2);
@@ -63,37 +89,11 @@ void	ft_exit(t_data *data, char **args)
 	else
 	{
 		if (if_zero(args[1]) == '0')
-		{
-			ft_putstr_fd("exit", 1);
-			data->last_ret = 0;
-			exit(0);
-		}
+			ft_do_exit(data, 0);
 		else
 		{
 			i = 0;
-			while (args[1][i])
-			{
-				if (i == 0 && (args[1][i] == '-' || args[1][i] == '+'))
-					i++;
-				if (!(ft_isdigit(args[1][i])))
-					non_numeric_arg(data, args[1]);
-				i++;
-			}
-			nb = ft_atoi(args[1]);
-			if (nb == 0)
-				non_numeric_arg(data, args[1]);
-			else if (nb > 255 || nb < 0)
-			{
-				ft_putstr_fd("exit", 1);
-				data->last_ret = nb % 256;
-				exit(0);
-			}
-			else
-			{
-				ft_putstr_fd("exit", 1);
-				data->last_ret = nb;
-				exit(0);
-			}
+			ft_exit_bis(data, args, i);
 		}
 	}
 }

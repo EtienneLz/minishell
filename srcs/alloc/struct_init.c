@@ -43,7 +43,6 @@ void	init(t_data *data)
 
 void	reset(t_data *data)
 {
-	
 	data->first = NULL;
 	data->actual = NULL;
 	data->error = 0;

@@ -31,6 +31,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	while (s2[i])
 		dest[j++] = s2[i++];
 	dest[j] = '\0';
-    free(s1);
+	free(s1);
 	return (dest);
 }
