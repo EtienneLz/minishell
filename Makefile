@@ -49,7 +49,7 @@ clean:
 		${RM} ${OBJS} ${OBJSBONUS}
 
 fclean: clean
-		make -C $(PATH_LIBFT) clean
+		make -C $(PATH_LIBFT) fclean
 		${RM} ${NAME}
 
 re: fclean all

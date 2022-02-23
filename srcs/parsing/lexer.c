@@ -78,6 +78,49 @@ static int	checker(t_data *data)
 	return (0);
 }
 
+void	find_lasts_commands(t_data *data)
+{
+	t_token	*actual;
+	int		check;
+	int		fd;
+
+	actual = data->first;
+	check = 0;
+	while (actual)
+	{
+		if (is_arrow(actual->content) == 1 && !check)
+		{
+			printf("fff\n");
+			while (actual->next && actual->next->next && (actual->next->type == STRING
+				|| actual->next->type == STRING_SIMPLE) && is_arrow(actual->next->next->content))
+			{
+				if (actual->type == R_ARROW || actual->type == RR_ARROW)
+				{
+					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
+					close(fd);
+					actual = actual->next->next;
+				}
+			}
+			if (actual->next && actual->next->next && actual->next->next->type == STRING)
+			{
+				actual->next->next->type = COMMAND;
+				check = 1;
+			}
+		}
+		if (!actual)
+			break ;
+		while (actual && actual->type != PIPE)
+			actual = actual->next;
+		if (actual && actual->type == PIPE)
+			if (actual->next)
+			{
+				actual = actual->next;
+				check = 0;
+			}
+		
+	}
+}
+
 int	lexer(t_data *data)
 {
 	t_token	*actual;
@@ -121,6 +164,7 @@ int	lexer(t_data *data)
 			
 		actual = actual->next;
 	}*/
+	find_lasts_commands(data);
 	counter(data);
 	return (0);
 }
