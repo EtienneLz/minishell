@@ -5,6 +5,7 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/exit.c \
 		srcs/built_ins/export/export.c \
 		srcs/alloc/struct_init.c \
+		srcs/alloc/alloc_error.c \
 		srcs/utils/utils_1.c \
 		srcs/utils/utils_2.c \
 		srcs/built_ins/pwd.c \

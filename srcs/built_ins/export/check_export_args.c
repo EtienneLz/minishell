@@ -76,7 +76,9 @@ static void	check_export_args(t_data *data, char **args)
 void	export_main_check(t_data *data, char **args)
 {
 	int	valid;
+	int	i;
 
+	i = 1;
 	while (args[i])
 		cmp_export_arg(data, args[i++]);
 	data->export.equal = 1;

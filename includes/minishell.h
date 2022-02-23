@@ -103,6 +103,7 @@ int	g_pid;
 void	cd_error(t_data *data, char *str);
 void	unset_error(t_data *data, char *str);
 void	export_error(t_data *data, char *str);
+void	alloc_error(t_data *data, char *cmd);
 
 /*
 ** Built-ins functions 
@@ -155,6 +156,7 @@ char	*treat_var(char *var);
 char	*check_exist(t_data *data, char *var);
 
 void	init(t_data *data);
+void	prompt(t_data *data);
 void	reset(t_data *data);
 int		lexer(t_data *data);
 int		execution(t_data *data);

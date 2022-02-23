@@ -41,15 +41,15 @@ static int	mini_routine(t_data *data, char *buffer)
 
 void	prompt(t_data *data)
 {
-	while (data.buffer)
+	while (data->buffer)
 	{
 		//signal(SIGQUIT, do_sig);
 		//signal(SIGINT, do_sig);
-		reset_var(&data);
-		data.buffer = readline("$> ");
-		mini_routine(&data, data.buffer);
-		if (data.buffer)
-			add_history(data.buffer);
+		reset_var(data);
+		data->buffer = readline("$> ");
+		mini_routine(data, data->buffer);
+		if (data->buffer)
+			add_history(data->buffer);
 	}
 }
 
@@ -124,14 +124,7 @@ int	main(int argc, char **argv, char **envp)
 	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
-		//signal(SIGQUIT, do_sig);
-		//signal(SIGINT, do_sig);
-		reset_var(&data);
-		data.buffer = readline("$> ");
-		mini_routine(&data, data.buffer);
-		//printf("%d\n", d);
-		if (data.buffer)
-			add_history(data.buffer);
+		prompt(&data);
 	}*/
 	return (0);
 }
