@@ -36,9 +36,13 @@ void	init(t_data *data)
 	data->unset.args = NULL;
 	data->cd.home = NULL;
 	data->nb_infiles = 0;
+	data->heredoc = 0;
 	data->nb_outfiles = 0;
 	data->last_out = 0;
 	data->tmp_var = NULL;
+	data->nb_command = 0;
+	data->infile = NULL;
+	data->outfile = NULL;
 }
 
 void	reset(t_data *data)
