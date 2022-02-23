@@ -23,7 +23,11 @@ SRCS = srcs/minishell.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/lexer.c \
 		srcs/execution/execution.c \
-		srcs/parsing/expansion.c
+		srcs/parsing/expansion.c \
+		srcs/error/error.c \
+		srcs/utils/utils_3.c \
+		srcs/utils/utils_4.c \
+		srcs/parsing/structurationinger.c \
 
 OBJS = ${SRCS:.c=.o}
 
@@ -52,7 +56,7 @@ clean:
 		${RM} ${OBJS} ${OBJSBONUS}
 
 fclean: clean
-		make -C $(PATH_LIBFT) clean
+		make -C $(PATH_LIBFT) fclean
 		${RM} ${NAME}
 
 re: fclean all

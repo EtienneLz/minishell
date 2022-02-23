@@ -20,7 +20,9 @@ static int	get_quoted(char *command, int i, char quote)
 	i++;
 	while (command[i])
 	{
-		if (command[i] == quote && (command[i + 1] == ' ' || command[i + 1] == '|' || command[i + 1] == '<' || command[i + 1] == '>'))
+		if (command[i] == quote && (command[i + 1] == ' '
+				|| command[i + 1] == '|' || command[i + 1] == '<'
+				|| command[i + 1] == '>'))
 			break ;
 		len++;
 		i++;
@@ -35,9 +37,9 @@ static int	skip_spaces(char *command, int i)
 	return (i);
 }
 
-static int len_next(char *command, int i)
+static int	len_next(char *command, int i)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (command[i] != ' ' && command[i] != '\0')
@@ -98,7 +100,7 @@ int	split_command(t_data *data, char *command)
 		len = check_char(data, command, i);
 		elem = malloc(sizeof(char) * (len + 1));
 		if (!elem)
-			exit(1);
+			exit(1);//alloc_error??
 		while (j < len && command[i])
 		{
 			elem[j] = command[i];
