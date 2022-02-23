@@ -12,63 +12,23 @@
 
 #include "../../../includes/minishell.h"
 
-char	**copy_env(char **tab, char **dest, int *i)
+static int	skip_env(char **tab, int i)
 {
-	int		j;
-	int		len;
-
-	j = 0;
-	len = 0;
-	while (tab[len])
-		len++;
-	while (j < len)
-	{
-		dest[*i] = malloc((ft_strlen(tab[j]) + 1) * sizeof(char));
-		//if (!dest[*i])
-		//	return (NULL);
-		ft_strcpy(dest[*i], tab[j]);
-		(*i)++;
-		j++;
-	}
-	return (dest);
-}
-
-char	**sort_env_atoz(char **tab, int len)
-{
-	char	*tmp;
-	int		i;
-	int 	j;
-
-	i = 0;
-	while (i < len)
-	{
-		j = i + 1;
-		while (j < len)
-		{
-			if (ft_strcmp(tab[i], tab[j]) > 0)
-			{
-				tmp = tab[i];
-				tab[i] = tab[j];
-				tab[j] = tmp;
-			}
-			j++;
-		}
+	if (tab[i][0] == '_' && tab[i][1] == '=')
 		i++;
-	}
-	return (tab);
+	return (i);
 }
 
-void	print_export(t_data *data, char **tab)
+static void	print_export(t_data *data, char **tab)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while(tab[i])
+	while (tab[i])
 	{
 		j = 0;
-		if (tab[i][0] == '_' && tab[i][1] == '=')
-			i++;
+		i = skip_env(tab, i);
 		if (!tab[i])
 			break ;
 		write(1, "export ", 7);
@@ -86,10 +46,9 @@ void	print_export(t_data *data, char **tab)
 			write(1, "=\"\"\n", 4);
 		i++;
 	}
-	free_tab(tab);
 }
 
-void	export_no_arg(t_data *data)
+static void	export_no_arg(t_data *data)
 {
 	char	**x_env;
 	int		len;
@@ -99,19 +58,20 @@ void	export_no_arg(t_data *data)
 	len = 0;
 	while (data->envp[len])
 		len++;
-	x_env = malloc((len + 1) * sizeof(char*));
-	//if (!x_env)
-		//return (NULL);
-	x_env = copy_env(data->envp, x_env, &i);
+	x_env = malloc((len + 1) * sizeof(char *));
+	if (!x_env)
+		alloc_error(data, "export");
+	x_env = copy_env(data, data->envp, x_env, &i);
 	x_env[len] = NULL;
 	x_env = sort_env_atoz(x_env, len);
 	print_export(data, x_env);
+	free_tab(x_env);
 }
 
-void	export_args(t_data *data, char **args)
+static void	export_args(t_data *data, char **args)
 {
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 	char	**tmp_env;
 
 	export_main_check(data, args);
@@ -126,25 +86,22 @@ void	export_args(t_data *data, char **args)
 		len += i;
 		i = 0;
 		tmp_env = malloc((len + 1) * sizeof(char *));
-		//if (!x_env)
-			//return (NULL);
-		tmp_env = copy_env(data->envp, tmp_env, &i);
-		tmp_env = copy_env(data->export.args, tmp_env, &i);
+		if (!tmp_env)
+			alloc_error(data, "export");
+		tmp_env = copy_env(data, data->envp, tmp_env, &i);
+		tmp_env = copy_env(data, data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
 		data->envp = tmp_env;
 		free_tab(data->export.args);
 	}
 }
 
-void	main_export(t_data *data, char **args)
+int	main_export(t_data *data, char **args)
 {
 	data->last_ret = 0;
-	if(args[1] != NULL)
+	if (args[1] != NULL)
 		export_args(data, args);
 	else
 		export_no_arg(data);
+	return (data->last_ret);
 }
- /**
-  * si erreur de malloc (check erreur?)
-  * si tout bon ret export = 0 sinon ret = 1;
-  **/

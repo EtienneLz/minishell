@@ -12,6 +12,13 @@
 
 #include "../../includes/minishell.h"
 
+void	error_command(t_data *data, char *arg)
+{
+	ft_putstr_fd("minishell: command not found: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("\n", 2);
+}
+
 static int	check_built_in(t_data *data, char *command)
 {
 	int		ret;
@@ -97,13 +104,19 @@ static int	child(t_data *data)
 			if (execve(bin, data->splitted_args[data->command_nb], NULL) == -1)
 			{
 				if (errno == 2)
-					printf("minishell: command not found: %s\n", data->splitted_args[data->command_nb][0]);
+					error_command(data,data->splitted_args[data->command_nb][0]);
 				else
 					perror("minishell");
-				exit(0);
+				printf("errno1 = %d\n", errno);
+				data->last_ret = errno;
+				kill(g_pid, SIGTERM);
+				//exit(0);
 			}
+			printf("errno2 = %d\n", errno);
+			data->last_ret = errno;
 		}
-		exit(0);
+		printf("ret = %d\n", data->last_ret);
+		return (1);//exit(0);
 	}
 	else
 		return (0);
@@ -156,6 +169,7 @@ static int	exe_pipe(t_data *data, int *fdin, int *fdout)
 	dup2(*fdout, STDOUT);
 	close(*fdout);
 	child(data);
+	//signal(SIGTERM, SIG_IGN);
 	data->command_nb++;
 	data->actual = to_next_command(data->actual);
 	return (0);

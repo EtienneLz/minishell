@@ -18,7 +18,8 @@ int	check_pipe(t_token	*actual)
 		actual = actual->next;
 	else
 		return (0);
-	while (actual && actual->type == STRING || actual->type == STRING_SIMPLE || actual->type == OPTION)
+	while (actual && actual->type == STRING || actual->type == STRING_SIMPLE
+		|| actual->type == OPTION)
 	{
 		if (actual->next == NULL)
 			return (0);
@@ -63,6 +64,15 @@ void	check_exit(t_data *data)
 	}
 }
 
+void	check_quotes_bis(char quote, int *len, int *i)
+{
+	if (quote)
+	{
+		(*len)--;
+		*i = 1;
+	}
+}
+
 char	*check_quotes(char *str)
 {
 	int		i;
@@ -77,11 +87,7 @@ char	*check_quotes(char *str)
 		quote = '\"';
 	else if (str[0] == '\'')
 		quote = '\'';
-	if (quote)
-	{
-		len--;
-		i = 1;
-	}
+	check_quotes_bis(quote, &len, &i);
 	if (str[len - 2] == quote)
 		len--;
 	dest = malloc(sizeof(char) * len);

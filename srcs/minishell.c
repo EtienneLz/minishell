@@ -39,6 +39,20 @@ static int	mini_routine(t_data *data, char *buffer)
 	return (0);
 }
 
+void	prompt(t_data *data)
+{
+	while (data->buffer)
+	{
+		//signal(SIGQUIT, do_sig);
+		//signal(SIGINT, do_sig);
+		reset_var(data);
+		data->buffer = readline("$> ");
+		mini_routine(data, data->buffer);
+		if (data->buffer)
+			add_history(data->buffer);
+	}
+}
+
 void	do_sig(int sig)
 {
 	//printf("pid = %d\n", g_pid);
@@ -75,28 +89,42 @@ void	do_sig(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*arg[6];
-	char *str;
+	char	*arg[2];
+	char	*unset[7];
 
 	init(&data);
 	(void)argc;
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
-	data.buffer = malloc(1);
+	unset[0] = "unset";
+	unset[1] = "OLDPWD=bibi";
+	unset[2] = "hello";
+	unset[3] = "5884";
+	unset[4] = "_36684";
+	unset[5] = "blop=bof";
+	unset[6] = NULL;
+	//main_unset(&data, unset);
+	//export_no_arg(&data);
+	//main_export(&data, unset);
+	//printf("mawie = %s\n", getenv("mawie"));
+	//printf("zsh = %s\n", getenv("ZSH"));
+	arg[0] = "cd";
+	//arg[1] = "..";
+	//arg[2] = "blop";
+	arg[1] = NULL;
+	//ft_pwd(&data);
+	//main_cd(&data, arg);
+	//ft_pwd(&data);
+	main_export(&data, unset);
+	main_export(&data, arg);
+	/*data.buffer = malloc(1);
 	//signal(SIGQUIT, do_sig);
 	//signal(SIGINT, do_sig);
 	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
-		//signal(SIGQUIT, do_sig);
-		//signal(SIGINT, do_sig);
-		reset_var(&data);
-		data.buffer = readline("$> ");
-		mini_routine(&data, data.buffer);
-		//printf("%d\n", d);
-		if (data.buffer)
-			add_history(data.buffer);
-	}
+		prompt(&data);
+	}*/
 	return (0);
 }

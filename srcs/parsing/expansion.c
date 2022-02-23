@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static char *treat_var(t_data *data, char *var)
+char *treat_var(char *var)
 {
     int     i;
     int     size;
@@ -36,7 +36,7 @@ static char *treat_var(t_data *data, char *var)
     return (ret);
 }
 
-static char *check_exist(t_data *data, char *var)
+char *check_exist(t_data *data, char *var)
 {
     int     i;
     char    *ret;
@@ -78,7 +78,7 @@ static char  *size_var(t_data *data, char *var)
         convert_var = "";
         return (convert_var);
     }
-    return (treat_var(data, convert_var));
+    return (treat_var(convert_var));
 } 
 
 static char *unsplit(char **split_str)
@@ -134,9 +134,14 @@ static void check_var(t_data *data, char *str, t_token *actual)
     {
         if (split_str[i][0] == '$')
         {
-            replaced = size_var(data, split_str[i]);
-            free(split_str[i]);
-            split_str[i] = replaced;
+            if (ft_strlen(split_str[i]) == 2 && split_str[i][1] == '?')
+                split_str[i] = ft_itoa(data->last_ret);
+            else
+            {
+                replaced = size_var(data, split_str[i]);
+                free(split_str[i]);
+                split_str[i] = replaced;
+            }
         }
         i++;
     }

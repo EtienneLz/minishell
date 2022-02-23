@@ -63,7 +63,6 @@ static void	ft_get_next_str(char **next_str, unsigned int *next_str_len,
 	*next_str += *next_str_len;
 	*next_str_len = 0;
 	i = 0;
-	
 	if ((*next_str)[i] && (*next_str)[i] == c)
 	{
 		while ((*next_str)[i] && (*next_str)[i] != ' ')

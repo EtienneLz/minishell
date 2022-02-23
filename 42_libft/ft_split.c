@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char				**ft_clear_splitted(char **tab)
+char	**ft_clear_splitted(char **tab)
 {
 	unsigned int	i;
 
@@ -53,7 +53,7 @@ static unsigned int	ft_get_nb_strs(char const *s, char c)
 	return (nb_strs);
 }
 
-static void			ft_get_next_str(char **next_str, unsigned int *next_str_len,
+static void	ft_get_next_str(char **next_str, unsigned int *next_str_len,
 					char c)
 {
 	unsigned int	i;
@@ -72,7 +72,7 @@ static void			ft_get_next_str(char **next_str, unsigned int *next_str_len,
 	}
 }
 
-char				**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char			**tab;
 	char			*next_str;
