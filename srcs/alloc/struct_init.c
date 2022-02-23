@@ -56,6 +56,7 @@ void	reset(t_data *data)
 	data->export.equal = 0;
 	data->envp_i = 0;
 	data->command_nb = 0;
+	data->nb_command = 0;
 	g_pid = 0;
 	data->tmpin = 0;
 	data->tmpout = 0;
