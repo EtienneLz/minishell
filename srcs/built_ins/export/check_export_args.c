@@ -18,8 +18,8 @@ static void	get_valid_args(t_data *data, char *str, int *i)
 
 	len = ft_strlen(str);
 	data->export.args[*i] = malloc((len + 1) * sizeof(char));
-	//if (!(data->export.args[*i]))
-		//message erreur + sortie
+	if (!(data->export.args[*i]))
+		alloc_error(data, "export");
 	ft_strcpy(data->export.args[*i], str);
 	data->export.valid_args--;
 	(*i)++;
@@ -86,8 +86,8 @@ void	export_main_check(t_data *data, char **args)
 	{
 		valid = data->export.valid_args;
 		data->export.args = malloc((valid + 1) * sizeof(char *));
-		//if (!tmp)
-			//message erreur + sortie
+		if (!data->export.args)
+			alloc_error(data, "export");
 		check_export_args(data, args);
 	}
 	data->export.check = 0;

@@ -131,7 +131,7 @@ char	*if_tilde(t_data *data, char *arg);
 */
 int		main_export(t_data *data, char **args);
 void	export_main_check(t_data *data, char **args);
-char	**copy_env(char **tab, char **dest, int *i);
+char	**copy_env(t_data *data, char **tab, char **dest, int *i);
 char	**sort_env_atoz(char **tab, int len);
 void	copy_equal(t_data *data);
 int		cmp_export_arg(t_data *data, char *str);

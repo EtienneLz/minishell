@@ -1,6 +1,6 @@
 #include "../../../includes/minishell.h"
 
-char	**copy_env(char **tab, char **dest, int *i)
+char	**copy_env(t_data *data, char **tab, char **dest, int *i)
 {
 	int		j;
 	int		len;
@@ -12,8 +12,8 @@ char	**copy_env(char **tab, char **dest, int *i)
 	while (j < len)
 	{
 		dest[*i] = malloc((ft_strlen(tab[j]) + 1) * sizeof(char));
-		//if (!dest[*i])
-		//	return (NULL);
+		if (!dest[*i])
+			alloc_error(data, "export");
 		ft_strcpy(dest[*i], tab[j]);
 		(*i)++;
 		j++;

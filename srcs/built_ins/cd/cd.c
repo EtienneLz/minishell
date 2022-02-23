@@ -39,8 +39,8 @@ static char	*do_cd_next(t_data *data, char **args, char *path)
 		else
 		{
 			str = malloc(ft_strlen(path) + ft_strlen(args[1]) + 2);
-			//if (!str)
-				//erreur
+			if (!str)
+				alloc_error(data, "cd");
 			str = cd_join(path, args[1], str);
 		}
 		if (!str)

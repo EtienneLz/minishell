@@ -39,6 +39,20 @@ static int	mini_routine(t_data *data, char *buffer)
 	return (0);
 }
 
+void	prompt(t_data *data)
+{
+	while (data.buffer)
+	{
+		//signal(SIGQUIT, do_sig);
+		//signal(SIGINT, do_sig);
+		reset_var(&data);
+		data.buffer = readline("$> ");
+		mini_routine(&data, data.buffer);
+		if (data.buffer)
+			add_history(data.buffer);
+	}
+}
+
 void	do_sig(int sig)
 {
 	//printf("pid = %d\n", g_pid);

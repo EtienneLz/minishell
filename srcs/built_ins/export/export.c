@@ -59,9 +59,9 @@ static void	export_no_arg(t_data *data)
 	while (data->envp[len])
 		len++;
 	x_env = malloc((len + 1) * sizeof(char *));
-	//if (!x_env)
-		//return (NULL);
-	x_env = copy_env(data->envp, x_env, &i);
+	if (!x_env)
+		alloc_error(data, "export");
+	x_env = copy_env(data, data->envp, x_env, &i);
 	x_env[len] = NULL;
 	x_env = sort_env_atoz(x_env, len);
 	print_export(data, x_env);
@@ -86,10 +86,10 @@ static void	export_args(t_data *data, char **args)
 		len += i;
 		i = 0;
 		tmp_env = malloc((len + 1) * sizeof(char *));
-		//if (!x_env)
-			//return (NULL);
-		tmp_env = copy_env(data->envp, tmp_env, &i);
-		tmp_env = copy_env(data->export.args, tmp_env, &i);
+		if (!tmp_env)
+			alloc_error(data, "export");
+		tmp_env = copy_env(data, data->envp, tmp_env, &i);
+		tmp_env = copy_env(data, data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
 		data->envp = tmp_env;
 		free_tab(data->export.args);

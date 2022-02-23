@@ -32,8 +32,8 @@ static void	get_unset_valid_args(t_data *data, char *str, int *i)
 
 	len = ft_strlen(str);
 	data->unset.args[*i] = malloc((len + 1) * sizeof(char));
-	//if (!(data->unset.args[*i]))
-		//message erreur + sortie
+	if (!(data->unset.args[*i]))
+		alloc_error(data, "unset");
 	ft_strcpy(data->unset.args[*i], str);
 	data->unset.valid_args--;
 	(*i)++;
@@ -89,8 +89,8 @@ void	unset_main_check(t_data *data, char **args)
 	{
 		valid = data->unset.valid_args;
 		data->unset.args = malloc((valid + 1) * sizeof(char *));
-		//if (!tmp)
-			//message erreur + sortie
+		if (!data->unset.args)
+			alloc_error(data, "unset");
 		check_unset_args(data, args);
 	}
 	data->unset.check = 0;

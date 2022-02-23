@@ -38,8 +38,8 @@ static char	**copy_unset_env(t_data *data, char **dest, int *i)
 		else
 		{
 			dest[*i] = malloc((ft_strlen(data->envp[j]) + 1) * sizeof(char));
-			//if (!dest[*i])
-			//	return (NULL);
+			if (!dest[*i])
+				alloc_error(data, "unset");
 			ft_strcpy(dest[*i], data->envp[j]);
 			(*i)++;
 			j++;
@@ -67,8 +67,8 @@ static void	unset_args(t_data *data, char **args)
 		len -= i;
 		i = 0;
 		tmp_env = malloc((len + 1) * sizeof(char *));
-		//if (!x_env)
-			//return (NULL);
+		if (!tmp_env)
+			alloc_error(data, "unset");
 		tmp_env = copy_unset_env(data, tmp_env, &i);
 		tmp_env[len] = NULL;
 		data->envp = tmp_env;
@@ -76,11 +76,6 @@ static void	unset_args(t_data *data, char **args)
 		data->unset.is_unset = 0;
 	}
 }
-
-/**
-  * si erreur de malloc (check erreur?)
-  * si tout bon ret export = 0 sinon ret = 1;
-  **/
 
 int	main_unset(t_data *data, char **args)
 {

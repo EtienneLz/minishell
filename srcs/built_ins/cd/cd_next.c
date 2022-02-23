@@ -61,8 +61,8 @@ char	*if_tilde(t_data *data, char *arg)
 	if (ft_strlen(arg) == 1 || (arg[0] == 'c' && arg[1] == 'd'))
 		return (data->cd.home);
 	new_dir = malloc(ft_strlen(data->cd.home) + ft_strlen(arg));
-	//if (!new_dir)
-			//erreur
+	if (!new_dir)
+		alloc_error(data, "cd");
 	new_dir = cd_join(data->cd.home, arg, new_dir);
 	return (new_dir);
 }
