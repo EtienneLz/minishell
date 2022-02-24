@@ -28,7 +28,7 @@ void	ft_lstadd_back(t_token **alst, t_token *new)
 	}
 }
 
-t_token	*ft_lstnew(char *content)
+t_token	*ft_lstnew(t_data *data, char *content)
 {
 	t_token	*dest;
 

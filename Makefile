@@ -1,6 +1,7 @@
 NAME = minishell
 
 SRCS = srcs/minishell.c \
+		srcs/signal.c \
 		srcs/built_ins/env.c \
 		srcs/built_ins/exit.c \
 		srcs/built_ins/export/export.c \
@@ -35,9 +36,9 @@ OBJSBONUS = ${SRCBONUS:.c=.o}
 
 PATH_LIBFT = 42_libft
 
-INCLUDES = -I/includes/minishell.h
+INCLUDES = -I/includes/minishell.h -I/usr/local/Cellar/readline/8.1.2/include/readline/
 
-CFLAGS = -g #-fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -fsanitize=address #-Werror -Wall -Wextra
 
 CC = clang 
 
@@ -49,7 +50,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -L/usr/local/Cellar/readline/8.1.2/lib/ -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean

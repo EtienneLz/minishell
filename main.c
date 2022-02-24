@@ -12,11 +12,11 @@ void	ft_putstr_fd(char *s, int fd)
 
 int	main()
 {
-	char *str;
+	/*char *str;
 
 	str = "\0";
 	ft_putstr_fd(str, 2);
-	printf("\nok\n");
-	//while (1)
-	//	printf("go\n");
+	printf("\nok\n");*/
+	while (1)
+		printf("go\n");
 }

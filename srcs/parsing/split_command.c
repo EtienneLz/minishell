@@ -110,7 +110,7 @@ int	split_command(t_data *data, char *command)
 		elem[j] = '\0';
 		if (len != 0)
 		{
-			new_token = ft_lstnew(elem);
+			new_token = ft_lstnew(data, elem);
 			if (data->quote_type == '\'')
 				new_token->type = STRING_SIMPLE;
 			data->quote_type = '\0';

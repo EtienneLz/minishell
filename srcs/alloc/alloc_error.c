@@ -14,7 +14,7 @@ void	alloc_error(t_data *data, char *cmd)
 	if (cmd != NULL)
 	{
 		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": ");
+		ft_putstr_fd(": ", 2);
 	}
 	ft_putstr_fd(": memory allocation failed\n", 2);
 	data->last_ret = 1;

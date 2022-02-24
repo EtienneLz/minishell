@@ -163,7 +163,7 @@ void	unset_main_check(t_data *data, char **args);
 ** utils functions
 */
 void	free_tab(char **tab);
-t_token	*ft_lstnew(char *content);
+t_token	*ft_lstnew(t_data *data, char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
@@ -171,6 +171,7 @@ void	check_exit(t_data *data);
 char	*treat_var(char *var);
 char	*check_exist(t_data *data, char *var);
 
+void	signal_handler(int sig);
 void	init(t_data *data);
 void	prompt(t_data *data);
 void	reset(t_data *data);

@@ -22,6 +22,11 @@ static void	reset_var(t_data *data)
 
 static int	mini_routine(t_data *data, char *buffer)
 {
+	if (!buffer)
+	{
+		reset_var(data);
+		exit(0);
+	}
 	if (buffer[0] == '\0')
 		return (1);
 	if (split_command(data, buffer))
@@ -40,53 +45,6 @@ static int	mini_routine(t_data *data, char *buffer)
 	return (0);
 }
 
-void	prompt(t_data *data)
-{
-	while (data->buffer)
-	{
-		//signal(SIGQUIT, do_sig);
-		//signal(SIGINT, do_sig);
-		reset_var(data);
-		data->buffer = readline("$> ");
-		mini_routine(data, data->buffer);
-		if (data->buffer)
-			add_history(data->buffer);
-	}
-}
-
-void	do_sig(int sig)
-{
-	//printf("pid = %d\n", g_pid);
-	//signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	if (g_pid != 0)
-	{
-		//if (!(kill(g_pid, sig)))
-		//{
-		if (sig == SIGQUIT)
-			printf("quit \\\n");
-		if (sig == SIGINT)
-			printf("quit C\n");
-		//}
-	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		//signal(SIGQUIT, SIG_IGN);
-		//printf("pid = %d\n", g_pid);
-		if (sig == SIGQUIT)
-		{
-			printf("do nothing");
-			//return ;
-		}
-		if (sig == SIGINT)
-			printf("$>");
-	}
-	//signal(SIGQUIT, do_sig);
-	//signal(SIGINT, do_sig);
-	//return ;
-}
-
 char	*line_prompt(char *prompt)
 {
 	char	*buffer;
@@ -100,8 +58,6 @@ char	*line_prompt(char *prompt)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	//char	*arg[2];
-	//char	*unset[7];
 
 	init(&data);
 	(void)argc;
@@ -128,16 +84,15 @@ int	main(int argc, char **argv, char **envp)
 	/main_cd(&data, arg);
 	ft_pwd(&data);
 	main_export(&data, unset);
-	main_export(&data, arg);
-	data.buffer = malloc(1);
-	signal(SIGQUIT, do_sig);
-	signal(SIGINT, do_sig);*/
+	main_export(&data, arg);*/
+	signal(SIGQUIT, signal_handler);
+	signal(SIGINT, signal_handler);
 	data.buffer = malloc(1);
 	data.buffer[0] = '\0';
 	while (data.buffer)
 	{
 		reset_var(&data);
-		data.buffer = line_prompt("$> ");
+		data.buffer = line_prompt("\e[1m\e[34mminishell> \e[0m");
 		mini_routine(&data, data.buffer);
 		//printf("%d\n", d);
 		if (data.buffer)
