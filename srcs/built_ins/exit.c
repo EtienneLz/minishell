@@ -74,7 +74,6 @@ void	ft_exit_bis(t_data *data, char **args, int i)
 void	ft_exit(t_data *data, char **args)
 {
 	int			i;
-	long long	nb;
 
 	i = 0;
 	if (!args)

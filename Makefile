@@ -40,7 +40,7 @@ PATH_LIBFT = 42_libft
 
 INCLUDES = -I/includes/minishell.h -I/usr/local/Cellar/readline/8.1.2/include/readline/
 
-CFLAGS = -g -fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -fsanitize=address -Werror -Wall -Wextra
 
 CC = clang 
 
