@@ -65,6 +65,18 @@ void	ft_lstfree(t_data *data)
 	{
 		tmp = actual->next;
 		free(actual->content);
+		if (actual->next_d_out)
+			free(actual->next_d_out);
+		if (actual->next_out)
+			free(actual->next_out);
+		if (actual->next_in)
+			free(actual->next_in);
+		if (actual->prev_d_out)
+			free(actual->prev_d_out);
+		if (actual->prev_out)
+			free(actual->prev_out);
+		if (actual->prev_in)
+			free(actual->prev_in); 
 		free(actual);
 		actual = tmp;
 	}
@@ -85,7 +97,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-static t_token	*to_pipe(t_data *s_data, t_token *actual, int i)
+static t_token	*to_pipe(t_token *actual, int i)
 {
 	int	w_pipe;
 
@@ -117,7 +129,7 @@ char	***split_arg(t_data *data)
 	while (i <= data->nb_pipe + 1)
 	{
 		if (i != 0)
-			actual = to_pipe(data, actual, i);
+			actual = to_pipe(actual, i);
 		size = 0;
 		j = 0;
 		while (actual && actual->type != PIPE)
@@ -137,7 +149,7 @@ char	***split_arg(t_data *data)
 		}
 		actual = data->first;
 		if (i != 0)
-			actual = to_pipe(data, actual, i);
+			actual = to_pipe(actual, i);
 		else
 			while (actual && actual->type != COMMAND)
 				actual = actual->next;

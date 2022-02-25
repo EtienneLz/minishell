@@ -35,7 +35,7 @@ static int	check_built_in(t_data *data, char **args)
 	else if (!ft_strcmp(args[0], "env"))
 		ft_env(data, args);
 	else if (!ft_strcmp(args[0], "pwd"))
-		ft_pwd(data);
+		ft_pwd();
 	else if (!ft_strcmp(args[0], "unset"))
 		main_unset(data, args);
 	else if (!ft_strcmp(args[0], "export"))
@@ -89,34 +89,13 @@ static char	*get_bin_path(char *command)
 	}
 }
 
-static int	outfile_func(t_data *data, int *fdout)
-{
-	int	i;
-	int	fd;
-
-	i = 0;
-	while (i < data->nb_outfiles - 1)
-	{
-		fd = open(data->outfile[i], O_CREAT | O_RDWR |
-			O_APPEND, 0644);
-		if (fd == -1)
-			perror("fd");
-		else
-			close(fd);
-		i++;
-	}
-	if (data->last_out == 1)
-		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	else
-		fd = open(data->outfile[i], O_CREAT | O_RDWR | O_APPEND, 0644);
-	return (fd);
-}
-
 static void	redirection(t_token *actual)
 {
 	int	fdout;
 	int	fdin;
-	
+
+	fdout = 0;
+	fdin = 0;
 	if (actual->prev_out)
 		fdout = open(actual->prev_out, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (actual->prev_d_out)
@@ -140,41 +119,51 @@ static void	redirection(t_token *actual)
 
 static void	redirection2(t_token *actual)
 {
-	int	fd;
+	int	fdout;
+	int	fdin;
 
+	fdout = 0;
+	fdin = 0;
 	if (actual->next_out)
-		fd = open(actual->next_out, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		fdout = open(actual->next_out, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (actual->next_d_out)
-		fd = open(actual->next_d_out, O_CREAT | O_RDWR | O_APPEND, 0644);
+		fdout = open(actual->next_d_out, O_CREAT | O_RDWR | O_APPEND, 0644);
+	if (actual->next_in)
+		fdin = open(actual->next_in, O_RDWR | O_APPEND, 0666);
+	if (fdin < 0)
+	{
+		perror("minishell:");
+		exit(0);
+	}
 	if (actual->next_out || actual->next_d_out)
 	{
-		dup2(fd, STDOUT);
-		dup2(fd, STDERR);
+		dup2(fdout, STDOUT);
+		dup2(fdout, STDERR);
 	}
-	if (fd)
-		close(fd);
+	if (actual->next_in)
+		dup2(fdin, STDIN);
+	if (fdout)
+		close(fdout);
+	if (fdin)
+		close(fdin);
 }
 
-static int	child(t_data *data, t_token *actual, int i)
+static int	child(t_data *data, t_token *actual)
 {
 	char	*bin;
-	int		fd;
 
 	if (actual->prev_in || actual->prev_out || actual->prev_d_out)
 		redirection(actual);
-	if (actual->prev_pipe)
-	{
+	if (actual->prev_pipe && !actual->next_in && !actual->prev_in)
 		dup2(to_prev_command(actual)->pipes[0] , STDIN);
-	}
-	if (actual->next_pipe && !(actual->prev_d_out || actual->prev_out))
+	if (actual->next_pipe && !actual->next_in)
 	{
-		
 		if (dup2(actual->pipes[1], STDOUT) < 0)
 			printf("error\n");
 		close(actual->pipes[1]);
 		close(actual->pipes[0]);
 	}
-	else if (actual->next_out || actual->next_d_out)
+	else if (actual->next_out || actual->next_d_out || actual->next_in)
 		redirection2(actual);
 	bin = get_bin_path(actual->args[0]);
 	if (bin == NULL)
@@ -228,7 +217,6 @@ static int	parent(t_data *data, t_token *actual)
 
 static int	exe_pipe(t_data *data, t_token *actual, int i)
 {
-	char	*bin;
 	int		error;
 
 	error = 0;
@@ -238,7 +226,7 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 		return (1);
 	data->pid[i] = fork();
 	if (data->pid[i] == 0)
-		child(data, actual, i);
+		child(data, actual);
 	else
 		parent(data, actual);
 	return (0);
@@ -274,12 +262,12 @@ static void	pre_check_builtins(t_data *data, t_token *actual, int i)
 
 int	execution(t_data *data)
 {
-	char	*bin;
 	data->actual = data->first;
 	if (data->actual->type != COMMAND)
 		data->actual = to_next_command(data->actual);
 	while (data->command_nb < data->nb_command)
 	{
+		//printf("c %d\n", data->actual->next_pipe);
 		pre_check_builtins(data, data->actual, data->command_nb);
 		data->command_nb++;
 		data->actual = to_next_command(data->actual);

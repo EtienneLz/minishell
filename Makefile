@@ -27,20 +27,21 @@ SRCS = srcs/minishell.c \
 		srcs/error/error.c \
 		srcs/utils/utils_3.c \
 		srcs/parsing/structurationinger.c \
+		srcs/parsing/heredoc.c \
 
 OBJS = ${SRCS:.c=.o}
 
 OBJSBONUS = ${SRCBONUS:.c=.o}
 
-PATH_LIBFT = 42_libft
+PATH_LIBFT = libft
 
-INCLUDES = -I/includes/minishell.h
+INCLUDES = /includes/minishell.h
 
-CFLAGS = -g #-fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -g3 -Werror -Wall -Wextra
 
 CC = clang 
 
-LIB = 42_libft/libft.a -I./usr/include
+LIB = libft/libft.a
 
 RM = rm -f
 
@@ -48,7 +49,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean
