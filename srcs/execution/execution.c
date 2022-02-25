@@ -192,6 +192,7 @@ static int	parent(t_data *data, t_token *actual)
 	i = 0;
 	ex = 0;
 	status = 0;
+	//signal(SIGQUIT, SIG_IGN);
 	if (actual->prev_pipe)
 		close(to_prev_command(actual)->pipes[0]);
 	if (actual->next_pipe || actual->prev_pipe)
@@ -228,7 +229,13 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 	if (data->pid[i] == 0)
 		child(data, actual);
 	else
+	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 		parent(data, actual);
+		signal(SIGQUIT, signal_handler);
+		signal(SIGINT, signal_handler);
+	}
 	return (0);
 }
 

@@ -12,11 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-char *treat_var(char *var)
+char	*treat_var(char *var)
 {
-	int     i;
-	int     size;
-	char    *ret;
+	int		i;
+	int		size;
+	char	*ret;
 
 	i = 0;
 	while (var[i] && var[i] != '=')
@@ -36,10 +36,10 @@ char *treat_var(char *var)
 	return (ret);
 }
 
-char *check_exist(t_data *data, char *var)
+char	*check_exist(t_data *data, char *var)
 {
-	int     i;
-	char    *ret;
+	int		i;
+	char	*ret;
 
 	i = 0;
 	ret = NULL;
@@ -56,11 +56,11 @@ char *check_exist(t_data *data, char *var)
 	return (NULL);
 }
 
-static char  *size_var(t_data *data, char *var)
+static char	*size_var(t_data *data, char *var)
 {
-	char    *var_name;
-	char    *convert_var;
-	int     i;
+	char	*var_name;
+	char	*convert_var;
+	int		i;
 
 	i = 0;
 	var_name = malloc(sizeof(char) * (ft_strlen(var) + 2));
@@ -79,12 +79,12 @@ static char  *size_var(t_data *data, char *var)
 		return (convert_var);
 	}
 	return (treat_var(convert_var));
-} 
+}
 
-static char *unsplit(char **split_str)
+static char	*unsplit(char **split_str)
 {
-	int     i;
-	char    *str;
+	int		i;
+	char	*str;
 
 	i = 1;
 	str = ft_strdup(split_str[0]);
@@ -96,7 +96,7 @@ static char *unsplit(char **split_str)
 	return (str);
 }
 
-static void check_var(t_data *data, char *str, t_token *actual)
+void	check_var(t_data *data, char *str, t_token *actual)
 {
 	char    **split_str;
 	char    *replaced;
@@ -116,17 +116,4 @@ static void check_var(t_data *data, char *str, t_token *actual)
 	}
 	free (actual->content);
 	actual->content = unsplit(split_str);
-}
-
-void expand(t_data *data)
-{
-	t_token *actual;
-
-	actual = data->first;
-	while (actual)
-	{
-		if (actual->type != STRING_SIMPLE || is_arrow(actual->prev->content) != 1)
-			check_var(data, actual->content, actual);
-		actual = actual->next;
-	}
 }

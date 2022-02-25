@@ -128,7 +128,6 @@ int		ft_echo(t_data *data, char **args, int flag_n);
 int		ft_pwd(void);
 void	ft_exit(t_data *data, char **args);
 
-void		main_cd(t_data *data, char **args);
 /*
 ** utils built-ins functions
 */
@@ -163,7 +162,7 @@ void	unset_main_check(t_data *data, char **args);
 ** utils functions
 */
 void	free_tab(char **tab);
-t_token	*ft_lstnew(char *content);
+t_token	*ft_lstnew(t_data *data, char *content);
 void	ft_lstadd_back(t_token **alst, t_token *new);
 void	ft_lstfree(t_data *data);
 char	***split_arg(t_data *data);
@@ -171,6 +170,7 @@ void	check_exit(t_data *data);
 char	*treat_var(char *var);
 char	*check_exist(t_data *data, char *var);
 
+void	signal_handler(int sig);
 void	init(t_data *data);
 void	prompt(t_data *data);
 void	reset(t_data *data);
@@ -179,10 +179,12 @@ int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
+void	check_var(t_data *data, char *str, t_token *actual);
+int		get_quoted(char *command, int i, char quote);
 int		check_pipe(t_token	*actual);
 t_token	*to_next_command(t_token *actual);
 void	expand(t_data *data);
-char	*check_quotes(char *str);
+char	*check_quotes(t_data *data, char *str);
 char	*line_prompt(char *prompt);
 void	print_error(char *error_str);
 char	is_redirection(char *str);

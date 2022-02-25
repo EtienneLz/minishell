@@ -91,13 +91,15 @@ void	structure(t_data *data)
 		actual = to_next_command(actual);
 	while (actual)
 	{
-		if (actual->prev && actual->prev->prev && is_arrow(actual->prev->prev->content) == 1)
+		if (actual->prev && actual->prev->prev
+			&& is_arrow(actual->prev->prev->content) == 1)
 			copy_name(actual, actual->prev->prev, 1);
 		if (actual->prev && is_arrow(actual->prev->content) == 2)
 			actual->prev_pipe = 1;
 		tmp = actual;
 		while (actual && (is_string(actual->type) || actual->type == COMMAND))
 			actual = actual->next;
+		//structure_bis(data, actual, tmp);
 		if (!actual)
 			break ;
 		if (is_arrow(actual->content) == 1)

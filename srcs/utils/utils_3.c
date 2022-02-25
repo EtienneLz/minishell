@@ -66,3 +66,35 @@ void	remove_quotes(t_data *data)
 		actual = actual->next;
 	}
 }
+t_token	*to_next_command(t_token *actual)
+{
+	t_token	*act;
+
+	act = actual;
+	if (act->next == NULL)
+		return (NULL);
+	act = act->next;
+	while (act && act->type != COMMAND)
+	{
+		act = act->next;
+	}
+	return (act);
+}
+
+int	nb_next_cmd(t_token	*actual)
+{
+	char	redir;
+	int		i;
+
+	i = 0;
+	redir = is_redirection(actual->content);
+	while (actual && (redir == PIPE || actual->type == STRING
+			|| actual->type == STRING_SIMPLE || actual->type == OPTION
+			|| actual->type == COMMAND))
+	{
+		if (actual->type == COMMAND)
+			i++;
+		actual = actual->next;
+	}
+	return (i);
+}

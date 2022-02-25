@@ -30,21 +30,6 @@ int	check_pipe(t_token	*actual)
 	return (0);
 }
 
-t_token	*to_next_command(t_token *actual)
-{
-	t_token	*act;
-
-	act = actual;
-	if (act->next == NULL)
-		return (NULL);
-	act = act->next;
-	while (act && act->type != COMMAND)
-	{
-		act = act->next;
-	}
-	return (act);
-}
-
 void	check_exit(t_data *data)
 {
 	t_token	*actual;
@@ -73,16 +58,21 @@ void	check_quotes_bis(char quote, int *len, int *i)
 	}
 }
 
-char	*check_quotes(char *str)
+static void	init_quotes(int *i, char *quote, int *len, char *str)
+{
+	*i = 0;
+	*quote = 0;
+	*len = ft_strlen(str) + 1;
+}
+
+char	*check_quotes(t_data *data, char *str)
 {
 	int		i;
 	int		len;
 	char	quote;
 	char	*dest;
 
-	i = 0;
-	quote = 0;
-	len = ft_strlen(str) + 1;
+	init_quotes(&i, &quote, &len, str);
 	if (str[0] == '\"')
 		quote = '\"';
 	else if (str[0] == '\'')
@@ -91,6 +81,8 @@ char	*check_quotes(char *str)
 	if (str[len - 2] == quote)
 		len--;
 	dest = malloc(sizeof(char) * len);
+	if (!dest)
+		alloc_error(data, NULL);
 	while (i < len - 1)
 	{
 		dest[i - 1] = str[i];
@@ -99,22 +91,4 @@ char	*check_quotes(char *str)
 	dest[i - 1] = '\0';
 	free(str);
 	return (dest);
-}
-
-int	nb_next_cmd(t_token	*actual)
-{
-	char	redir;
-	int		i;
-
-	i = 0;
-	redir = is_redirection(actual->content);
-	while (actual && (redir == PIPE || actual->type == STRING
-		|| actual->type == STRING_SIMPLE || actual->type == OPTION
-		|| actual->type == COMMAND))
-	{
-		if (actual->type == COMMAND)
-			i++;
-		actual = actual->next;
-	}
-	return (i);
 }

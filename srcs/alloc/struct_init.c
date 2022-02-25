@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	init(t_data *data)
+static void	init_bis(t_data *data)
 {
 	data->first = NULL;
 	data->actual = NULL;
@@ -27,6 +27,11 @@ void	init(t_data *data)
 	data->export.equal = 0;
 	data->envp_i = 0;
 	data->command_nb = 0;
+}
+
+void	init(t_data *data)
+{
+	init_bis(data);
 	g_pid = 0;
 	data->tmpin = 0;
 	data->tmpout = 0;
