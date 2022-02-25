@@ -95,24 +95,17 @@ char	**ft_split_noskip(char const *s, char c)
 	tab = malloc(sizeof(char *) * (nb_strs + 1));
 	if (!tab)
 		return (NULL);
-	i = 0;
+	i = -1;
 	next_str = (char *)s;
 	next_str_len = 0;
-	while (i < nb_strs)
+	while (++i < nb_strs)
 	{
 		ft_get_next_str(&next_str, &next_str_len, c);
 		tab[i] = malloc(sizeof(char) * (next_str_len + 1));
-		if (!tab)
+		if (!tab[i])
 			return (ft_clear_splitted(tab));
 		ft_strlcpy(tab[i], next_str, next_str_len + 1);
-		i++;
 	}
 	tab[i] = NULL;
-	/*i = 0;
-	while(tab[i])
-	{
-		printf("i%d: %s%%\n", i, tab[i]);
-		i++;
-	}*/
 	return (tab);
 }

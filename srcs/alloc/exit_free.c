@@ -31,8 +31,6 @@ void	minifree(t_data *data)
 		ft_lstfree(data);
 	if (data->splitted_args)
 		splitted_args_free(data->splitted_args);
-	/*if (data->outfile)
-		free_tab(data->outfile);*/
 	if (data->infile)
 		free_tab(data->infile);
 }

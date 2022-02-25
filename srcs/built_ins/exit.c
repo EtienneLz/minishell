@@ -77,6 +77,8 @@ void	ft_exit(t_data *data, char **args)
 	long long	nb;
 
 	i = 0;
+	if (!args)
+		ft_do_exit(data, 0);
 	while (args[i])
 		i++;
 	if (i == 1)

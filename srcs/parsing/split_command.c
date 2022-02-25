@@ -12,24 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-static int	get_quoted(char *command, int i, char quote)
-{
-	int	len;
-
-	len = 1;
-	i++;
-	while (command[i])
-	{
-		if (command[i] == quote && (command[i + 1] == ' '
-				|| command[i + 1] == '|' || command[i + 1] == '<'
-				|| command[i + 1] == '>'))
-			break ;
-		len++;
-		i++;
-	}
-	return (len + 1);
-}
-
 static int	skip_spaces(char *command, int i)
 {
 	while (command[i] == ' ')
@@ -83,13 +65,26 @@ static int	check_char(t_data *data, char *command, int i)
 	return (len);
 }
 
+static void	split_command_bis(t_data *data, int len, char *elem)
+{
+	t_token	*new_token;
+
+	if (len != 0)
+	{
+		new_token = ft_lstnew(data, elem);
+		if (data->quote_type == '\'')
+			new_token->type = STRING_SIMPLE;
+		data->quote_type = '\0';
+		ft_lstadd_back(&data->first, new_token);
+	}
+}
+
 int	split_command(t_data *data, char *command)
 {
 	int		i;
 	int		j;
 	int		len;
 	char	*elem;
-	t_token	*new_token;
 
 	i = 0;
 	while (command[i])
@@ -100,7 +95,7 @@ int	split_command(t_data *data, char *command)
 		len = check_char(data, command, i);
 		elem = malloc(sizeof(char) * (len + 1));
 		if (!elem)
-			exit(1);//alloc_error??
+			alloc_error(data, NULL);
 		while (j < len && command[i])
 		{
 			elem[j] = command[i];
@@ -108,21 +103,7 @@ int	split_command(t_data *data, char *command)
 			j++;
 		}
 		elem[j] = '\0';
-		if (len != 0)
-		{
-			new_token = ft_lstnew(data, elem);
-			if (data->quote_type == '\'')
-				new_token->type = STRING_SIMPLE;
-			data->quote_type = '\0';
-			ft_lstadd_back(&data->first, new_token);
-		}
+		split_command_bis(data, len, elem);
 	}
-	/*t_token *actual;
-	actual = data->first;
-	while(actual)
-	{
-		printf("%s\n", actual->content);
-		actual = actual->next;
-	}*/
 	return (0);
 }

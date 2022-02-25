@@ -21,10 +21,12 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/unset/unset_check_args.c \
 		srcs/built_ins/unset/unset_error.c \
 		srcs/parsing/split_command.c \
+		srcs/parsing/split_command_next.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/lexer.c \
 		srcs/execution/execution.c \
 		srcs/parsing/expansion.c \
+		srcs/parsing/expansion_next.c \
 		srcs/error/error.c \
 		srcs/utils/utils_3.c \
 		srcs/utils/utils_4.c \

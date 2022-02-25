@@ -25,7 +25,8 @@ static int	mini_routine(t_data *data, char *buffer)
 	if (!buffer)
 	{
 		reset_var(data);
-		exit(0);
+		ft_exit(data, NULL);
+		//exit(0);
 	}
 	if (buffer[0] == '\0')
 		return (1);
@@ -43,6 +44,15 @@ static int	mini_routine(t_data *data, char *buffer)
 	if (execution(data))
 		return (4);
 	return (0);
+}
+
+void	prompt(t_data *data)
+{
+	reset_var(data);
+	data->buffer = line_prompt("\e[1m\e[34mminishell> \e[0m");
+	mini_routine(data, data->buffer);
+	if (data->buffer)
+		add_history(data->buffer);
 }
 
 char	*line_prompt(char *prompt)

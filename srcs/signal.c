@@ -6,7 +6,7 @@
 /*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:05:08 by mseligna          #+#    #+#             */
-/*   Updated: 2022/02/24 20:31:19 by mseligna         ###   ########.fr       */
+/*   Updated: 2022/02/25 18:10:04 by mseligna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ void	signal_handler(int sig)
 	{
 		if (sig == SIGQUIT)
 		{
-			write(1, "Quit: 3\n", 8);
 			kill(g_pid, SIGQUIT);
-			//write(1, "^\\\Quit: 3\n", 11);
+			write(1, "Quit: 3\n", 8);
 			g_pid = -1;
 			return ;
 		}

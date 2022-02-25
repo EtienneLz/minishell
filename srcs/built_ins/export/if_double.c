@@ -62,27 +62,33 @@ int	if_equal(t_data *data, char *s1, char *s2)
 	return (0);
 }
 
+static void	cmp_export_arg_bis(t_data *data, char *str, int i)
+{
+	int	j;
+
+	j = 0;
+	while (str[j])
+	{
+		if (str[j] == '=')
+		{
+			data->envp[i] = join_arg(data->envp[i], str);
+			break ;
+		}
+		j++;
+	}
+}
+
 int	cmp_export_arg(t_data *data, char *str)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	while (data->envp[i])
 	{
 		if (if_equal(data, data->envp[i], str) == 1)
 		{
 			if (data->export.equal != 1)
-				while (str[j])
-				{
-					if (str[j] == '=')
-					{
-						data->envp[i] = join_arg(data->envp[i], str);
-						break ;
-					}
-					j++;
-				}
+				cmp_export_arg_bis(data, str, i);
 			return (1);
 		}
 		i++;

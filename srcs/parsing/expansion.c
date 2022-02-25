@@ -95,33 +95,10 @@ static char	*unsplit(char **split_str)
 		str = ft_strjoin_free(str, split_str[i]);
 		i++;
 	}
-	/*size = 0;
-	while (split_str[i])
-	{
-		size += ft_strlen(split_str[i]);
-		i++;
-	}
-	if (split_str[0][0] == '\"')
-		size -= 2;
-	str = malloc(sizeof(char) * size + 1);
-	size = 0;
-	i = 0;
-	while (split_str[i])
-	{
-		j = 0;
-		while (split_str[i][j])
-		{
-			str[size] = split_str[i][j];
-			size++;
-			j++;
-		}
-		i++;
-	}*/
-	//printf("%s\n", str);
 	return (str);
 }
 
-static void	check_var(t_data *data, char *str, t_token *actual)
+void	check_var(t_data *data, char *str, t_token *actual)
 {
 	char	**split_str;
 	char	*replaced;
@@ -142,24 +119,4 @@ static void	check_var(t_data *data, char *str, t_token *actual)
 	}
 	free (actual->content);
 	actual->content = unsplit(split_str);
-}
-
-void	expand(t_data *data)
-{
-	t_token	*actual;
-
-	actual = data->first;
-	while (actual)
-	{
-		if (actual->type == STRING)
-		{
-			if (actual->content[0] == '\"')
-				actual->content = check_quotes(data, actual->content);
-			check_var(data, actual->content, actual);
-		}
-		else if (actual->type == STRING_SIMPLE)
-			if (actual->content[0] == '\'')
-				actual->content = check_quotes(data, actual->content);
-		actual = actual->next;
-	}
 }

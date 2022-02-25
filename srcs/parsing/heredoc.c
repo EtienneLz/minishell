@@ -7,7 +7,7 @@ char	**get_sep(t_data *data)
 	t_token	*actual;
 
 	actual = data->first;
-	sep = malloc(sizeof(char *) * (data->outfile + 1));
+	sep = malloc(sizeof(char *) * (ft_atoi(data->outfile) + 1));
 	if (!sep)
 		alloc_error(data, NULL);
 	i = 0;
@@ -15,7 +15,7 @@ char	**get_sep(t_data *data)
 	{
 		if (actual->type == LL_ARROW && actual->next)
 		{
-			ft_strcpy(sep[i], actual->next->content)
+			ft_strcpy(sep[i], actual->next->content);
 			i++;
 		}
 		actual = actual->next;

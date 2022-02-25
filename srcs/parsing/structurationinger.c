@@ -18,8 +18,6 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	{
 		if (to_copy->type == L_ARROW)
 			actual->prev_in = ft_strdup(to_copy->next->content);
-		//if (to_copy->type == LL_ARROW)
-		//	actual->prev_d_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->prev_out = ft_strdup(to_copy->next->content);
 		if (to_copy->type == RR_ARROW)
@@ -29,8 +27,6 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	{
 		if (to_copy->type == L_ARROW)
 			actual->next_in = ft_strdup(to_copy->next->content);
-	//	if (to_copy->type == LL_ARROW)
-	//		actual->next_d_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->next_out = ft_strdup(to_copy->next->content);
 		if (to_copy->type == RR_ARROW)
@@ -57,6 +53,18 @@ static void	args_associate(t_data *data)
 	}
 }
 
+/*static void	structure_bis(t_data *data, t_token *actual, t_token *tmp)
+{
+	if (actual->prev && actual->prev->prev
+		&& is_arrow(actual->prev->prev->content) == 1)
+		copy_name(actual, actual->prev->prev, 1);
+	if (actual->prev && is_arrow(actual->prev->content) == 2)
+		actual->prev_pipe = 1;
+	tmp = actual;
+	while (actual && (is_string(actual->type) || actual->type == COMMAND))
+		actual = actual->next;
+}*/
+
 void	structure(t_data *data)
 {
 	t_token	*actual;
@@ -75,6 +83,7 @@ void	structure(t_data *data)
 		tmp = actual;
 		while (actual && (is_string(actual->type) || actual->type == COMMAND))
 			actual = actual->next;
+		//structure_bis(data, actual, tmp);
 		if (!actual)
 			break ;
 		if (is_arrow(actual->content) == 1)
@@ -86,10 +95,5 @@ void	structure(t_data *data)
 	args_associate(data);
 	actual = data->first;
 	while (actual)
-	{
-		//printf("%c\n", actual->type);
-		//if (actual->type == COMMAND)
-			//printf("%s next: %d prev: %d, prev_out: %c, next_out: %c\n", actual->content, actual->next_pipe, actual->prev_pipe, actual->prev_out, actual->next_out);
 		actual = actual->next;
-	}
 }
