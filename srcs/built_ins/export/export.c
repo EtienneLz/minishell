@@ -19,7 +19,7 @@ static int	skip_env(char **tab, int i)
 	return (i);
 }
 
-static void	print_export(t_data *data, char **tab)
+static void	print_export(char **tab)
 {
 	int	i;
 	int	j;
@@ -64,7 +64,7 @@ static void	export_no_arg(t_data *data)
 	x_env = copy_env(data, data->envp, x_env, &i);
 	x_env[len] = NULL;
 	x_env = sort_env_atoz(x_env, len);
-	print_export(data, x_env);
+	print_export(x_env);
 	free_tab(x_env);
 }
 

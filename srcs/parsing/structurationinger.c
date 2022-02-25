@@ -18,8 +18,8 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	{
 		if (to_copy->type == L_ARROW)
 			actual->prev_in = ft_strdup(to_copy->next->content);
-		//if (to_copy->type == LL_ARROW)
-		//	actual->prev_d_in = ft_strdup(to_copy->next->content);
+		if (to_copy->type == LL_ARROW)
+			actual->prev_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->prev_out = ft_strdup(to_copy->next->content);
 		if (to_copy->type == RR_ARROW)
@@ -29,8 +29,8 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	{
 		if (to_copy->type == L_ARROW)
 			actual->next_in = ft_strdup(to_copy->next->content);
-	//	if (to_copy->type == LL_ARROW)
-	//		actual->next_d_in = ft_strdup(to_copy->next->content);
+		if (to_copy->type == LL_ARROW)
+			actual->next_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->next_out = ft_strdup(to_copy->next->content);
 		if (to_copy->type == RR_ARROW)
@@ -53,6 +53,30 @@ static void	args_associate(t_data *data)
 			actual->args = data->splitted_args[i];
 			i++;
 		}
+		actual = actual->next;
+	}
+}
+
+static void	check_prev_next(t_data *data)
+{
+	t_token	*actual;
+	t_token	*tmp;
+	int		check;
+
+	actual = data->first;
+	check = 0;
+	while (actual)
+	{
+		if (actual->type == COMMAND && check)
+		{
+			check = 0;
+			actual->prev_pipe = 1;
+			tmp->next_pipe = 1;
+		}
+		if (actual->type == COMMAND)
+			tmp = actual;
+		if (actual->type == PIPE)
+			check = 1;
 		actual = actual->next;
 	}
 }
@@ -82,13 +106,14 @@ void	structure(t_data *data)
 			tmp->next_pipe = 1;
 		actual = to_next_command(actual);
 	}
+	check_prev_next(data);
 	args_associate(data);
-	actual = data->first;
+	/*actual = data->first;
 	while (actual)
 	{
-		//printf("%c\n", actual->type);
-		//if (actual->type == COMMAND)
-			//printf("%s next: %d prev: %d, prev_out: %c, next_out: %c\n", actual->content, actual->next_pipe, actual->prev_pipe, actual->prev_out, actual->next_out);
+		printf("%c\n", actual->type);
+		if (actual->type == COMMAND)
+			printf("%s next: %d prev: %d, prev_out: %s, next_out: %s\n", actual->content, actual->next_pipe, actual->prev_pipe, actual->prev_in, actual->next_in);
 		actual = actual->next;
-	}
+	}*/
 }
