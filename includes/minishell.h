@@ -23,7 +23,7 @@
 # include <sys/types.h>
 # include <signal.h>
 # include <sys/wait.h>
-# include "../42_libft/libft.h"
+# include "../libft/libft.h"
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
@@ -107,6 +107,7 @@ typedef struct s_data
 	int			last_out;
 	char		*tmp_var;
 	int			heredoc;
+	int			heredoc_nb;
 	pid_t		*pid;
 }				t_data;
 
@@ -124,7 +125,7 @@ void	alloc_error(t_data *data, char *cmd);
 */
 int		ft_env(t_data *data, char **args);
 int		ft_echo(t_data *data, char **args, int flag_n);
-int		ft_pwd(t_data *data);
+int		ft_pwd(void);
 void	ft_exit(t_data *data, char **args);
 
 /*
@@ -185,11 +186,13 @@ t_token	*to_next_command(t_token *actual);
 void	expand(t_data *data);
 char	*check_quotes(t_data *data, char *str);
 char	*line_prompt(char *prompt);
-void	print_error(t_data *data, char *error_str);
+void	print_error(char *error_str);
 char	is_redirection(char *str);
 int		is_arrow(char *str);
 int		is_string(char type);
 void	structure(t_data *data);
 t_token	*to_prev_command(t_token *actual);
+void	remove_quotes(t_data *data);
+void	get_sep(t_data *data);
 
 #endif

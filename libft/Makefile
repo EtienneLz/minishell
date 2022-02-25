@@ -24,17 +24,17 @@ OBJS = ${SRCS:.c=.o}
 
 OBJSBONUS = ${SRCBONUS:.c=.o}
 
-GCCFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 
 RM  = rm -f
 
 .c.o:
-	clang ${GCCFLAGS} -c $< -o ${<:.c=.o}
+	clang ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all: ${NAME}
 
 ${NAME}:	${OBJS}
-	libtool -o ${NAME} ${OBJS}
+	ar rc -o ${NAME} ${OBJS}
 	ranlib ${NAME}
 
 bonus:		${OBJSBONUS} ${OBJS}

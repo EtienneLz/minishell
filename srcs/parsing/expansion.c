@@ -84,8 +84,6 @@ static char	*size_var(t_data *data, char *var)
 static char	*unsplit(char **split_str)
 {
 	int		i;
-	int		j;
-	int		size;
 	char	*str;
 
 	i = 1;
@@ -100,10 +98,9 @@ static char	*unsplit(char **split_str)
 
 void	check_var(t_data *data, char *str, t_token *actual)
 {
-	char	**split_str;
-	char	*replaced;
-	int		i;
-	int		j;
+	char    **split_str;
+	char    *replaced;
+	int     i;
 
 	i = 0;
 	split_str = ft_split_noskip(str, '$');

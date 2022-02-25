@@ -25,6 +25,23 @@ void	splitted_args_free(char ***tab)
 	free(tab);
 }
 
+static void	unlink_heredoc(t_data *data)
+{
+	char	*file;
+	int		i;
+
+	
+	i = 0;
+	while (i < data->heredoc_nb)
+	{
+		file = ft_strdup("tmp/.");
+		ft_strlcat(file, ft_itoa(i), 6 + ft_strlen(ft_itoa(i)));
+		unlink(file);
+		free(file);
+		i++;
+	}
+}
+
 void	minifree(t_data *data)
 {
 	if (data->first)
@@ -33,4 +50,5 @@ void	minifree(t_data *data)
 		splitted_args_free(data->splitted_args);
 	if (data->infile)
 		free_tab(data->infile);
+	unlink_heredoc(data);
 }

@@ -32,10 +32,11 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (1);
 	if (split_command(data, buffer))
 		return (2);
+	remove_quotes(data);
 	if (lexer(data))
 		return (3);
-	//if (data->heredoc > 0)
-	//	ft_heredoc(data);
+	if (data->heredoc > 0)
+		get_sep(data);
 	expand(data);
 	data->splitted_args = split_arg(data);
 	structure(data);

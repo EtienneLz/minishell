@@ -65,6 +65,18 @@ void	ft_lstfree(t_data *data)
 	{
 		tmp = actual->next;
 		free(actual->content);
+		if (actual->next_d_out)
+			free(actual->next_d_out);
+		if (actual->next_out)
+			free(actual->next_out);
+		if (actual->next_in)
+			free(actual->next_in);
+		if (actual->prev_d_out)
+			free(actual->prev_d_out);
+		if (actual->prev_out)
+			free(actual->prev_out);
+		if (actual->prev_in)
+			free(actual->prev_in); 
 		free(actual);
 		actual = tmp;
 	}
