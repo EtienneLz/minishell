@@ -115,7 +115,7 @@ void	structure(t_data *data)
 	/*actual = data->first;
 	while (actual)
 	{
-		printf("%c\n", actual->type);
+		printf("%s\n", actual->content);
 		//if (actual->type == COMMAND)
 		//	printf("%s next: %s prev: %s, prev_out: %s, next_out: %s\n", actual->content, actual->next_out, actual->prev_out, actual->prev_in, actual->next_in);
 		actual = actual->next;

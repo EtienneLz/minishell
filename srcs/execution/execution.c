@@ -159,7 +159,7 @@ static int	child(t_data *data, t_token *actual)
 		bin = actual->args[0];
 	if (check_built_in(data, actual->args) == 0)
 	{
-		if (execve(bin, actual->args, NULL) == -1)
+		if (execve(bin, actual->args, data->envp) == -1)
 		{
 			if (errno == 2)
 				printf("minishell: command not found: %s\n", actual->args[0]);
