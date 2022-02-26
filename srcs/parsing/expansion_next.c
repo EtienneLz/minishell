@@ -7,7 +7,7 @@ void	expand(t_data *data)
 	actual = data->first;
 	while (actual)
 	{
-		if (actual->type == STRING)
+		if (actual->type == STRING || actual->type == COMMAND)
 		{
 			if (actual->content[0] == '\"')
 				actual->content = check_quotes(data, actual->content);
