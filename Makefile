@@ -20,6 +20,7 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/unset/unset.c \
 		srcs/built_ins/unset/unset_check_args.c \
 		srcs/built_ins/unset/unset_error.c \
+		srcs/built_ins/echo.c \
 		srcs/parsing/split_command.c \
 		srcs/parsing/split_command_next.c \
 		srcs/alloc/exit_free.c \
@@ -41,7 +42,7 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -g3 -Werror -Wall -Wextra
+CFLAGS = -g -g3# -Werror -Wall -Wextra
 
 CC = clang 
 
@@ -53,7 +54,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline
+		${CC} ${CFLAGS} -lreadline ${OBJS} ${LIB} -o ${NAME}
 
 clean:
 		make -C $(PATH_LIBFT) clean

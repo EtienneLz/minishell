@@ -124,7 +124,7 @@ void	alloc_error(t_data *data, char *cmd);
 ** Built-ins functions 
 */
 int		ft_env(t_data *data, char **args);
-int		ft_echo(t_data *data, char **args, int flag_n);
+int		ft_echo(t_data *data, char **args);
 int		ft_pwd(void);
 void	ft_exit(t_data *data, char **args);
 
