@@ -17,14 +17,14 @@ static void	here_read(char *buffer, char *sep, int fd)
 	while (1)
 	{
 		buffer = readline("> ");
-		if (!ft_strcmp(buffer, sep))
-			break ;
-		if (buffer[0] == '\0')
+		if (!buffer)
 		{
-			printf("minishell: warning: heredoc delimited by EOF");
+			printf("minishell: warning: heredoc delimited by EOF ");
 			printf("(wanted `%s\')\n", sep);
 			break ;
 		}
+		if (!ft_strcmp(buffer, sep))
+			break ;
 		ft_putstr_fd(buffer, fd);
 		ft_putstr_fd("\n", fd);
 		free(buffer);
