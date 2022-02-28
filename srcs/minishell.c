@@ -32,10 +32,11 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (1);
 	if (split_command(data, buffer))
 		return (2);
+	remove_quotes(data);
 	if (lexer(data))
 		return (3);
-	//if (data->heredoc > 0)
-	//	ft_heredoc(data);
+	if (data->heredoc > 0)
+		get_sep(data);
 	expand(data);
 	data->splitted_args = split_arg(data);
 	structure(data);
@@ -74,27 +75,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	data.envp = envp;
 	data.cd.home = getenv("HOME");
-	/*unset[0] = "unset";
-	unset[1] = "OLDPWD=bibi";
-	unset[2] = "hello";
-	unset[3] = "5884";
-	unset[4] = "_36684";
-	unset[5] = "blop=bof";
-	unset[6] = NULL;
-	main_unset(&data, unset);
-	export_no_arg(&data);
-	main_export(&data, unset);
-	printf("mawie = %s\n", getenv("mawie"));
-	printf("zsh = %s\n", getenv("ZSH"));
-	arg[0] = "cd";
-	arg[1] = "..";
-	arg[2] = "blop";
-	arg[1] = NULL;
-	ft_pwd(&data);
-	/main_cd(&data, arg);
-	ft_pwd(&data);
-	main_export(&data, unset);
-	main_export(&data, arg);*/
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler);
 	data.buffer = malloc(1);
@@ -104,7 +84,6 @@ int	main(int argc, char **argv, char **envp)
 		reset_var(&data);
 		data.buffer = line_prompt("\e[1m\e[34mminishell> \e[0m");
 		mini_routine(&data, data.buffer);
-		//printf("%d\n", d);
 		if (data.buffer)
 			add_history(data.buffer);
 	}

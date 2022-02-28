@@ -25,7 +25,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-static t_token	*to_pipe(t_data *s_data, t_token *actual, int i)
+static t_token	*to_pipe(t_token *actual, int i)
 {
 	int	w_pipe;
 
@@ -39,7 +39,20 @@ static t_token	*to_pipe(t_data *s_data, t_token *actual, int i)
 	return (actual);
 }
 
-//static void	split_args_bis()
+t_token	*to_next_command(t_token *actual)
+{
+	t_token	*act;
+
+	act = actual;
+	if (!act)
+		return (NULL);
+	if (act->next == NULL)
+		return (NULL);
+	act = act->next;
+	while (act && act->type != COMMAND)
+		act = act->next;
+	return (act);
+}
 
 char	***split_arg(t_data *data)
 {
@@ -59,7 +72,7 @@ char	***split_arg(t_data *data)
 	while (i <= data->nb_pipe + 1)
 	{
 		if (i != 0)
-			actual = to_pipe(data, actual, i);
+			actual = to_pipe(actual, i);
 		size = 0;
 		j = 0;
 		while (actual && actual->type != PIPE)
@@ -80,7 +93,7 @@ char	***split_arg(t_data *data)
 		}
 		actual = data->first;
 		if (i != 0)
-			actual = to_pipe(data, actual, i);
+			actual = to_pipe(actual, i);
 		else
 			while (actual && actual->type != COMMAND)
 				actual = actual->next;

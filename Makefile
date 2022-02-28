@@ -20,6 +20,7 @@ SRCS = srcs/minishell.c \
 		srcs/built_ins/unset/unset.c \
 		srcs/built_ins/unset/unset_check_args.c \
 		srcs/built_ins/unset/unset_error.c \
+		srcs/built_ins/echo.c \
 		srcs/parsing/split_command.c \
 		srcs/parsing/split_command_next.c \
 		srcs/alloc/exit_free.c \
@@ -31,20 +32,21 @@ SRCS = srcs/minishell.c \
 		srcs/utils/utils_3.c \
 		srcs/utils/utils_4.c \
 		srcs/parsing/structurationinger.c \
+		srcs/parsing/heredoc.c \
 
 OBJS = ${SRCS:.c=.o}
 
 OBJSBONUS = ${SRCBONUS:.c=.o}
 
-PATH_LIBFT = 42_libft
+PATH_LIBFT = libft
 
-INCLUDES = -I/includes/minishell.h -I/usr/local/Cellar/readline/8.1.2/include/readline/
+INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -g3# -Werror -Wall -Wextra
 
 CC = clang 
 
-LIB = 42_libft/libft.a -I./usr/include
+LIB = libft/libft.a
 
 RM = rm -f
 
@@ -52,7 +54,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} ${INCLUDES} ${OBJS} ${LIB} -o ${NAME} -L/usr/local/Cellar/readline/8.1.2/lib/ -lreadline
+		${CC} ${CFLAGS} -lreadline ${OBJS} ${LIB} -o ${NAME}
 
 clean:
 		make -C $(PATH_LIBFT) clean

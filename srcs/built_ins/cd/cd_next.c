@@ -51,7 +51,6 @@ char	*cd_join(char *dir, char *arg, char *new_dir)
 
 char	*if_tilde(t_data *data, char *arg)
 {
-	char	*home;
 	char	*new_dir;
 	int		i;
 	int		j;

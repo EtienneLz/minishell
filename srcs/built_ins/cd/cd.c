@@ -28,6 +28,7 @@ static char	*do_cd_next(t_data *data, char **args, char *path)
 {
 	char	*str;
 
+	str = NULL;
 	if (args[1][0] == '/')
 			data->cd.ret = chdir(args[1]);
 	else
@@ -81,7 +82,6 @@ static void	do_cd(t_data *data, char **args, int len)
 int	main_cd(t_data *data, char **args)
 {
 	int		len;
-	char	*new_dir;
 
 	len = 0;
 	data->last_ret = 0;

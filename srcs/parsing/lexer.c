@@ -15,23 +15,15 @@
 char	is_redirection(char *str)
 {
 	if (!ft_strcmp(str, "|"))
-	{
 		return (PIPE);
-	}
 	else if (!ft_strcmp(str, "<"))
-	{
 		return (L_ARROW);
-	}
 	else if (!ft_strcmp(str, ">"))
-	{
 		return (R_ARROW);
-	}
 	else if (!ft_strcmp(str, "<<"))
 		return (LL_ARROW);
 	else if (!ft_strcmp(str, ">>"))
-	{
 		return (RR_ARROW);
-	}
 	return (0);
 }
 
@@ -58,65 +50,64 @@ static void	counter(t_data *data)
 	}	
 }
 
-static int	checker(t_data *data)
-{
-	t_token	*actual;
-	t_token	*next;
-
-	actual = data->first;
-	next = actual->next;
-	while (actual && actual->next)
-	{
-		if (actual->type == COMMAND && next->type == STRING)
-			if (next->content[0] == '-')
-				next->type = OPTION;
-		if ((actual->type != STRING || actual->type != STRING_SIMPLE) && actual->type == next->type)
-			return (1);
-		actual = next;
-		next = actual->next;
-	}
-	return (0);
-}
-
-void	find_lasts_commands(t_data *data)
+static void	find_lasts_commands(t_data *data)
 {
 	t_token	*actual;
 	int		check;
-	int		fd;
 
 	actual = data->first;
 	check = 0;
 	while (actual)
 	{
-		if (is_arrow(actual->content) == 1 && !check)
+		while (is_arrow(actual->content) == 1 && !check)
 		{
-			while (actual->next && actual->next->next && (actual->next->type == STRING
-				|| actual->next->type == STRING_SIMPLE) && is_arrow(actual->next->next->content))
-			{
-				if (actual->type == R_ARROW || actual->type == RR_ARROW)
-				{
-					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
-					close(fd);
-					actual = actual->next->next;
-				}
-			}
+			actual->type = is_redirection(actual->content);
 			if (actual->next && actual->next->next && actual->next->next->type == STRING)
 			{
 				actual->next->next->type = COMMAND;
 				check = 1;
 			}
+			else if (actual->next && actual->next->next)
+				actual = actual->next->next;
 		}
-		if (!actual)
-			break ;
 		while (actual && actual->type != PIPE)
 			actual = actual->next;
 		if (actual && actual->type == PIPE)
+		{
 			if (actual->next)
 			{
 				actual = actual->next;
 				check = 0;
 			}
-		
+		}
+	}
+}
+
+static void	create_files(t_data *data)
+{
+	t_token	*actual;
+	int		fd;
+
+	actual = data->first;
+	while (actual)
+	{
+		if (actual->type == R_ARROW || actual->type == RR_ARROW)
+		{
+			if (!actual->next || is_arrow(actual->next->content))
+			{
+				print_error("minishell: syntax error\n");
+				return ;
+			}
+			else
+			{
+				if (actual->type == R_ARROW)
+					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
+				 else if (actual->type == RR_ARROW)
+					fd = open(actual->next->content, O_CREAT | O_RDWR | O_APPEND, 0644);
+				close(fd);
+			}
+		}
+		actual = actual->next;
 	}
 }
 
@@ -149,9 +140,8 @@ int	lexer(t_data *data)
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	/*actual = data->first;
 	
-	infiles_name(data);
+	/*actual = data->first;
 	while (actual)
 	{
 		printf("t = %c\n", actual->type);
@@ -160,10 +150,10 @@ int	lexer(t_data *data)
 			print_error(data, "syntax error near unexpected token `newline\'\n");
 			return (1);
 		}
-			
 		actual = actual->next;
 	}*/
 	find_lasts_commands(data);
+	create_files(data);
 	counter(data);
 	return (0);
 }

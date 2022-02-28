@@ -18,6 +18,8 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	{
 		if (to_copy->type == L_ARROW)
 			actual->prev_in = ft_strdup(to_copy->next->content);
+		if (to_copy->type == LL_ARROW)
+			actual->prev_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->prev_out = ft_strdup(to_copy->next->content);
 		if (to_copy->type == RR_ARROW)
@@ -26,6 +28,8 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	else if (!dir)
 	{
 		if (to_copy->type == L_ARROW)
+			actual->next_in = ft_strdup(to_copy->next->content);
+		if (to_copy->type == LL_ARROW)
 			actual->next_in = ft_strdup(to_copy->next->content);
 		if (to_copy->type == R_ARROW)
 			actual->next_out = ft_strdup(to_copy->next->content);
@@ -53,17 +57,29 @@ static void	args_associate(t_data *data)
 	}
 }
 
-/*static void	structure_bis(t_data *data, t_token *actual, t_token *tmp)
+static void	check_prev_next(t_data *data)
 {
-	if (actual->prev && actual->prev->prev
-		&& is_arrow(actual->prev->prev->content) == 1)
-		copy_name(actual, actual->prev->prev, 1);
-	if (actual->prev && is_arrow(actual->prev->content) == 2)
-		actual->prev_pipe = 1;
-	tmp = actual;
-	while (actual && (is_string(actual->type) || actual->type == COMMAND))
+	t_token	*actual;
+	t_token	*tmp;
+	int		check;
+
+	actual = data->first;
+	check = 0;
+	while (actual)
+	{
+		if (actual->type == COMMAND && check)
+		{
+			check = 0;
+			actual->prev_pipe = 1;
+			tmp->next_pipe = 1;
+		}
+		if (actual->type == COMMAND)
+			tmp = actual;
+		if (actual->type == PIPE)
+			check = 1;
 		actual = actual->next;
-}*/
+	}
+}
 
 void	structure(t_data *data)
 {
@@ -81,19 +97,30 @@ void	structure(t_data *data)
 		if (actual->prev && is_arrow(actual->prev->content) == 2)
 			actual->prev_pipe = 1;
 		tmp = actual;
-		while (actual && (is_string(actual->type) || actual->type == COMMAND))
+		while (actual && (!is_string(actual->type) || actual->type == COMMAND))
 			actual = actual->next;
-		//structure_bis(data, actual, tmp);
-		if (!actual)
-			break ;
-		if (is_arrow(actual->content) == 1)
+		if (actual && actual->next && is_arrow(actual->next->content) == 1)
+			actual = actual->next;
+		while (actual && actual->next && actual->next->next && is_arrow(actual->content) == 1)
+		{
 			copy_name(tmp, actual, 0);
-		if (is_arrow(actual->content) == 2)
+			actual = actual->next->next;
+		}
+		if (actual && actual->next && !actual->next->next && is_arrow(actual->content) == 1)
+			copy_name(tmp, actual, 0);
+		if (actual && is_arrow(actual->content) == 2)
 			tmp->next_pipe = 1;
 		actual = to_next_command(actual);
 	}
-	args_associate(data);
-	actual = data->first;
+	/*actual = data->first;
 	while (actual)
+	{
+		printf("%s\n", actual->content);
+		//if (actual->type == COMMAND)
+		//	printf("%s next: %s prev: %s, prev_out: %s, next_out: %s\n", actual->content, actual->next_out, actual->prev_out, actual->prev_in, actual->next_in);
 		actual = actual->next;
+	}*/
+	check_prev_next(data);
+	args_associate(data);
+	
 }
