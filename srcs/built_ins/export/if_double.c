@@ -14,7 +14,7 @@
 
 static void	join_arg_bis(char *s1, char *s2, int *n, int *m)
 {
-	while (s1[*n] != '=')
+	while (s1[*n] && s1[*n] != '=')
 		(*n)++;
 	while (s2[*m] && s2[*m] != '=')
 		(*m)++;

@@ -19,10 +19,12 @@ void	free_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		free(tab[i]);
+		if (tab[i][0] != '\0')
+			free(tab[i]);
 		i++;
 	}
-	free(tab);
+	if (tab[i])
+		free(tab);
 }
 
 t_token	*to_pipe(t_token *actual, int i)
