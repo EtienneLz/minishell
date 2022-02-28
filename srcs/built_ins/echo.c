@@ -20,7 +20,10 @@ int	ft_echo(t_data *data, char **args)
 	flag = 0;
 	i = 1;
 	if (!ft_strcmp(args[1], "-n"))
+	{
+		i++;
 		flag = 1;
+	}
 	if (args[1] == NULL && flag == 0)
 		ft_putstr_fd("\n", 1);
 	else
