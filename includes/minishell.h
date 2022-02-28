@@ -136,7 +136,7 @@ char	*join_arg(char *s1, char *s2);
 /*
 ** Cd functions
 */
-void	main_cd(t_data *data, char **args);
+int		main_cd(t_data *data, char **args);
 void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd);
 char	*cd_join(char *dir, char *arg, char *new_dir);
 char	*if_tilde(t_data *data, char *arg);

@@ -78,7 +78,7 @@ static void	do_cd(t_data *data, char **args, int len)
 	}
 }
 
-void	main_cd(t_data *data, char **args)
+int	main_cd(t_data *data, char **args)
 {
 	int		len;
 	char	*new_dir;
@@ -94,4 +94,5 @@ void	main_cd(t_data *data, char **args)
 	}
 	else
 		do_cd(data, args, len);
+	return (data->last_ret);
 }
