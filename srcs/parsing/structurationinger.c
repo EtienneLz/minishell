@@ -97,7 +97,7 @@ void	structure(t_data *data)
 		if (actual->prev && is_arrow(actual->prev->content) == 2)
 			actual->prev_pipe = 1;
 		tmp = actual;
-		while (actual && (!is_string(actual->type) || actual->type == COMMAND))
+		while (actual && actual->next && (!is_string(actual->type) || actual->type == COMMAND) && is_arrow(actual->next->content) != 1)
 			actual = actual->next;
 		if (actual && actual->next && is_arrow(actual->next->content) == 1)
 			actual = actual->next;

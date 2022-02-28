@@ -17,20 +17,21 @@ static int	check_built_in(t_data *data, char **args)
 	int		ret;
 
 	ret = 1;
-	if (!ft_strcmp(args[0], "cd"))
-		/*ret = */main_cd(data, args);
-	else if (!ft_strcmp(args[0], "echo"))
-		ret = ft_echo(data, args);
-	else if (!ft_strcmp(args[0], "env"))
+	data->last_ret = 1000;
+	if (!ft_strcmp(args[0], "cd") && data->envp)
+		ret = main_cd(data, args);
+	else if (!ft_strcmp(args[0], "env") && data->envp)
 		ret = ft_env(data, args);
+	else if (!ft_strcmp(args[0], "unset") && data->envp)
+		ret = main_unset(data, args);
+	else if (!ft_strcmp(args[0], "export") && data->envp)
+		ret = main_export(data, args);
+	else if (!ft_strcmp(args[0], "echo"))
+		ret = ft_echo(args);
 	else if (!ft_strcmp(args[0], "pwd"))
 		ret = ft_pwd();
-	else if (!ft_strcmp(args[0], "unset"))
-		ret = main_unset(data, args);
-	else if (!ft_strcmp(args[0], "export"))
-		ret = main_export(data, args);
 	else
-		ret = 0;
+		ret = 1000;
 	return (ret);
 }
 
@@ -159,7 +160,7 @@ static int	child(t_data *data, t_token *actual)
 	if (bin == NULL)
 		bin = actual->args[0];
 	ret = check_built_in(data, actual->args);
-	if (ret == 0)
+	if (ret == 1000)
 	{
 		ret = execve(bin, actual->args, data->envp);
 		if (ret == -1)
@@ -234,22 +235,22 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 
 static void	pre_check_builtins(t_data *data, t_token *actual, int i)
 {
-	if (!ft_strcmp(actual->args[0], "cd"))
+	if (!ft_strcmp(actual->args[0], "cd") && data->envp != NULL)
 	{
 		if (data->nb_command > 1)
 			exe_pipe(data, actual, i);
-		/*data->ret =*/ main_cd(data, actual->args);
+		data->ret = main_cd(data, actual->args);
 	}
 	else if (!ft_strcmp(actual->args[0], "echo"))
 	{
 		exe_pipe(data, actual, i);
 	}
-	else if (!ft_strcmp(actual->args[0], "unset"))
+	else if (!ft_strcmp(actual->args[0], "unset") && data->envp != NULL)
 	{
 		exe_pipe(data, actual, i);
 		data->ret = main_unset(data, actual->args);
 	}
-	else if (!ft_strcmp(actual->args[0], "export") && actual->args[1])
+	else if (!ft_strcmp(actual->args[0], "export") && actual->args[1] && data->envp != NULL)
 	{
 		exe_pipe(data, actual, i);
 		data->ret = main_export(data, actual->args);

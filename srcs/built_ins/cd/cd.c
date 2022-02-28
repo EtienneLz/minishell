@@ -77,6 +77,7 @@ static void	do_cd(t_data *data, char **args, int len)
 		change_pwd_vars(data, pwd, path);
 		data->last_ret = 0;
 	}
+	free(str);
 }
 
 int	main_cd(t_data *data, char **args)
@@ -84,7 +85,6 @@ int	main_cd(t_data *data, char **args)
 	int		len;
 
 	len = 0;
-	data->last_ret = 0;
 	while (args[len])
 		len++;
 	if (len > 2)
@@ -94,5 +94,8 @@ int	main_cd(t_data *data, char **args)
 	}
 	else
 		do_cd(data, args, len);
-	return (data->last_ret);
+	if (data->last_ret == 1000)
+		return (0);
+	else
+		return (data->last_ret);
 }

@@ -124,7 +124,7 @@ void	alloc_error(t_data *data, char *cmd);
 ** Built-ins functions 
 */
 int		ft_env(t_data *data, char **args);
-int		ft_echo(t_data *data, char **args);
+int		ft_echo(char **args);
 int		ft_pwd(void);
 void	ft_exit(t_data *data, char **args);
 
@@ -147,7 +147,8 @@ char	*if_tilde(t_data *data, char *arg);
 */
 int		main_export(t_data *data, char **args);
 void	export_main_check(t_data *data, char **args);
-char	**copy_env(t_data *data, char **tab, char **dest, int *i);
+int		skip_env(char **tab, int i);
+char	**copy_env(char **tab, char **dest, int *i);
 char	**sort_env_atoz(char **tab, int len);
 void	copy_equal(t_data *data);
 int		cmp_export_arg(t_data *data, char *str);

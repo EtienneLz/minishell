@@ -34,6 +34,8 @@ char	*cd_join(char *dir, char *arg, char *new_dir)
 
 	i = 0;
 	j = 0;
+	if (!new_dir)
+		return (NULL);
 	while (dir[i])
 	{
 		new_dir[i] = dir[i];

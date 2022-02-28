@@ -26,7 +26,6 @@ static int	mini_routine(t_data *data, char *buffer)
 	{
 		reset_var(data);
 		ft_exit(data, NULL);
-		//exit(0);
 	}
 	if (buffer[0] == '\0')
 		return (1);
@@ -73,19 +72,21 @@ int	main(int argc, char **argv, char **envp)
 	init(&data);
 	(void)argc;
 	(void)argv;
-	data.envp = envp;
-	data.cd.home = getenv("HOME");
+	if (envp)
+	{
+		data.envp = envp;
+		data.cd.home = getenv("HOME");
+	}
+	else
+	{
+		ft_putstr_fd("minishell> ", 2);
+		ft_putstr_fd("Fatal error: environment variables not set", 2);
+	}
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler);
 	data.buffer = malloc(1);
 	data.buffer[0] = '\0';
 	while (data.buffer)
-	{
-		reset_var(&data);
-		data.buffer = line_prompt("\e[1m\e[34mminishell> \e[0m");
-		mini_routine(&data, data.buffer);
-		if (data.buffer)
-			add_history(data.buffer);
-	}
+		prompt(&data);
 	return (0);
 }

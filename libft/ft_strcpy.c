@@ -22,7 +22,7 @@ size_t	ft_strcpy(char *dst, const char *src)
 	size_t	srclen;
 
 	srclen = ft_strlen(src);
-	if (srclen != 0)
+	if (srclen != 0 && dst)
 	{
 		ft_cmemcpy(dst, src, srclen);
 		dst[srclen] = '\0';
