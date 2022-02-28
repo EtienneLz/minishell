@@ -30,7 +30,6 @@ static void	unlink_heredoc(t_data *data)
 	char	*file;
 	int		i;
 
-	
 	i = 0;
 	while (i < data->heredoc_nb)
 	{
@@ -48,7 +47,5 @@ void	minifree(t_data *data)
 		ft_lstfree(data);
 	if (data->splitted_args)
 		splitted_args_free(data->splitted_args);
-	if (data->infile)
-		free_tab(data->infile);
 	unlink_heredoc(data);
 }

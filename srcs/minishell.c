@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
+/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 12:25:23 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/23 13:18:27 by mseligna         ###   ########.fr       */
+/*   Created: 2022/02/28 18:23:09 by elouchez          #+#    #+#             */
+/*   Updated: 2022/02/28 18:23:09 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int	mini_routine(t_data *data, char *buffer)
 	{
 		reset_var(data);
 		ft_exit(data, NULL);
-		//exit(0);
 	}
 	if (buffer[0] == '\0')
 		return (1);
@@ -35,15 +34,16 @@ static int	mini_routine(t_data *data, char *buffer)
 	remove_quotes(data);
 	if (lexer(data))
 		return (3);
+	if (last_check(data) == 2)
+		return (0);
 	if (data->heredoc > 0)
 		get_sep(data);
 	expand(data);
 	data->splitted_args = split_arg(data);
 	structure(data);
 	check_exit(data);
-	data->pid = malloc(sizeof(int) * data->nb_command);
-	if (execution(data))
-		return (4);
+	data->pid = mallocer(data->pid, sizeof(int) * data->nb_command);
+	execution(data);
 	return (0);
 }
 
@@ -60,7 +60,6 @@ char	*line_prompt(char *prompt)
 {
 	char	*buffer;
 
-	buffer = malloc(1);
 	buffer = "";
 	buffer = readline(prompt);
 	return (buffer);

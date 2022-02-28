@@ -22,7 +22,7 @@ char	*treat_var(char *var)
 	while (var[i] && var[i] != '=')
 		i++;
 	size = ft_strlen(var) - i;
-	ret = malloc(sizeof(char) * size);
+	ret = mallocer(&ret, sizeof(char) * size);
 	size = 0;
 	i++;
 	while (var[i])
@@ -47,7 +47,7 @@ char	*check_exist(t_data *data, char *var)
 	{
 		if (!ft_strncmp(var, data->envp[i], ft_strlen(var)))
 		{
-			ret = malloc(sizeof(char) * (ft_strlen(data->envp[i]) + 1));
+			ret = mallocer(&ret, sizeof(char) * (ft_strlen(data->envp[i]) + 1));
 			ft_strcpy(ret, data->envp[i]);
 			return (ret);
 		}
@@ -63,7 +63,7 @@ static char	*size_var(t_data *data, char *var)
 	int		i;
 
 	i = 0;
-	var_name = malloc(sizeof(char) * (ft_strlen(var) + 2));
+	var_name = mallocer(&var_name, sizeof(char) * (ft_strlen(var) + 2));
 	while (var[i + 1] && var[i + 1] != ' ')
 	{
 		var_name[i] = var[i + 1];
@@ -72,9 +72,11 @@ static char	*size_var(t_data *data, char *var)
 	var_name[i] = '=';
 	var_name[i + 1] = '\0';
 	convert_var = check_exist(data, var_name);
+	if (var_name)
+		free(var_name);
 	if (!convert_var)
 	{
-		convert_var = malloc(sizeof(char));
+		convert_var = mallocer(&convert_var, sizeof(char));
 		convert_var = "";
 		return (convert_var);
 	}
@@ -98,9 +100,9 @@ static char	*unsplit(char **split_str)
 
 void	check_var(t_data *data, char *str, t_token *actual)
 {
-	char    **split_str;
-	char    *replaced;
-	int     i;
+	char	**split_str;
+	char	*replaced;
+	int		i;
 
 	i = 0;
 	split_str = ft_split_noskip(str, '$');
@@ -108,7 +110,10 @@ void	check_var(t_data *data, char *str, t_token *actual)
 	{
 		if (split_str[i][0] == '$')
 		{
-			replaced = size_var(data, split_str[i]);
+			if (split_str[i][1] == '?')
+				replaced = ft_itoa(data->ret);
+			else
+				replaced = size_var(data, split_str[i]);
 			free(split_str[i]);
 			split_str[i] = replaced;
 		}
@@ -116,4 +121,5 @@ void	check_var(t_data *data, char *str, t_token *actual)
 	}
 	free (actual->content);
 	actual->content = unsplit(split_str);
+	free_tab(split_str);
 }

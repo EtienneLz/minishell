@@ -79,6 +79,21 @@ static void	check_prev_next(t_data *data)
 			check = 1;
 		actual = actual->next;
 	}
+	args_associate(data);
+}
+
+static t_token	*structure_2(t_token *actual, t_token *tmp)
+{
+	while (actual && actual->next && actual->next->next
+		&& is_arrow(actual->content) == 1)
+	{
+		copy_name(tmp, actual, 0);
+		actual = actual->next->next;
+	}
+	if (actual && actual->next && !actual->next->next
+		&& is_arrow(actual->content) == 1)
+		copy_name(tmp, actual, 0);
+	return (actual);
 }
 
 void	structure(t_data *data)
@@ -86,9 +101,7 @@ void	structure(t_data *data)
 	t_token	*actual;
 	t_token	*tmp;
 
-	actual = data->first;
-	if (actual->type != COMMAND)
-		actual = to_next_command(actual);
+	actual = structure_norm(data);
 	while (actual)
 	{
 		if (actual->prev && actual->prev->prev
@@ -97,30 +110,16 @@ void	structure(t_data *data)
 		if (actual->prev && is_arrow(actual->prev->content) == 2)
 			actual->prev_pipe = 1;
 		tmp = actual;
-		while (actual && (!is_string(actual->type) || actual->type == COMMAND))
+		while (actual && actual->next && (!is_string(actual->type)
+				|| actual->type == COMMAND)
+			&& is_arrow(actual->next->content) != 1)
 			actual = actual->next;
 		if (actual && actual->next && is_arrow(actual->next->content) == 1)
 			actual = actual->next;
-		while (actual && actual->next && actual->next->next && is_arrow(actual->content) == 1)
-		{
-			copy_name(tmp, actual, 0);
-			actual = actual->next->next;
-		}
-		if (actual && actual->next && !actual->next->next && is_arrow(actual->content) == 1)
-			copy_name(tmp, actual, 0);
+		actual = structure_2(actual, tmp);
 		if (actual && is_arrow(actual->content) == 2)
 			tmp->next_pipe = 1;
 		actual = to_next_command(actual);
 	}
-	/*actual = data->first;
-	while (actual)
-	{
-		printf("%s\n", actual->content);
-		//if (actual->type == COMMAND)
-		//	printf("%s next: %s prev: %s, prev_out: %s, next_out: %s\n", actual->content, actual->next_out, actual->prev_out, actual->prev_in, actual->next_in);
-		actual = actual->next;
-	}*/
 	check_prev_next(data);
-	args_associate(data);
-	
 }

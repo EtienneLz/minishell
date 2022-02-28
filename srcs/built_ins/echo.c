@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int	ft_echo(t_data *data, char **args)
+int	ft_echo(char **args)
 {
 	int	i;
 	int	flag;

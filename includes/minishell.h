@@ -101,9 +101,7 @@ typedef struct s_data
 	int			ret;
 	int			last_ret;
 	int			nb_infiles;
-	char		**infile;
 	int			nb_outfiles;
-	char		**outfile;
 	int			last_out;
 	char		*tmp_var;
 	int			heredoc;
@@ -124,7 +122,7 @@ void	alloc_error(t_data *data, char *cmd);
 ** Built-ins functions 
 */
 int		ft_env(t_data *data, char **args);
-int		ft_echo(t_data *data, char **args);
+int		ft_echo(char **args);
 int		ft_pwd(void);
 void	ft_exit(t_data *data, char **args);
 
@@ -159,6 +157,17 @@ int		main_unset(t_data *data, char **args);
 void	unset_main_check(t_data *data, char **args);
 
 /*
+** Execution functions
+*/
+void	redirection(t_token *actual);
+void	redirection2(t_token *actual);
+int		execution(t_data *data);
+char	*get_bin_path(char *command);
+void	pre_check_builtins(t_data *data, t_token *actual, int i);
+int		check_built_in(t_data *data, char **args);
+int		exe_pipe(t_data *data, t_token *actual, int i);
+
+/*
 ** utils functions
 */
 void	free_tab(char **tab);
@@ -169,13 +178,11 @@ char	***split_arg(t_data *data);
 void	check_exit(t_data *data);
 char	*treat_var(char *var);
 char	*check_exist(t_data *data, char *var);
-
 void	signal_handler(int sig);
 void	init(t_data *data);
 void	prompt(t_data *data);
 void	reset(t_data *data);
 int		lexer(t_data *data);
-int		execution(t_data *data);
 void	minifree(t_data *data);
 void	splitted_args_free(char ***tab);
 int		split_command(t_data *data, char *command);
@@ -194,5 +201,12 @@ void	structure(t_data *data);
 t_token	*to_prev_command(t_token *actual);
 void	remove_quotes(t_data *data);
 void	get_sep(t_data *data);
+void	*mallocer(void *dest, int size);
+int		last_check(t_data *data);
+t_token	*to_pipe(t_token *actual, int i);
+t_token	*structure_norm(t_data *data);
+t_token	*lexer_2(t_token *actual);
+t_token	*lasts_commands_2(t_token *actual, int *check);
+int		ret_status(t_data *data, int status, int i);
 
 #endif

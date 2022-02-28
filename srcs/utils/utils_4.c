@@ -25,7 +25,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-static t_token	*to_pipe(t_token *actual, int i)
+t_token	*to_pipe(t_token *actual, int i)
 {
 	int	w_pipe;
 
@@ -62,7 +62,7 @@ char	***split_arg(t_data *data)
 	t_token	*actual;
 	char	***ret;
 
-	ret = malloc(sizeof(char **) * (data->nb_pipe + 3));
+	ret = mallocer(&ret, sizeof(char **) * (data->nb_command + 2));
 	if (!ret)
 		alloc_error(data, NULL);
 	actual = data->first;
@@ -97,7 +97,7 @@ char	***split_arg(t_data *data)
 		else
 			while (actual && actual->type != COMMAND)
 				actual = actual->next;
-		ret[i] = malloc(sizeof(char *) * (size + 2));
+		ret[i] = mallocer(&ret[i], sizeof(char *) * (size + 3));
 		if (!ret[i])
 			alloc_error(data, NULL);
 		while (actual && actual->type != PIPE)
