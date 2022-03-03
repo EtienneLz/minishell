@@ -25,7 +25,10 @@ SRCS = srcs/minishell.c \
 		srcs/parsing/split_command_next.c \
 		srcs/alloc/exit_free.c \
 		srcs/parsing/lexer.c \
+		srcs/parsing/lexer_utils.c \
 		srcs/execution/execution.c \
+		srcs/execution/get_path.c \
+		srcs/execution/redirection.c \
 		srcs/parsing/expansion.c \
 		srcs/parsing/expansion_next.c \
 		srcs/error/error.c \
@@ -42,7 +45,7 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -g3# -Werror -Wall -Wextra
+CFLAGS = -g -g3 -Werror -Wall -Wextra
 
 CC = clang 
 

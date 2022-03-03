@@ -27,6 +27,7 @@ static void	init_bis(t_data *data)
 	data->export.equal = 0;
 	data->envp_i = 0;
 	data->command_nb = 0;
+	data->ret = 0;
 }
 
 void	init(t_data *data)
@@ -46,8 +47,21 @@ void	init(t_data *data)
 	data->last_out = 0;
 	data->tmp_var = NULL;
 	data->nb_command = 0;
-	data->infile = NULL;
-	data->outfile = NULL;
+	data->heredoc_nb = 0;
+}
+
+static void	reset2(t_data *data)
+{
+	data->tmpin = 0;
+	data->tmpout = 0;
+	data->unset.is_unset = 0;
+	data->unset.check = 0;
+	data->unset.valid_args = 0;
+	data->unset.args = NULL;
+	data->nb_infiles = 0;
+	data->nb_outfiles = 0;
+	data->last_out = 0;
+	data->tmp_var = NULL;
 	data->heredoc_nb = 0;
 }
 
@@ -68,15 +82,5 @@ void	reset(t_data *data)
 	data->command_nb = 0;
 	data->nb_command = 0;
 	g_pid = 0;
-	data->tmpin = 0;
-	data->tmpout = 0;
-	data->unset.is_unset = 0;
-	data->unset.check = 0;
-	data->unset.valid_args = 0;
-	data->unset.args = NULL;
-	data->nb_infiles = 0;
-	data->nb_outfiles = 0;
-	data->last_out = 0;
-	data->tmp_var = NULL;
-	data->heredoc_nb = 0;
+	reset2(data);
 }

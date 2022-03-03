@@ -46,7 +46,8 @@ static void	ft_heredoc(t_data *data, char **sep)
 			actual = actual->next;
 		actual = actual->next;
 		file = ft_strdup("tmp/.");
-		ft_strlcat(file, ft_itoa(data->heredoc_nb), 6 + ft_strlen(ft_itoa(data->heredoc_nb)));
+		ft_strlcat(file, ft_itoa(data->heredoc_nb),
+			6 + ft_strlen(ft_itoa(data->heredoc_nb)));
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		here_read(buffer, sep[data->heredoc_nb], fd);
 		close(fd);
@@ -63,7 +64,7 @@ void	get_sep(t_data *data)
 	int		i;
 
 	actual = data->first;
-	sep = malloc(sizeof(char*) * (data->heredoc + 1));
+	sep = mallocer(&sep, sizeof(char *) * (data->heredoc + 1));
 	i = 0;
 	while (actual)
 	{

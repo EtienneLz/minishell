@@ -93,7 +93,7 @@ int	split_command(t_data *data, char *command)
 		elem = NULL;
 		i = skip_spaces(command, i);
 		len = check_char(data, command, i);
-		elem = malloc(sizeof(char) * (len + 1));
+		elem = mallocer(&elem, sizeof(char) * (len + 1));
 		if (!elem)
 			alloc_error(data, NULL);
 		while (j < len && command[i])

@@ -60,9 +60,20 @@ void	remove_quotes(t_data *data)
 			len = ft_strlen(actual->content);
 			if (actual->content[0] == '\'' && actual->content[len - 1] == '\'')
 				actual->content = check_quotes(data, actual->content);
-			else if (actual->content[0] == '\"' && actual->content[len - 1] == '\"')
+			else if (actual->content[0] == '\"'
+				&& actual->content[len - 1] == '\"')
 				actual->content = check_quotes(data, actual->content);
 		}
 		actual = actual->next;
 	}
+}
+
+t_token	*structure_norm(t_data *data)
+{
+	t_token	*actual;
+
+	actual = data->first;
+	if (actual->type != COMMAND)
+		actual = to_next_command(actual);
+	return (actual);
 }

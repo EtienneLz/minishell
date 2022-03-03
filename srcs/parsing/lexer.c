@@ -59,16 +59,9 @@ static void	find_lasts_commands(t_data *data)
 	check = 0;
 	while (actual)
 	{
-		while (is_arrow(actual->content) == 1 && !check)
+		while (actual->next && is_arrow(actual->content) == 1 && !check)
 		{
-			actual->type = is_redirection(actual->content);
-			if (actual->next && actual->next->next && actual->next->next->type == STRING)
-			{
-				actual->next->next->type = COMMAND;
-				check = 1;
-			}
-			else if (actual->next && actual->next->next)
-				actual = actual->next->next;
+			actual = lasts_commands_2(actual, &check);
 		}
 		while (actual && actual->type != PIPE)
 			actual = actual->next;
@@ -79,36 +72,40 @@ static void	find_lasts_commands(t_data *data)
 				actual = actual->next;
 				check = 0;
 			}
+			else
+				return ;
 		}
 	}
 }
 
-static void	create_files(t_data *data)
+void	create_files(t_data *data)
 {
 	t_token	*actual;
 	int		fd;
 
+	fd = 0;
 	actual = data->first;
 	while (actual)
 	{
+		if (!actual->next && is_arrow(actual->content) == 1)
+			return ;
 		if (actual->type == R_ARROW || actual->type == RR_ARROW)
 		{
-			if (!actual->next || is_arrow(actual->next->content))
-			{
-				print_error("minishell: syntax error\n");
-				return ;
-			}
-			else
-			{
-				if (actual->type == R_ARROW)
-					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
-				 else if (actual->type == RR_ARROW)
-					fd = open(actual->next->content, O_CREAT | O_RDWR | O_APPEND, 0644);
+			if (actual->type == R_ARROW && !is_arrow(actual->next->content))
+				fd = open(actual->next->content,
+						O_CREAT | O_RDWR | O_TRUNC, 0644);
+			else if (actual->type == RR_ARROW
+				&& !is_arrow(actual->next->content))
+				fd = open(actual->next->content,
+						O_CREAT | O_RDWR | O_APPEND, 0644);
+			if (fd < 0)
+				perror("minishell");
+			else if (fd != 0)
 				close(fd);
-			}
 		}
 		actual = actual->next;
 	}
+	counter(data);
 }
 
 int	lexer(t_data *data)
@@ -117,6 +114,8 @@ int	lexer(t_data *data)
 	char	type;
 
 	actual = data->first;
+	if (!actual)
+		return (1);
 	actual->type = is_redirection(actual->content);
 	if (actual->type == 0)
 		actual->type = COMMAND;
@@ -128,32 +127,12 @@ int	lexer(t_data *data)
 		{
 			actual->type = type;
 			if (actual->next)
-			{
-
-				if (actual->type == PIPE && actual->next->type == 0)
-					actual->next->type = COMMAND;
-				else
-					actual->next->type = STRING;
-				actual = actual->next;
-			}
+				actual = lexer_2(actual);
 		}
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	
-	/*actual = data->first;
-	while (actual)
-	{
-		printf("t = %c\n", actual->type);
-		if (is_redirection(actual->content) && !actual->next)
-		{
-			print_error(data, "syntax error near unexpected token `newline\'\n");
-			return (1);
-		}
-		actual = actual->next;
-	}*/
 	find_lasts_commands(data);
-	create_files(data);
-	counter(data);
+	final_lex(data);
 	return (0);
 }

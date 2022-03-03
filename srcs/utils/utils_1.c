@@ -32,7 +32,7 @@ t_token	*ft_lstnew(t_data *data, char *content)
 {
 	t_token	*dest;
 
-	dest = malloc(sizeof(t_token));
+	dest = mallocer(&dest, sizeof(t_token));
 	if (!dest)
 		alloc_error(data, NULL);
 	dest->type = '\0';
@@ -61,7 +61,7 @@ void	ft_lstfree(t_data *data)
 	t_token	*tmp;
 
 	actual = data->first;
-	while (actual->next != NULL)
+	while (actual != NULL)
 	{
 		tmp = actual->next;
 		free(actual->content);
@@ -76,10 +76,18 @@ void	ft_lstfree(t_data *data)
 		if (actual->prev_out)
 			free(actual->prev_out);
 		if (actual->prev_in)
-			free(actual->prev_in); 
+			free(actual->prev_in);
 		free(actual);
 		actual = tmp;
 	}
-	free(actual->content);
 	free(actual);
+}
+
+void	*mallocer(void *dest, int size)
+{
+	dest = malloc(size);
+	if (!dest)
+		return (NULL);
+	else
+		return (dest);
 }
