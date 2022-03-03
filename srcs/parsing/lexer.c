@@ -59,7 +59,7 @@ static void	find_lasts_commands(t_data *data)
 	check = 0;
 	while (actual)
 	{
-		while (is_arrow(actual->content) == 1 && !check)
+		while (actual->next && is_arrow(actual->content) == 1 && !check)
 		{
 			actual = lasts_commands_2(actual, &check);
 		}
@@ -78,11 +78,12 @@ static void	find_lasts_commands(t_data *data)
 	}
 }
 
-static void	create_files(t_data *data)
+void	create_files(t_data *data)
 {
 	t_token	*actual;
 	int		fd;
 
+	fd = 0;
 	actual = data->first;
 	while (actual)
 	{
@@ -90,19 +91,21 @@ static void	create_files(t_data *data)
 			return ;
 		if (actual->type == R_ARROW || actual->type == RR_ARROW)
 		{
-			if (actual->type == R_ARROW)
+			if (actual->type == R_ARROW && !is_arrow(actual->next->content))
 				fd = open(actual->next->content,
 						O_CREAT | O_RDWR | O_TRUNC, 0644);
-			else if (actual->type == RR_ARROW)
+			else if (actual->type == RR_ARROW
+				&& !is_arrow(actual->next->content))
 				fd = open(actual->next->content,
 						O_CREAT | O_RDWR | O_APPEND, 0644);
 			if (fd < 0)
 				perror("minishell");
-			else
+			else if (fd != 0)
 				close(fd);
 		}
 		actual = actual->next;
 	}
+	counter(data);
 }
 
 int	lexer(t_data *data)
@@ -111,6 +114,8 @@ int	lexer(t_data *data)
 	char	type;
 
 	actual = data->first;
+	if (!actual)
+		return (1);
 	actual->type = is_redirection(actual->content);
 	if (actual->type == 0)
 		actual->type = COMMAND;
@@ -128,7 +133,6 @@ int	lexer(t_data *data)
 			actual->type = STRING;
 	}
 	find_lasts_commands(data);
-	create_files(data);
-	counter(data);
+	final_lex(data);
 	return (0);
 }

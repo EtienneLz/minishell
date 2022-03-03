@@ -21,8 +21,9 @@ static int	execution_ve(t_data *data, t_token *actual, char *bin)
 	{
 		if (errno == 2)
 		{
-			print_error("minishell: command not found: ");
-			ft_putstr_fd(actual->args[0], STDERR);
+			print_error("command not found: ");
+			if (actual->args[0])
+				ft_putstr_fd(actual->args[0], STDERR);
 			ft_putstr_fd("\n", STDERR);
 		}
 		else

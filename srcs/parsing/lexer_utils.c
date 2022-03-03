@@ -35,3 +35,17 @@ t_token	*lasts_commands_2(t_token *actual, int *check)
 		actual = actual->next->next;
 	return (actual);
 }
+
+void	final_lex(t_data *data)
+{
+	t_token	*actual;
+
+	actual = data->first;
+	while (actual)
+	{
+		if (is_redirection(actual->content))
+			actual->type = is_redirection(actual->content);
+		actual = actual->next;
+	}
+	create_files(data);
+}

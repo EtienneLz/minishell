@@ -33,7 +33,7 @@ static int	mini_routine(t_data *data, char *buffer)
 		return (2);
 	remove_quotes(data);
 	if (lexer(data))
-		return (3);
+		return (0);
 	if (last_check(data) == 2)
 		return (0);
 	if (data->heredoc > 0)

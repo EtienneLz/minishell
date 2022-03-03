@@ -74,10 +74,10 @@ static char	*size_var(t_data *data, char *var)
 	convert_var = check_exist(data, var_name);
 	if (var_name)
 		free(var_name);
+	printf("a %s\n", convert_var);
 	if (!convert_var)
 	{
-		convert_var = mallocer(&convert_var, sizeof(char));
-		convert_var = "";
+		convert_var = NULL;
 		return (convert_var);
 	}
 	return (treat_var(convert_var));
@@ -89,6 +89,8 @@ static char	*unsplit(char **split_str)
 	char	*str;
 
 	i = 1;
+	if (split_str[0] == NULL)
+		return (NULL);
 	str = ft_strdup(split_str[0]);
 	while (split_str[i])
 	{
@@ -121,5 +123,9 @@ void	check_var(t_data *data, char *str, t_token *actual)
 	}
 	free (actual->content);
 	actual->content = unsplit(split_str);
-	free_tab(split_str);
+	if (split_str)
+	{
+		free_tab(split_str);
+		free(split_str);
+	}
 }

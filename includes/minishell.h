@@ -208,5 +208,7 @@ t_token	*structure_norm(t_data *data);
 t_token	*lexer_2(t_token *actual);
 t_token	*lasts_commands_2(t_token *actual, int *check);
 int		ret_status(t_data *data, int status, int i);
+void	final_lex(t_data *data);
+void	create_files(t_data *data);
 
 #endif

@@ -21,6 +21,8 @@ char	*get_bin_path(char *command)
 
 	path_split = NULL;
 	bin = NULL;
+	if (!command || command[0] == '\0')
+		return (ft_strdup(""));
 	path = ft_strdup(getenv("PATH"));
 	i = 0;
 	if (!path)
@@ -47,6 +49,7 @@ char	*get_bin_path(char *command)
 			i++;
 		}
 		free_tab(path_split);
+		free(path_split);
 		return (bin);
 	}
 	else
@@ -81,24 +84,14 @@ static void	pre_check_builtins_2(t_data *data, t_token *actual, int i)
 
 void	pre_check_builtins(t_data *data, t_token *actual, int i)
 {
-	char	*bin;
-
-	if (actual->content[0] == '\0')
-	{
-		data->ret = 0;
-		return ;
-	}
-	bin = get_bin_path(actual->args[0]);
-	if (bin == NULL)
+	if (!actual->content || actual->content[0] == '\0')
 	{
 		exe_pipe(data, actual, i);
 		data->ret = 127;
+		return ;
 	}
 	else
-	{
-		free(bin);
 		pre_check_builtins_2(data, actual, i);
-	}
 }
 
 int	check_built_in(t_data *data, char **args)

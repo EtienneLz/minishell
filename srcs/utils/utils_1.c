@@ -55,30 +55,13 @@ t_token	*ft_lstnew(t_data *data, char *content)
 	return (dest);
 }
 
-static void	ft_lstfree2(t_token *actual)
-{
-	free(actual->content);
-	if (actual->next_d_out)
-		free(actual->next_d_out);
-	if (actual->next_out)
-		free(actual->next_out);
-	if (actual->next_in)
-		free(actual->next_in);
-	if (actual->prev_d_out)
-		free(actual->prev_d_out);
-	if (actual->prev_out)
-		free(actual->prev_out);
-	if (actual->prev_in)
-		free(actual->prev_in);
-}
-
 void	ft_lstfree(t_data *data)
 {
 	t_token	*actual;
 	t_token	*tmp;
 
 	actual = data->first;
-	while (actual->next != NULL)
+	while (actual != NULL)
 	{
 		tmp = actual->next;
 		free(actual->content);
@@ -97,7 +80,6 @@ void	ft_lstfree(t_data *data)
 		free(actual);
 		actual = tmp;
 	}
-	ft_lstfree2(actual);
 	free(actual);
 }
 
