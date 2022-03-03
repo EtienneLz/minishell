@@ -97,25 +97,30 @@ void	structure(t_data *data)
 		if (actual->prev && is_arrow(actual->prev->content) == 2)
 			actual->prev_pipe = 1;
 		tmp = actual;
-		while (actual && (is_string(actual->type) || actual->type == COMMAND))
+		while (actual && actual->next && (!is_string(actual->type) || actual->type == COMMAND) && is_arrow(actual->next->content) != 1)
 			actual = actual->next;
-		//structure_bis(data, actual, tmp);
-		if (!actual)
-			break ;
-		if (is_arrow(actual->content) == 1)
+		if (actual && actual->next && is_arrow(actual->next->content) == 1)
+			actual = actual->next;
+		while (actual && actual->next && actual->next->next && is_arrow(actual->content) == 1)
+		{
 			copy_name(tmp, actual, 0);
-		if (is_arrow(actual->content) == 2)
+			actual = actual->next->next;
+		}
+		if (actual && actual->next && !actual->next->next && is_arrow(actual->content) == 1)
+			copy_name(tmp, actual, 0);
+		if (actual && is_arrow(actual->content) == 2)
 			tmp->next_pipe = 1;
 		actual = to_next_command(actual);
 	}
-	check_prev_next(data);
-	args_associate(data);
 	/*actual = data->first;
 	while (actual)
 	{
-		printf("%c\n", actual->type);
-		if (actual->type == COMMAND)
-			printf("%s next: %d prev: %d, prev_out: %s, next_out: %s\n", actual->content, actual->next_pipe, actual->prev_pipe, actual->prev_in, actual->next_in);
+		printf("%s\n", actual->content);
+		//if (actual->type == COMMAND)
+		//	printf("%s next: %s prev: %s, prev_out: %s, next_out: %s\n", actual->content, actual->next_out, actual->prev_out, actual->prev_in, actual->next_in);
 		actual = actual->next;
 	}*/
+	check_prev_next(data);
+	args_associate(data);
+	
 }

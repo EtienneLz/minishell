@@ -60,7 +60,8 @@ void	remove_quotes(t_data *data)
 			len = ft_strlen(actual->content);
 			if (actual->content[0] == '\'' && actual->content[len - 1] == '\'')
 				actual->content = check_quotes(data, actual->content);
-			else if (actual->content[0] == '\"' && actual->content[len - 1] == '\"')
+			else if (actual->content[0] == '\"'
+				&& actual->content[len - 1] == '\"')
 				actual->content = check_quotes(data, actual->content);
 		}
 		actual = actual->next;

@@ -44,13 +44,13 @@ t_token	*to_next_command(t_token *actual)
 	t_token	*act;
 
 	act = actual;
+	if (!act)
+		return (NULL);
 	if (act->next == NULL)
 		return (NULL);
 	act = act->next;
 	while (act && act->type != COMMAND)
-	{
 		act = act->next;
-	}
 	return (act);
 }
 

@@ -12,46 +12,23 @@
 
 #include "../includes/minishell.h"
 
-/*static void	do_ctrl_c(void)
-{
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	if (g_pid == 0)
-	{
-		rl_redisplay();
-	}
-	//signal(SIGINT, signal_handler);
-}
-
-void	signal_handler(int sig)
+static void	signal_handler_bis(int sig)
 {
 	if (sig == SIGQUIT)
 	{
-		//printf("pid \\\ = %d\n", g_pid);
-		//signal(SIGQUIT, SIG_IGN);
-		if (g_pid != 0)
-		{
-			//signal(SIGQUIT, SIG_IGN);
-			write(1, "Quit: 3\n", 8);
-			kill(g_pid, SIGQUIT);
-			//write(1, "^\\\Quit: 3\n", 11);
-			g_pid = -1;
-			return ;
-		}
-		else if (g_pid == 0)
-		{
-			write(2, "\t\t\b\b\b\b\b  \b\b", 11);
-		}
-		//signal(SIGQUIT, signal_handler);
-	}
-	else if (sig == SIGINT)
-	{
-		write(2, "\t\t\b\b\b\b\b  ", 9);
-		do_ctrl_c();
+		write(2, "\b\b  \b\b", 6);
 		return ;
 	}
-}*/
+	else
+	{
+		write(2, "\b\b  ", 4);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		return ;
+	}
+}
 
 void	signal_handler(int sig)
 {
@@ -74,19 +51,6 @@ void	signal_handler(int sig)
 	}
 	else
 	{
-		if (sig == SIGQUIT)
-		{
-			write(2, "\t\t\b\b\b\b\b  \b\b", 11);
-			return ;
-		}
-		else
-		{
-			write(2, "\t\t\b\b\b\b\b  ", 9);
-			write(1, "\n", 1);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-			return ;
-		}
+		signal_handler_bis(sig);
 	}
 }

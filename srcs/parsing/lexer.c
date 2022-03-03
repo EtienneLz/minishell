@@ -50,39 +50,26 @@ static void	counter(t_data *data)
 	}	
 }
 
-void	find_lasts_commands(t_data *data)
+static void	find_lasts_commands(t_data *data)
 {
 	t_token	*actual;
 	int		check;
-	int		fd;
 
 	actual = data->first;
 	check = 0;
 	while (actual)
 	{
-		if (is_arrow(actual->content) == 1 && !check)
+		while (is_arrow(actual->content) == 1 && !check)
 		{
 			actual->type = is_redirection(actual->content);
-			while (actual->next && actual->next->next && (actual->next->type == STRING
-				|| actual->next->type == STRING_SIMPLE) && is_arrow(actual->next->next->content))
-			{
-				if (actual->type == R_ARROW || actual->type == RR_ARROW)
-				{
-					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
-					close(fd);
-					actual = actual->next->next;
-				}
-				else
-					actual = actual->next->next;
-			}
 			if (actual->next && actual->next->next && actual->next->next->type == STRING)
 			{
 				actual->next->next->type = COMMAND;
 				check = 1;
 			}
+			else if (actual->next && actual->next->next)
+				actual = actual->next->next;
 		}
-		if (!actual)
-			break ;
 		while (actual && actual->type != PIPE)
 			actual = actual->next;
 		if (actual && actual->type == PIPE)
@@ -93,6 +80,34 @@ void	find_lasts_commands(t_data *data)
 				check = 0;
 			}
 		}
+	}
+}
+
+static void	create_files(t_data *data)
+{
+	t_token	*actual;
+	int		fd;
+
+	actual = data->first;
+	while (actual)
+	{
+		if (actual->type == R_ARROW || actual->type == RR_ARROW)
+		{
+			if (!actual->next || is_arrow(actual->next->content))
+			{
+				print_error("minishell: syntax error\n");
+				return ;
+			}
+			else
+			{
+				if (actual->type == R_ARROW)
+					fd = open(actual->next->content, O_CREAT | O_RDWR | O_TRUNC, 0644);
+				 else if (actual->type == RR_ARROW)
+					fd = open(actual->next->content, O_CREAT | O_RDWR | O_APPEND, 0644);
+				close(fd);
+			}
+		}
+		actual = actual->next;
 	}
 }
 
@@ -125,10 +140,8 @@ int	lexer(t_data *data)
 		else if (actual->type != STRING_SIMPLE)
 			actual->type = STRING;
 	}
-	find_lasts_commands(data);
-/*	actual = data->first;
 	
-	//infiles_name(data);
+	/*actual = data->first;
 	while (actual)
 	{
 		printf("t = %c\n", actual->type);
@@ -137,9 +150,10 @@ int	lexer(t_data *data)
 			print_error(data, "syntax error near unexpected token `newline\'\n");
 			return (1);
 		}
-			
 		actual = actual->next;
 	}*/
+	find_lasts_commands(data);
+	create_files(data);
 	counter(data);
 	return (0);
 }

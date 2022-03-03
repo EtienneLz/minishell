@@ -26,7 +26,6 @@ static int	mini_routine(t_data *data, char *buffer)
 	{
 		reset_var(data);
 		ft_exit(data, NULL);
-		//exit(0);
 	}
 	if (buffer[0] == '\0')
 		return (1);
@@ -73,41 +72,21 @@ int	main(int argc, char **argv, char **envp)
 	init(&data);
 	(void)argc;
 	(void)argv;
-	data.envp = envp;
-	data.cd.home = getenv("HOME");
-	/*unset[0] = "unset";
-	unset[1] = "OLDPWD=bibi";
-	unset[2] = "hello";
-	unset[3] = "5884";
-	unset[4] = "_36684";
-	unset[5] = "blop=bof";
-	unset[6] = NULL;
-	main_unset(&data, unset);
-	export_no_arg(&data);
-	main_export(&data, unset);
-	printf("mawie = %s\n", getenv("mawie"));
-	printf("zsh = %s\n", getenv("ZSH"));
-	arg[0] = "cd";
-	arg[1] = "..";
-	arg[2] = "blop";
-	arg[1] = NULL;
-	ft_pwd(&data);
-	/main_cd(&data, arg);
-	ft_pwd(&data);
-	main_export(&data, unset);
-	main_export(&data, arg);*/
+	if (envp)
+	{
+		data.envp = envp;
+		data.cd.home = getenv("HOME");
+	}
+	else
+	{
+		ft_putstr_fd("minishell> ", 2);
+		ft_putstr_fd("Fatal error: environment variables not set", 2);
+	}
 	signal(SIGQUIT, signal_handler);
 	signal(SIGINT, signal_handler);
 	data.buffer = malloc(1);
 	data.buffer[0] = '\0';
 	while (data.buffer)
-	{
-		reset_var(&data);
-		data.buffer = line_prompt("\e[1m\e[34mminishell> \e[0m");
-		mini_routine(&data, data.buffer);
-		//printf("%d\n", d);
-		if (data.buffer)
-			add_history(data.buffer);
-	}
+		prompt(&data);
 	return (0);
 }

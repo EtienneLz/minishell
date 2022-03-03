@@ -51,7 +51,7 @@ void	init(t_data *data)
 	data->heredoc_nb = 0;
 }
 
-void	reset(t_data *data)
+void	reset_bis(t_data *data)
 {
 	data->first = NULL;
 	data->actual = NULL;
@@ -67,6 +67,11 @@ void	reset(t_data *data)
 	data->envp_i = 0;
 	data->command_nb = 0;
 	data->nb_command = 0;
+}
+
+void	reset(t_data *data)
+{
+	reset_bis(data);
 	g_pid = 0;
 	data->tmpin = 0;
 	data->tmpout = 0;

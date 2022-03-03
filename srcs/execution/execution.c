@@ -17,31 +17,21 @@ static int	check_built_in(t_data *data, char **args)
 	int		ret;
 
 	ret = 1;
-	/*int i = 0;
-	while(args[i])
-	{
-		printf("%s\n", args[i]);
-		i++;
-	}*/
-	if (!ft_strcmp(args[0], "cd"))
-		main_cd(data, args);
-	/*else if (!ft_strcmp(command, "echo"))
-	{
-		if (data->first->next->type == OPTION)
-			echo(data, 1);
-		else
-			echo(data, 0);
-	}*/
-	else if (!ft_strcmp(args[0], "env"))
-		ft_env(data, args);
+	data->last_ret = 1000;
+	if (!ft_strcmp(args[0], "cd") && data->envp)
+		ret = main_cd(data, args);
+	else if (!ft_strcmp(args[0], "env") && data->envp)
+		ret = ft_env(data, args);
+	else if (!ft_strcmp(args[0], "unset") && data->envp)
+		ret = main_unset(data, args);
+	else if (!ft_strcmp(args[0], "export") && data->envp)
+		ret = main_export(data, args);
+	else if (!ft_strcmp(args[0], "echo"))
+		ret = ft_echo(args);
 	else if (!ft_strcmp(args[0], "pwd"))
-		ft_pwd();
-	else if (!ft_strcmp(args[0], "unset"))
-		main_unset(data, args);
-	else if (!ft_strcmp(args[0], "export"))
-		main_export(data, args);
+		ret = ft_pwd();
 	else
-		ret = 0;
+		ret = 1000;
 	return (ret);
 }
 
@@ -102,8 +92,11 @@ static void	redirection(t_token *actual)
 		fdout = open(actual->prev_d_out, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (actual->prev_in)
 		fdin = open(actual->prev_in, O_RDONLY);
-	if (fdout < 0)
-		printf("%s, %s\n", actual->prev_out, actual->prev_d_out);
+	if (fdout < 0 || fdin < 0)
+	{
+		print_error("minishell: error: File opening failed\n");
+		exit (0);
+	}
 	if (actual->prev_out || actual->prev_d_out)
 	{
 		dup2(fdout, STDOUT);
@@ -130,11 +123,8 @@ static void	redirection2(t_token *actual)
 		fdout = open(actual->next_d_out, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (actual->next_in)
 		fdin = open(actual->next_in, O_RDWR | O_APPEND, 0666);
-	if (fdin < 0)
-	{
-		perror("minishell:");
-		exit(0);
-	}
+	if (fdout < 0 || fdin < 0)
+		print_error("File opening failed\n");
 	if (actual->next_out || actual->next_d_out)
 	{
 		dup2(fdout, STDOUT);
@@ -151,15 +141,16 @@ static void	redirection2(t_token *actual)
 static int	child(t_data *data, t_token *actual)
 {
 	char	*bin;
+	int		ret;
 
 	if (actual->prev_in || actual->prev_out || actual->prev_d_out)
 		redirection(actual);
 	if (actual->prev_pipe && !actual->next_in && !actual->prev_in)
 		dup2(to_prev_command(actual)->pipes[0] , STDIN);
-	if (actual->next_pipe && !actual->next_in)
+	if (actual->next_pipe && !actual->next_in && !actual->next_out && !actual->next_d_out)
 	{
 		if (dup2(actual->pipes[1], STDOUT) < 0)
-			printf("error\n");
+			print_error(" \n");
 		close(actual->pipes[1]);
 		close(actual->pipes[0]);
 	}
@@ -168,17 +159,20 @@ static int	child(t_data *data, t_token *actual)
 	bin = get_bin_path(actual->args[0]);
 	if (bin == NULL)
 		bin = actual->args[0];
-	if (check_built_in(data, actual->args) == 0)
+	ret = check_built_in(data, actual->args);
+	if (ret == 1000)
 	{
-		if (execve(bin, actual->args, NULL) == -1)
+		ret = execve(bin, actual->args, data->envp);
+		if (ret == -1)
 		{
 			if (errno == 2)
 				printf("minishell: command not found: %s\n", actual->args[0]);
 			else
 				perror("minishell");
 		}
+		free(bin);
 	}
-	exit(0);
+	exit (ret);
 }
 
 static int	parent(t_data *data, t_token *actual)
@@ -232,7 +226,7 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, SIG_IGN);
-		parent(data, actual);
+		data->ret = parent(data, actual);
 		signal(SIGQUIT, signal_handler);
 		signal(SIGINT, signal_handler);
 	}
@@ -241,25 +235,25 @@ static int	exe_pipe(t_data *data, t_token *actual, int i)
 
 static void	pre_check_builtins(t_data *data, t_token *actual, int i)
 {
-	if (!ft_strcmp(actual->args[0], "cd"))
+	if (!ft_strcmp(actual->args[0], "cd") && data->envp != NULL)
 	{
 		if (data->nb_command > 1)
 			exe_pipe(data, actual, i);
-		/*data->ret =*/ main_cd(data, actual->args);
+		data->ret = main_cd(data, actual->args);
 	}
-	/*else if (!ft_strcmp(command, "echo"))
+	else if (!ft_strcmp(actual->args[0], "echo"))
 	{
 		exe_pipe(data, actual, i);
-	}*/
-	else if (!ft_strcmp(actual->args[0], "unset"))
-	{
-		exe_pipe(data, actual, i);
-		/*data->ret = */main_unset(data, actual->args);
 	}
-	else if (!ft_strcmp(actual->args[0], "export") && actual->args[1])
+	else if (!ft_strcmp(actual->args[0], "unset") && data->envp != NULL)
 	{
 		exe_pipe(data, actual, i);
-		/*data->ret = */main_export(data, actual->args);
+		data->ret = main_unset(data, actual->args);
+	}
+	else if (!ft_strcmp(actual->args[0], "export") && actual->args[1] && data->envp != NULL)
+	{
+		exe_pipe(data, actual, i);
+		data->ret = main_export(data, actual->args);
 	}
 	else if (actual->content == NULL)
 		data->ret = 127;
@@ -274,7 +268,6 @@ int	execution(t_data *data)
 		data->actual = to_next_command(data->actual);
 	while (data->command_nb < data->nb_command)
 	{
-		//printf("c %d\n", data->actual->next_pipe);
 		pre_check_builtins(data, data->actual, data->command_nb);
 		data->command_nb++;
 		data->actual = to_next_command(data->actual);

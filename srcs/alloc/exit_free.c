@@ -30,7 +30,6 @@ static void	unlink_heredoc(t_data *data)
 	char	*file;
 	int		i;
 
-	
 	i = 0;
 	while (i < data->heredoc_nb)
 	{

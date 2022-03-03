@@ -19,7 +19,7 @@ int	check_pipe(t_token	*actual)
 	else
 		return (0);
 	while (actual && (actual->type == STRING || actual->type == STRING_SIMPLE
-		|| actual->type == OPTION))
+			|| actual->type == OPTION))
 	{
 		if (actual->next == NULL)
 			return (0);

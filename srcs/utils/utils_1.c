@@ -76,7 +76,7 @@ void	ft_lstfree(t_data *data)
 		if (actual->prev_out)
 			free(actual->prev_out);
 		if (actual->prev_in)
-			free(actual->prev_in); 
+			free(actual->prev_in);
 		free(actual);
 		actual = tmp;
 	}
