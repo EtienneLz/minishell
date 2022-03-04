@@ -39,7 +39,10 @@ static char	**copy_unset_env(t_data *data, char **dest, int *i)
 		{
 			dest[*i] = malloc((ft_strlen(data->envp[j]) + 1) * sizeof(char));
 			if (!dest[*i])
-				alloc_error(data, "unset");
+			{
+				free_tab(dest);
+				return (NULL);
+			}
 			ft_strcpy(dest[*i], data->envp[j]);
 			(*i)++;
 			j++;
@@ -48,7 +51,22 @@ static char	**copy_unset_env(t_data *data, char **dest, int *i)
 	return (dest);
 }
 
-static void	unset_args(t_data *data, char **args)
+static int	unset_args_bis(t_data *data)
+{
+	int	len;
+	int	i;
+
+	len = 0;
+	i = 0;
+	while (data->envp[len])
+		len++;
+	while (data->unset.args[i])
+		i++;
+	len -= i;
+	return (len);
+}
+
+static int	unset_args(t_data *data, char **args)
 {
 	int		len;
 	int		i;
@@ -59,28 +77,32 @@ static void	unset_args(t_data *data, char **args)
 	unset_main_check(data, args);
 	if (data->unset.args != NULL)
 	{
-		while (data->envp[len])
-			len++;
-		i = 0;
-		while (data->unset.args[i])
-			i++;
-		len -= i;
+		len = unset_args_bis(data);
 		i = 0;
 		tmp_env = malloc((len + 1) * sizeof(char *));
 		if (!tmp_env)
-			alloc_error(data, "unset");
+			return (1);
 		tmp_env = copy_unset_env(data, tmp_env, &i);
 		tmp_env[len] = NULL;
-		data->envp = tmp_env;
+		if (tmp_env)
+			data->envp = tmp_env;
 		free_tab(data->unset.args);
-		data->unset.is_unset = 0;
 	}
+	return (0);
 }
 
 int	main_unset(t_data *data, char **args)
 {
-	data->last_ret = 0;
+	int	ret;
+
+	ret = 0;
 	if (args[1] != NULL)
-		unset_args(data, args);
-	return (data->last_ret);
+		ret = unset_args(data, args);
+	data->unset.is_unset = 0;
+	if (ret == 1)
+		alloc_error(data, "unset");
+	if (data->last_ret == 1000)
+		return (0);
+	else
+		return (data->last_ret);
 }

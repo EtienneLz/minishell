@@ -28,6 +28,7 @@ static void	init_bis(t_data *data)
 	data->envp_i = 0;
 	data->command_nb = 0;
 	data->ret = 0;
+	data->last_ret = 0;
 }
 
 void	init(t_data *data)
@@ -63,9 +64,10 @@ static void	reset2(t_data *data)
 	data->last_out = 0;
 	data->tmp_var = NULL;
 	data->heredoc_nb = 0;
+	data->last_ret = 0;
 }
 
-void	reset(t_data *data)
+void	reset_bis(t_data *data)
 {
 	data->first = NULL;
 	data->actual = NULL;
@@ -81,6 +83,11 @@ void	reset(t_data *data)
 	data->envp_i = 0;
 	data->command_nb = 0;
 	data->nb_command = 0;
+}
+
+void	reset(t_data *data)
+{
+	reset_bis(data);
 	g_pid = 0;
 	reset2(data);
 }

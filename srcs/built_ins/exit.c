@@ -39,7 +39,12 @@ void	non_numeric_arg(t_data *data, char *arg)
 	ft_putstr_fd(": numeric argument required\n", 2);
 	data->last_ret = 255;
 	minifree(data);
-	exit(1);
+	if (data->envp)
+	{
+		free_tab(data->envp);
+		free(data->envp);
+	}
+	exit(data->last_ret);
 }
 
 void	ft_do_exit(t_data *data, int nb)
@@ -47,7 +52,12 @@ void	ft_do_exit(t_data *data, int nb)
 	ft_putstr_fd("exit\n", 1);
 	data->last_ret = nb;
 	minifree(data);
-	exit(0);
+	if (data->envp)
+	{
+		free_tab(data->envp);
+		free(data->envp);
+	}
+	exit(data->last_ret);
 }
 
 void	ft_exit_bis(t_data *data, char **args, int i)

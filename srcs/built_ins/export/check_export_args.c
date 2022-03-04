@@ -17,14 +17,17 @@ static void	get_valid_args(t_data *data, char *str, int *i)
 	int	len;
 
 	len = ft_strlen(str);
-	data->export.args[*i] = malloc((len + 1) * sizeof(char));
-	if (!(data->export.args[*i]))
-		alloc_error(data, "export");
-	ft_strcpy(data->export.args[*i], str);
-	data->export.valid_args--;
-	(*i)++;
-	if (data->export.valid_args == 0)
-		data->export.args[*i] = NULL;
+	if (data->export.args)
+	{
+		data->export.args[*i] = malloc((len + 1) * sizeof(char));
+		if (!(data->export.args[*i]))
+			alloc_error(data, "export");
+		ft_strcpy(data->export.args[*i], str);
+		data->export.valid_args--;
+		(*i)++;
+		if (data->export.valid_args == 0)
+			data->export.args[*i] = NULL;
+	}
 }
 
 static void	check_export_args_bis(t_data *data, char **args, int i, int *k)

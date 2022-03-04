@@ -12,6 +12,24 @@
 
 #include "../includes/minishell.h"
 
+static void	signal_handler_bis(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		write(2, "\b\b  \b\b", 6);
+		return ;
+	}
+	else
+	{
+		write(2, "\b\b  ", 4);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		return ;
+	}
+}
+
 void	signal_handler(int sig)
 {
 	if (g_pid != 0)
@@ -33,19 +51,6 @@ void	signal_handler(int sig)
 	}
 	else
 	{
-		if (sig == SIGQUIT)
-		{
-			write(2, "\b\b  \b\b", 6);
-			return ;
-		}
-		else
-		{
-			write(2, "\b\b  ", 4);
-			write(1, "\n", 1);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-			return ;
-		}
+		signal_handler_bis(sig);
 	}
 }

@@ -12,13 +12,6 @@
 
 #include "../../../includes/minishell.h"
 
-static int	skip_env(char **tab, int i)
-{
-	if (tab[i][0] == '_' && tab[i][1] == '=')
-		i++;
-	return (i);
-}
-
 static void	print_export(char **tab)
 {
 	int	i;
@@ -48,7 +41,7 @@ static void	print_export(char **tab)
 	}
 }
 
-static void	export_no_arg(t_data *data)
+static int	export_no_arg(t_data *data)
 {
 	char	**x_env;
 	int		len;
@@ -60,15 +53,33 @@ static void	export_no_arg(t_data *data)
 		len++;
 	x_env = malloc((len + 1) * sizeof(char *));
 	if (!x_env)
-		alloc_error(data, "export");
-	x_env = copy_env(data, data->envp, x_env, &i);
+		return (1);
+	x_env = copy_env(data->envp, x_env, &i);
+	if (!x_env)
+		return (1);
 	x_env[len] = NULL;
 	x_env = sort_env_atoz(x_env, len);
 	print_export(x_env);
 	free_tab(x_env);
+	return (0);
 }
 
-static void	export_args(t_data *data, char **args)
+static int	export_args_bis(t_data *data)
+{
+	int	len;
+	int	i;
+
+	len = 0;
+	i = 0;
+	while (data->envp[len])
+		len++;
+	while (data->export.args[i])
+		i++;
+	len += i;
+	return (len);
+}
+
+static int	export_args(t_data *data, char **args)
 {
 	int		len;
 	int		i;
@@ -76,32 +87,40 @@ static void	export_args(t_data *data, char **args)
 
 	export_main_check(data, args);
 	len = 0;
-	while (data->envp[len])
-		len++;
 	i = 0;
 	if (data->export.args != NULL)
 	{
-		while (data->export.args[i])
-			i++;
-		len += i;
-		i = 0;
+		len = export_args_bis(data);
 		tmp_env = malloc((len + 1) * sizeof(char *));
 		if (!tmp_env)
-			alloc_error(data, "export");
-		tmp_env = copy_env(data, data->envp, tmp_env, &i);
-		tmp_env = copy_env(data, data->export.args, tmp_env, &i);
+			return (1);
+		tmp_env = copy_env(data->envp, tmp_env, &i);
+		if (!tmp_env)
+			return (1);
+		tmp_env = copy_env(data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
 		data->envp = tmp_env;
-		free_tab(data->export.args);
 	}
+	return (0);
 }
 
 int	main_export(t_data *data, char **args)
 {
-	data->last_ret = 0;
+	int	ret;
+
 	if (args[1] != NULL)
-		export_args(data, args);
+		ret = export_args(data, args);
 	else
-		export_no_arg(data);
-	return (data->last_ret);
+		ret = export_no_arg(data);
+	if (data->export.args)
+	{
+		free_tab(data->export.args);
+		free(data->export.args);
+	}
+	if (ret == 1)
+		alloc_error(data, "export");
+	if (data->last_ret == 1000)
+		return (0);
+	else
+		return (data->last_ret);
 }
