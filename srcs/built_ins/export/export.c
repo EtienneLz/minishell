@@ -61,6 +61,7 @@ static int	export_no_arg(t_data *data)
 	x_env = sort_env_atoz(x_env, len);
 	print_export(x_env);
 	free_tab(x_env);
+	free(x_env);
 	return (0);
 }
 
@@ -109,7 +110,10 @@ int	main_export(t_data *data, char **args)
 	int	ret;
 
 	if (args[1] != NULL)
+	{
 		ret = export_args(data, args);
+		data->is_export = 1;
+	}
 	else
 		ret = export_no_arg(data);
 	if (data->export.args)

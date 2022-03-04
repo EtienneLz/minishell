@@ -107,6 +107,7 @@ typedef struct s_data
 	int			heredoc;
 	int			heredoc_nb;
 	pid_t		*pid;
+	int			is_export;
 }				t_data;
 
 int	g_pid;
