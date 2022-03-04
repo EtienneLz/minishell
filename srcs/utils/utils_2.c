@@ -43,10 +43,7 @@ void	check_exit(t_data *data)
 		{
 			i++;
 			if (!ft_strcmp(actual->content, "exit"))
-			{
-				printf("ffff\n");
 				ft_exit(data, data->splitted_args[i - 1]);
-			}
 		}
 		actual = actual->next;
 	}

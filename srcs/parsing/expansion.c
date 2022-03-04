@@ -74,7 +74,6 @@ static char	*size_var(t_data *data, char *var)
 	convert_var = check_exist(data, var_name);
 	if (var_name)
 		free(var_name);
-	printf("a %s\n", convert_var);
 	if (!convert_var)
 	{
 		convert_var = NULL;

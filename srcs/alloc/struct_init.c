@@ -49,6 +49,7 @@ void	init(t_data *data)
 	data->tmp_var = NULL;
 	data->nb_command = 0;
 	data->heredoc_nb = 0;
+	data->is_export = 0;
 }
 
 static void	reset2(t_data *data)
