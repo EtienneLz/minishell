@@ -39,7 +39,8 @@ static int	mini_routine(t_data *data, char *buffer)
 	if (last_check(data) == 2)
 		return (0);
 	if (data->heredoc > 0)
-		get_sep(data);
+		if (get_sep(data))
+			return (0);
 	expand(data);
 	data->splitted_args = split_arg(data);
 	structure(data);

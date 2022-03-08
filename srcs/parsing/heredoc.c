@@ -40,12 +40,21 @@ static char	*here_expand(t_data *data, char *buffer)
 	return (ret);
 }
 
+/*static void	heredoc_sig(int sig)
+{
+	if (sig == SIGINT)
+		g_pid = 1;
+	//signal(SIGINT, SIG_IGN);
+	signal_handler(sig);
+}*/
+
 static void	here_read(t_data *data, char *buffer, char *sep, int fd)
 {
 	char	*ret;
 
 	while (1)
 	{
+		signal(SIGINT, signal_heredoc);
 		buffer = readline("> ");
 		if (!buffer)
 		{
@@ -55,6 +64,11 @@ static void	here_read(t_data *data, char *buffer, char *sep, int fd)
 		}
 		if (!ft_strcmp(buffer, sep))
 			break ;
+		if (!ft_strcmp(buffer, ""))
+		{
+			ft_putstr_fd("\n", fd);
+			continue ;
+		}
 		ret = here_expand(data, buffer);
 		free(buffer);
 		ft_putstr_fd(ret, fd);
@@ -91,7 +105,7 @@ char	*concanate(int j, char *src)
 	return (dest);
 }
 
-static void	ft_heredoc(t_data *data, char **sep)
+static int	ft_heredoc(t_data *data, char **sep)
 {
 	int		fd;
 	char	*buffer;
@@ -108,18 +122,22 @@ static void	ft_heredoc(t_data *data, char **sep)
 		file = concanate(data->heredoc_nb, "tmp/.");
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		here_read(data, buffer, sep[data->heredoc_nb], fd);
+		if (g_pid == -1000)
+			return (1);
 		close(fd);
 		actual->content = ft_strdup(file);
 		free(file);
 		data->heredoc_nb++;
 	}
+	return (0);
 }
 
-void	get_sep(t_data *data)
+int	get_sep(t_data *data)
 {
 	char	**sep;
 	t_token	*actual;
 	int		i;
+	int		ret;
 
 	actual = data->first;
 	sep = mallocer(&sep, sizeof(char *) * (data->heredoc + 1));
@@ -134,6 +152,9 @@ void	get_sep(t_data *data)
 		actual = actual->next;
 	}
 	sep[i] = NULL;
-	ft_heredoc(data, sep);
+	ret = ft_heredoc(data, sep);
+	if (ret)
+		data->ret = 128;
 	free_tab(sep);
+	return (ret);
 }

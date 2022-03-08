@@ -99,15 +99,16 @@ int	exe_pipe(t_data *data, t_token *actual, int i)
 	if (error != 0)
 		return (1);
 	data->pid[i] = fork();
+	g_pid = data->pid[i];
 	if (data->pid[i] == 0)
 		child(data, actual);
 	else
 	{
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, SIG_IGN);
+		//signal(SIGQUIT, SIG_IGN);
+		//signal(SIGINT, SIG_IGN);
 		ret = parent(data, actual);
-		signal(SIGQUIT, signal_handler);
-		signal(SIGINT, signal_handler);
+		//signal(SIGQUIT, signal_handler);
+		//signal(SIGINT, signal_handler);
 	}
 	return (ret);
 }

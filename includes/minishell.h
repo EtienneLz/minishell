@@ -202,7 +202,7 @@ int		is_string(char type);
 void	structure(t_data *data);
 t_token	*to_prev_command(t_token *actual);
 void	remove_quotes(t_data *data);
-void	get_sep(t_data *data);
+int		get_sep(t_data *data);
 void	*mallocer(void *dest, int size);
 int		last_check(t_data *data);
 t_token	*to_pipe(t_token *actual, int i);
@@ -220,5 +220,6 @@ void	counter(t_data *data);
 t_token	*to_command(t_token *actual, int i);
 char	*unsplit(char **split_str);
 char	*size_var(t_data *data, char *var);
+void	signal_heredoc(int sig);
 
 #endif
