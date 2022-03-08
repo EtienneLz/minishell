@@ -109,7 +109,7 @@ typedef struct s_data
 	pid_t		*pid;
 }				t_data;
 
-int	g_pid;
+extern int	g_pid;
 /*
 ** Errors functions 
 */

@@ -33,20 +33,29 @@ int	check_pipe(t_token	*actual)
 void	check_exit(t_data *data)
 {
 	t_token	*actual;
+	t_token	*tmp;
 	int		i;
+	int		t;
 
 	actual = data->first;
 	i = 0;
+	t = 0;
+	tmp = NULL;
 	while (actual)
 	{
 		if (actual->type == COMMAND)
 		{
 			i++;
 			if (!ft_strcmp(actual->content, "exit"))
-				ft_exit(data, data->splitted_args[i - 1]);
+			{
+				tmp = actual;
+				t = i;
+			}
 		}
 		actual = actual->next;
 	}
+	if (tmp)
+		ft_exit(data, data->splitted_args[t - 1]);
 }
 
 static void	check_quotes_bis(char quote, int *len, int *i, char *str)

@@ -55,6 +55,10 @@ static int	child(t_data *data, t_token *actual)
 	if (ret == 1000)
 		ret = execution_ve(data, actual, bin);
 	free(bin);
+	minifree(data);
+	if (data->envp)
+		free_tab(data->envp);
+	free (data->pid);
 	exit (ret);
 }
 

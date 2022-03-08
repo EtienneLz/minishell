@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+int	g_pid;
+
 static void	reset_var(t_data *data)
 {
 	if (data->buffer)
