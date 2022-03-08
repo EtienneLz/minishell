@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
+/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/13 03:18:52 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/23 13:18:59 by mseligna         ###   ########.fr       */
+/*   Created: 2022/03/08 15:49:37 by elouchez          #+#    #+#             */
+/*   Updated: 2022/03/08 15:49:37 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,10 @@ static int	child(t_data *data, t_token *actual)
 		redirection(actual);
 	if (actual->prev_pipe && !actual->next_in
 		&& !actual->prev_in && to_prev_command(actual))
-	{
 		dup2(to_prev_command(actual)->pipes[0], STDIN);
-	}
 	if (actual->next_pipe && !actual->next_in
 		&& !actual->next_out && !actual->next_d_out)
-	{
-		if (dup2(actual->pipes[1], STDOUT) < 0)
-			print_error(" \n");
-		close(actual->pipes[1]);
-		close(actual->pipes[0]);
-	}
+		child_pipe(actual);
 	else if (actual->next_out || actual->next_d_out || actual->next_in)
 		redirection2(actual);
 	bin = get_bin_path(data, actual->args[0]);

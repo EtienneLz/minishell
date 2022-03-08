@@ -12,14 +12,13 @@
 
 #include "../../includes/minishell.h"
 
-static int	get_size(t_token *actual, int *j, int i)
+static int	get_size(t_data *data, t_token *actual, int i)
 {
 	int	size;
 
 	if (i != 0)
-		actual = to_pipe(actual, i);
+		actual = to_command(data->first, i);
 	size = 0;
-	(*j) = 0;
 	while (actual && actual->type != PIPE)
 	{
 		if (actual->type == RR_ARROW || actual->type == R_ARROW
@@ -34,28 +33,36 @@ static int	get_size(t_token *actual, int *j, int i)
 		{
 			size++;
 			actual = actual->next;
-		}	
+		}
 	}
 	return (size);
 }
 
-static t_token	*to_next_oskour(t_data *data, t_token *actual, int i)
+static t_token	*actual_command(t_data *data, int i)
 {
+	t_token	*actual;
+
 	actual = data->first;
 	if (i != 0)
-		actual = to_pipe(actual, i);
+		actual = to_command(data->first, i);
 	else
 		while (actual && actual->type != COMMAND)
 			actual = actual->next;
 	return (actual);
 }
 
-static void	copy_in_tab(t_token *actual, char ****ret, int *j, int i)
+static char	**return_arg(t_data *data, t_token *actual, int size)
 {
+	char	**ret;
+	int		i;
+
+	ret = malloc(sizeof(char *) * (size + 1));
+	i = 0;
+	if (!ret)
+		alloc_error(data, NULL);
 	while (actual && actual->type != PIPE)
 	{
-		if (actual->type == RR_ARROW || actual->type == R_ARROW
-			|| actual->type == LL_ARROW || actual->type == L_ARROW)
+		if (is_arrow(actual->content) == 1)
 		{
 			if (actual->next && actual->next->next)
 				actual = actual->next->next;
@@ -64,37 +71,34 @@ static void	copy_in_tab(t_token *actual, char ****ret, int *j, int i)
 		}
 		else
 		{
-			ret[i][(*j)] = actual->content;
+			if (!(actual->content == NULL && i < size))
+				ret[i++] = actual->content;
 			actual = actual->next;
-			(*j)++;
 		}
 	}
-}
+	ret[i] = NULL;
+	return (ret);
+}	
 
 char	***split_arg(t_data *data)
 {
-	int		size;
 	int		i;
-	int		j;
 	t_token	*actual;
 	char	***ret;
+	int		size;
 
-	ret = mallocer(&ret, sizeof(char **) * (data->nb_command + 2));
+	ret = malloc(sizeof(char **) * (data->nb_command + 1));
 	if (!ret)
 		alloc_error(data, NULL);
 	actual = data->first;
 	i = 0;
 	while (actual && actual->type != COMMAND)
 		actual = actual->next;
-	while (i <= data->nb_pipe + 1)
+	while (i < data->nb_command)
 	{
-		size = get_size(actual, &j, i);
-		actual = to_next_oskour(data, actual, i);
-		ret[i] = mallocer(&ret[i], sizeof(char *) * (size + 3));
-		if (!ret[i])
-			alloc_error(data, NULL);
-		copy_in_tab(actual, &ret, &j, i);
-		ret[i][j] = NULL;
+		size = get_size(data, actual, i);
+		actual = actual_command(data, i);
+		ret[i] = return_arg(data, actual, size);
 		i++;
 	}
 	ret[i] = NULL;

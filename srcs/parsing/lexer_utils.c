@@ -48,4 +48,5 @@ void	final_lex(t_data *data)
 		actual = actual->next;
 	}
 	create_files(data);
+	counter(data);
 }

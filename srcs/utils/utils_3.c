@@ -49,30 +49,30 @@ t_token	*to_prev_command(t_token *actual)
 
 void	remove_quotes(t_data *data)
 {
-	t_token	*actual;
+	t_token	*act;
 	int		len;
 
-	actual = data->first;
-	while (actual)
+	act = data->first;
+	while (act)
 	{
-		if (!is_arrow(actual->content))
+		if (!is_arrow(act->content))
 		{
-			len = ft_strlen(actual->content);
-			if ((actual->content[0] == '\'' && actual->content[len - 1] == '\'')
-				|| (actual->content[0] == '\"'
-					&& actual->content[len - 1] == '\"') && len == 2)
+			len = ft_strlen(act->content);
+			if (((act->content[0] == '\'' && act->content[len - 1] == '\'')
+					|| (act->content[0] == '\"'
+						&& act->content[len - 1] == '\"')) && len == 2)
 			{
-				free(actual->content);
-				actual->content = NULL;
+				free(act->content);
+				act->content = NULL;
 			}
-			else if (actual->content[0] == '\''
-				&& actual->content[len - 1] == '\'')
-				actual->content = check_quotes(data, actual->content);
-			else if (actual->content[0] == '\"'
-				&& actual->content[len - 1] == '\"')
-				actual->content = check_quotes(data, actual->content);
+			else if (act->content[0] == '\''
+				&& act->content[len - 1] == '\'')
+				act->content = check_quotes(data, act->content);
+			else if (act->content[0] == '\"'
+				&& act->content[len - 1] == '\"')
+				act->content = check_quotes(data, act->content);
 		}
-		actual = actual->next;
+		act = act->next;
 	}
 }
 

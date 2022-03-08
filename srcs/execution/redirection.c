@@ -89,3 +89,11 @@ int	ret_status(t_data *data, int status, int i)
 	}
 	return (ret);
 }
+
+void	child_pipe(t_token *actual)
+{
+	if (dup2(actual->pipes[1], STDOUT) < 0)
+		print_error(" \n");
+	close(actual->pipes[1]);
+	close(actual->pipes[0]);
+}

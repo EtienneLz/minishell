@@ -12,6 +12,35 @@
 
 #include "../../includes/minishell.h"
 
+static char	*search_path(char *bin, char *command, char *path)
+{
+	char	**path_split;
+	int		i;
+
+	i = 0;
+	path_split = ft_split(path, ':');
+	free(path);
+	path = NULL;
+	while (path_split[i])
+	{
+		bin = (char *)ft_calloc(sizeof(char),
+				(ft_strlen(path_split[i]) + ft_strlen(command) + 2));
+		if (bin == NULL)
+			break ;
+		ft_strlcat(bin, path_split[i], ft_strlen(bin)
+			+ ft_strlen(path_split[i]) + 2);
+		ft_strlcat(bin, "/", ft_strlen(bin) + 2);
+		ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 2);
+		if (access(bin, F_OK) == 0)
+			break ;
+		free(bin);
+		bin = NULL;
+		i++;
+	}
+	free_tab(path_split);
+	return (bin);
+}
+
 char	*get_bin_path(t_data *data, char *command)
 {
 	char	*path;
@@ -28,30 +57,7 @@ char	*get_bin_path(t_data *data, char *command)
 		return (NULL);
 	i = 0;
 	if (command[0] != '/' && ft_strncmp(command, "./", 2) != 0)
-	{
-		path_split = ft_split(path, ':');
-		free(path);
-		path = NULL;
-		while (path_split[i])
-		{
-			bin = (char *)ft_calloc(sizeof(char),
-					(ft_strlen(path_split[i]) + ft_strlen(command) + 2));
-			if (bin == NULL)
-				break ;
-			ft_strlcat(bin, path_split[i], ft_strlen(bin)
-				+ ft_strlen(path_split[i]) + 2);
-			ft_strlcat(bin, "/", ft_strlen(bin) + 2);
-			ft_strlcat(bin, command, ft_strlen(bin) + ft_strlen(command) + 2);
-			if (access(bin, F_OK) == 0)
-				break ;
-			free(bin);
-			bin = NULL;
-			i++;
-		}
-		free_tab(path_split);
-		free(path_split);
-		return (bin);
-	}
+		return (search_path(bin, command, path));
 	else
 	{
 		free(path);

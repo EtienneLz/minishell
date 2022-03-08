@@ -22,7 +22,7 @@ char	*treat_var(char *var)
 	while (var[i] && var[i] != '=')
 		i++;
 	size = ft_strlen(var) - i;
-	ret = mallocer(ret, sizeof(char) * size);
+	ret = mallocer(&ret, sizeof(char) * size);
 	size = 0;
 	i++;
 	while (var[i])
@@ -123,8 +123,5 @@ void	check_var(t_data *data, char *str, t_token *actual)
 	free(actual->content);
 	actual->content = unsplit(split_str);
 	if (split_str)
-	{
 		free_tab(split_str);
-		free(split_str);
-	}
 }

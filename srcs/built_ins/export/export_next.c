@@ -34,7 +34,6 @@ char	**copy_env(char **tab, char **dest, int *i)
 		if (!dest[*i])
 		{
 			free_tab(dest);
-			free(dest);
 			return (NULL);
 		}
 		ft_strcpy(dest[*i], tab[j]);

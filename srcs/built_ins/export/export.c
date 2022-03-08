@@ -61,7 +61,6 @@ static int	export_no_arg(t_data *data)
 	x_env = sort_env_atoz(x_env, len);
 	print_export(x_env);
 	free_tab(x_env);
-	free(x_env);
 	return (0);
 }
 
@@ -101,7 +100,6 @@ static int	export_args(t_data *data, char **args)
 		tmp_env = copy_env(data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
 		free_tab(data->envp);
-		free(data->envp);
 		data->envp = tmp_env;
 	}
 	return (0);
@@ -116,10 +114,7 @@ int	main_export(t_data *data, char **args)
 	else
 		ret = export_no_arg(data);
 	if (data->export.args)
-	{
 		free_tab(data->export.args);
-		free(data->export.args);
-	}
 	if (ret == 1)
 		alloc_error(data, "export");
 	if (data->last_ret == 1000)

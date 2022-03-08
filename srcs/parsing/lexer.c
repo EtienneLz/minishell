@@ -27,7 +27,7 @@ char	is_redirection(char *str)
 	return (0);
 }
 
-static void	counter(t_data *data)
+void	counter(t_data *data)
 {
 	t_token	*actual;
 
@@ -105,7 +105,6 @@ void	create_files(t_data *data)
 		}
 		actual = actual->next;
 	}
-	counter(data);
 }
 
 int	lexer(t_data *data)
@@ -134,6 +133,5 @@ int	lexer(t_data *data)
 	}
 	find_lasts_commands(data);
 	final_lex(data);
-	actual = data->first;
 	return (0);
 }

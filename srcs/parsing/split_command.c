@@ -99,11 +99,7 @@ int	split_command(t_data *data, char *command)
 		if (!elem)
 			alloc_error(data, NULL);
 		while (j < len && command[i])
-		{
-			elem[j] = command[i];
-			i++;
-			j++;
-		}
+			elem[j++] = command[i++];
 		elem[j] = '\0';
 		split_command_bis(data, len, elem);
 	}

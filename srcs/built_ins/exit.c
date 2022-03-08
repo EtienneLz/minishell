@@ -40,10 +40,7 @@ void	non_numeric_arg(t_data *data, char *arg)
 	data->last_ret = 255;
 	minifree(data);
 	if (data->envp)
-	{
 		free_tab(data->envp);
-		free(data->envp);
-	}
 	exit(data->last_ret);
 }
 
@@ -53,10 +50,7 @@ void	ft_do_exit(t_data *data, int nb)
 	data->last_ret = nb;
 	minifree(data);
 	if (data->envp)
-	{
 		free_tab(data->envp);
-		free(data->envp);
-	}
 	exit(data->last_ret);
 }
 

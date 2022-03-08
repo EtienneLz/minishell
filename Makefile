@@ -35,6 +35,7 @@ SRCS = srcs/minishell.c \
 		srcs/error/error.c \
 		srcs/utils/utils_3.c \
 		srcs/utils/utils_4.c \
+		srcs/utils/utils_5.c \
 		srcs/parsing/structurationinger.c \
 		srcs/parsing/heredoc.c \
 
@@ -46,7 +47,7 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -g3 #-fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -g3 -Werror -Wall -Wextra
 
 CC = clang 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mseligna <mseligna@students.42.fr>         +#+  +:+       +#+        */
+/*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/17 12:25:48 by elouchez          #+#    #+#             */
-/*   Updated: 2022/01/23 12:28:18 by mseligna         ###   ########.fr       */
+/*   Created: 2022/03/08 15:53:31 by elouchez          #+#    #+#             */
+/*   Updated: 2022/03/08 15:53:31 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	ft_exit(t_data *data, char **args);
 ** utils built-ins functions
 */
 int		if_equal(t_data *data, char *s1, char *s2);
-char	*join_arg(t_data *data, char *s1, char *s2);
+char	*join_arg(char *s1, char *s2);
 
 /*
 ** Cd functions
@@ -167,6 +167,7 @@ char	*get_bin_path(t_data *data, char *command);
 void	pre_check_builtins(t_data *data, t_token *actual, int i);
 int		check_built_in(t_data *data, char **args);
 int		exe_pipe(t_data *data, t_token *actual, int i);
+void	child_pipe(t_token *actual);
 
 /*
 ** utils functions
@@ -215,5 +216,7 @@ char	*concanate(int j, char *src);
 char	*get_env_val(t_data *data, char *str);
 void	init_lvl(t_data *data, char **envp);
 char	**init_env(char **envp);
+void	counter(t_data *data);
+t_token	*to_command(t_token *actual, int i);
 
 #endif

@@ -41,7 +41,7 @@ char	*concanate(int j, char *src)
 	num = ft_itoa(j);
 	i = 0;
 	len = ft_strlen(num);
-	dest = mallocer(dest, sizeof(char) * (ft_strlen(src) + len + 1));
+	dest = mallocer(&dest, sizeof(char) * (ft_strlen(src) + len + 1));
 	while (src[i])
 	{
 		dest[i] = src[i];
@@ -104,5 +104,4 @@ void	get_sep(t_data *data)
 	sep[i] = NULL;
 	ft_heredoc(data, sep);
 	free_tab(sep);
-	free(sep);
 }

@@ -15,10 +15,7 @@
 void	free_args(t_data *data)
 {
 	if (data->export.args != NULL)
-	{
 		free_tab(data->export.args);
-		free(data->export.args);
-	}
 	if (data->unset.args != NULL)
 		free_tab(data->unset.args);
 }
