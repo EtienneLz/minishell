@@ -41,7 +41,7 @@ char	*concanate(int j, char *src)
 	num = ft_itoa(j);
 	i = 0;
 	len = ft_strlen(num);
-	dest = mallocer(dest, sizeof(char) * (ft_strlen(src) + len + 1));
+	dest = mallocer(&dest, sizeof(char) * (ft_strlen(src) + len + 1));
 	while (src[i])
 	{
 		dest[i] = src[i];

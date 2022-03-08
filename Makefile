@@ -46,7 +46,7 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -g3 #-fsanitize=address #-Werror -Wall -Wextra
+CFLAGS = -g -g3 -Werror -Wall -Wextra#-fsanitize=address 
 
 CC = clang 
 
@@ -58,7 +58,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} -lreadline -lbsd ${OBJS} ${LIB} -o ${NAME}
+		${CC} ${CFLAGS} -lreadline ${OBJS} ${LIB} -o ${NAME}
 
 clean:
 		make -C $(PATH_LIBFT) clean

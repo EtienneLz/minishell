@@ -52,6 +52,15 @@ static char	*do_cd_next(t_data *data, char **args, char *path)
 	return (str);
 }
 
+static char	*only_one(t_data *data, char *s)
+{
+	char	*str;
+
+	str = if_tilde(data, s);
+	data->cd.ret = chdir(str);
+	return (NULL);
+}
+
 static void	do_cd(t_data *data, char **args, int len)
 {
 	char	path[PATH_MAX];
@@ -61,11 +70,7 @@ static void	do_cd(t_data *data, char **args, int len)
 	getcwd(path, PATH_MAX);
 	pwd = get_env_val(data, "PWD");
 	if (len == 1)
-	{
-		str = if_tilde(data, args[0]);
-		data->cd.ret = chdir(str);
-		str = NULL;
-	}
+		str = only_one(data, args[0]);
 	else
 		str = do_cd_next(data, args, path);
 	if (data->cd.ret != 0 && !(args[1][0] == '-' && args[1][1] == '\0'))

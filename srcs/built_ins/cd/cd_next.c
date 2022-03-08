@@ -17,7 +17,6 @@ void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 	int		i;
 	int		checkpwd;
 	int		old;
-	char	*tmp;
 
 	i = 0;
 	checkpwd = 0;
@@ -26,18 +25,18 @@ void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 	{
 		if (strncmp(data->envp[i], "PWD", 3) == 0)
 		{
-			data->envp[i] = join_arg(data, data->envp[i], pwd);
+			data->envp[i] = join_arg(data->envp[i], pwd);
 			checkpwd = 1;
 		}
 		if (strncmp(data->envp[i], "OLDPWD", 6) == 0)
 		{
-			data->envp[i] = join_arg(data, data->envp[i], oldpwd);
+			data->envp[i] = join_arg(data->envp[i], oldpwd);
 			old = i;
 		}
 		i++;
 	}
 	if (checkpwd == 0)
-		data->envp[old] = join_arg(data, data->envp[old], "=");
+		data->envp[old] = join_arg(data->envp[old], "=");
 }
 
 char	*cd_join(char *dir, char *arg, char *new_dir)

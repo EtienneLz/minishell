@@ -82,7 +82,7 @@ char	*check_quotes(t_data *data, char *str)
 	check_quotes_bis(quote, &len, &i);
 	if (str[len - 2] == quote)
 		len--;
-	dest = mallocer(dest, sizeof(char) * len);
+	dest = mallocer(&dest, sizeof(char) * len);
 	if (!dest)
 		alloc_error(data, NULL);
 	while (i < len - 1)

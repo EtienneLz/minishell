@@ -130,7 +130,7 @@ void	ft_exit(t_data *data, char **args);
 ** utils built-ins functions
 */
 int		if_equal(t_data *data, char *s1, char *s2);
-char	*join_arg(t_data *data, char *s1, char *s2);
+char	*join_arg(char *s1, char *s2);
 
 /*
 ** Cd functions
