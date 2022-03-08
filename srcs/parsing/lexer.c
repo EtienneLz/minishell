@@ -134,5 +134,6 @@ int	lexer(t_data *data)
 	}
 	find_lasts_commands(data);
 	final_lex(data);
+	actual = data->first;
 	return (0);
 }

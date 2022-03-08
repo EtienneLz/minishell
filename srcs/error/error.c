@@ -23,7 +23,7 @@ int	last_check(t_data *data)
 	t_token	*actual;
 
 	actual = data->first;
-	if (actual->content[0] == '\0')
+	if (actual->content && actual->content[0] == '\0')
 		actual->content = NULL;
 	while (actual->next)
 		actual = actual->next;

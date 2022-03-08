@@ -100,7 +100,13 @@ static int	export_args(t_data *data, char **args)
 			return (1);
 		tmp_env = copy_env(data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
+		if (data->env_mal)
+		{
+			free_tab(data->envp);
+			free(data->envp);
+		}
 		data->envp = tmp_env;
+		data->env_mal = 1;
 	}
 	return (0);
 }

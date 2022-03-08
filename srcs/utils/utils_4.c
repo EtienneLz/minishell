@@ -27,18 +27,22 @@ void	free_tab(char **tab)
 		free(tab);
 }
 
-t_token	*to_pipe(t_token *actual, int i)
+t_token	*to_command(t_token *actual, int i)
 {
-	int	w_pipe;
+	int	w_com;
 
-	w_pipe = 0;
-	while (actual && w_pipe < i)
+	w_com = 0;
+	while (actual)
 	{
-		if (actual->type == PIPE)
-			w_pipe++;
+		if (actual->type == COMMAND)
+		{
+			if (w_com == i)
+				return (actual);
+			w_com++;
+		}
 		actual = actual->next;
 	}
-	return (actual);
+	return (NULL);
 }
 
 t_token	*to_next_command(t_token *actual)
@@ -64,17 +68,17 @@ char	***split_arg(t_data *data)
 	t_token	*actual;
 	char	***ret;
 
-	ret = mallocer(&ret, sizeof(char **) * (data->nb_command + 2));
+	ret = malloc(sizeof(char **) * (data->nb_command + 1));
 	if (!ret)
 		alloc_error(data, NULL);
 	actual = data->first;
 	i = 0;
 	while (actual && actual->type != COMMAND)
 		actual = actual->next;
-	while (i <= data->nb_pipe + 1)
+	while (i < data->nb_command)
 	{
 		if (i != 0)
-			actual = to_pipe(actual, i);
+			actual = to_command(data->first, i);
 		size = 0;
 		j = 0;
 		while (actual && actual->type != PIPE)
@@ -95,11 +99,11 @@ char	***split_arg(t_data *data)
 		}
 		actual = data->first;
 		if (i != 0)
-			actual = to_pipe(actual, i);
+			actual = to_command(data->first, i);
 		else
 			while (actual && actual->type != COMMAND)
 				actual = actual->next;
-		ret[i] = mallocer(&ret[i], sizeof(char *) * (size + 3));
+		ret[i] = malloc(sizeof(char *) * (size + 1));
 		if (!ret[i])
 			alloc_error(data, NULL);
 		while (actual && actual->type != PIPE)
@@ -114,9 +118,12 @@ char	***split_arg(t_data *data)
 			}
 			else
 			{
-				ret[i][j] = actual->content;
+				if (!(actual->content == NULL && j < size))
+				{
+					ret[i][j] = actual->content;
+					j++;
+				}
 				actual = actual->next;
-				j++;
 			}
 		}
 		ret[i][j] = NULL;

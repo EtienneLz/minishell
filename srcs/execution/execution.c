@@ -25,6 +25,7 @@ static int	execution_ve(t_data *data, t_token *actual, char *bin)
 			if (actual->args[0])
 				ft_putstr_fd(actual->args[0], STDERR);
 			ft_putstr_fd("\n", STDERR);
+			ret = 127;
 		}
 		else
 			perror("minishell");
@@ -39,8 +40,11 @@ static int	child(t_data *data, t_token *actual)
 
 	if (actual->prev_in || actual->prev_out || actual->prev_d_out)
 		redirection(actual);
-	if (actual->prev_pipe && !actual->next_in && !actual->prev_in)
+	if (actual->prev_pipe && !actual->next_in
+		&& !actual->prev_in && to_prev_command(actual))
+	{
 		dup2(to_prev_command(actual)->pipes[0], STDIN);
+	}
 	if (actual->next_pipe && !actual->next_in
 		&& !actual->next_out && !actual->next_d_out)
 	{
@@ -70,7 +74,7 @@ static int	parent(t_data *data, t_token *actual)
 	ret = 0;
 	i = 0;
 	status = 0;
-	if (actual->prev_pipe)
+	if (actual->prev_pipe && to_prev_command(actual))
 		close(to_prev_command(actual)->pipes[0]);
 	if (actual->next_pipe || actual->prev_pipe)
 		close(actual->pipes[1]);

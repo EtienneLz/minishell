@@ -65,17 +65,19 @@ static void	check_prev_next(t_data *data)
 
 	actual = data->first;
 	check = 0;
+	tmp = NULL;
 	while (actual)
 	{
 		if (actual->type == COMMAND && check)
 		{
 			check = 0;
 			actual->prev_pipe = 1;
-			tmp->next_pipe = 1;
+			if (tmp)
+				tmp->next_pipe = 1;
 		}
 		if (actual->type == COMMAND)
 			tmp = actual;
-		if (actual->type == PIPE)
+		if (actual->type == PIPE && tmp)
 			check = 1;
 		actual = actual->next;
 	}

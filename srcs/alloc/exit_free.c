@@ -33,8 +33,7 @@ static void	unlink_heredoc(t_data *data)
 	i = 0;
 	while (i < data->heredoc_nb)
 	{
-		file = ft_strdup("tmp/.");
-		ft_strlcat(file, ft_itoa(i), 6 + ft_strlen(ft_itoa(i)));
+		file = concanate(i);
 		unlink(file);
 		free(file);
 		i++;

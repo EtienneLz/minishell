@@ -111,7 +111,7 @@ void	check_var(t_data *data, char *str, t_token *actual)
 	{
 		if (split_str[i][0] == '$')
 		{
-			if (split_str[i][1] == '?')
+			if (split_str[i][1] == '?' && split_str[i][2] == '\0')
 				replaced = ft_itoa(data->ret);
 			else
 				replaced = size_var(data, split_str[i]);
@@ -120,7 +120,7 @@ void	check_var(t_data *data, char *str, t_token *actual)
 		}
 		i++;
 	}
-	free (actual->content);
+	free(actual->content);
 	actual->content = unsplit(split_str);
 	if (split_str)
 	{

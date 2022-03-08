@@ -58,7 +58,15 @@ void	remove_quotes(t_data *data)
 		if (!is_arrow(actual->content))
 		{
 			len = ft_strlen(actual->content);
-			if (actual->content[0] == '\'' && actual->content[len - 1] == '\'')
+			if ((actual->content[0] == '\'' && actual->content[len - 1] == '\'')
+				|| (actual->content[0] == '\"'
+					&& actual->content[len - 1] == '\"') && len == 2)
+			{
+				free(actual->content);
+				actual->content = NULL;
+			}
+			else if (actual->content[0] == '\''
+				&& actual->content[len - 1] == '\'')
 				actual->content = check_quotes(data, actual->content);
 			else if (actual->content[0] == '\"'
 				&& actual->content[len - 1] == '\"')

@@ -25,7 +25,7 @@ static void	join_arg_bis(char *s1, char *s2, int *n, int *m)
 	}
 }
 
-char	*join_arg(char *s1, char *s2)
+char	*join_arg(t_data *data, char *s1, char *s2)
 {
 	char	*dest;
 	int		n;
@@ -46,6 +46,8 @@ char	*join_arg(char *s1, char *s2)
 	while (s2[m])
 		dest[j++] = s2[m++];
 	dest[j] = '\0';
+	if (data->is_export || data->env_mal)
+		free(s1);
 	return (dest);
 }
 
@@ -83,7 +85,7 @@ static void	cmp_export_arg_bis(t_data *data, char *str, int i)
 	{
 		if (str[j] == '=')
 		{
-			data->envp[i] = join_arg(data->envp[i], str);
+			data->envp[i] = join_arg(data, data->envp[i], str);
 			break ;
 		}
 		j++;

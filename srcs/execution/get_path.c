@@ -98,6 +98,7 @@ int	check_built_in(t_data *data, char **args)
 {
 	int		ret;
 
+	data->last_ret = 1000;
 	ret = 1;
 	if (!ft_strcmp(args[0], "cd"))
 		main_cd(data, args);

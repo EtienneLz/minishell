@@ -108,6 +108,7 @@ typedef struct s_data
 	int			heredoc_nb;
 	pid_t		*pid;
 	int			is_export;
+	int			env_mal;
 }				t_data;
 
 int	g_pid;
@@ -131,7 +132,7 @@ void	ft_exit(t_data *data, char **args);
 ** utils built-ins functions
 */
 int		if_equal(t_data *data, char *s1, char *s2);
-char	*join_arg(char *s1, char *s2);
+char	*join_arg(t_data *data, char *s1, char *s2);
 
 /*
 ** Cd functions
@@ -212,5 +213,6 @@ t_token	*lasts_commands_2(t_token *actual, int *check);
 int		ret_status(t_data *data, int status, int i);
 void	final_lex(t_data *data);
 void	create_files(t_data *data);
+char	*concanate(int j);
 
 #endif

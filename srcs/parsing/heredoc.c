@@ -31,6 +31,36 @@ static void	here_read(char *buffer, char *sep, int fd)
 	}
 }
 
+char	*concanate(int j)
+{
+	char	*num;
+	int		len;
+	char	*dest;
+	int		i;
+	char	*tmp;
+
+	num = ft_itoa(j);
+	tmp = "tmp/.";
+	i = 0;
+	len = ft_strlen(num);
+	dest = mallocer(dest, sizeof(char) * (6 + len));
+	while (tmp[i])
+	{
+		dest[i] = tmp[i];
+		i++;
+	}
+	len = 0;
+	while (num[len])
+	{
+		dest[i] = num[len];
+		len++;
+		i++;
+	}
+	dest[i] = '\0';
+	free(num);
+	return (dest);
+}
+
 static void	ft_heredoc(t_data *data, char **sep)
 {
 	int		fd;
@@ -45,9 +75,7 @@ static void	ft_heredoc(t_data *data, char **sep)
 		while (actual && actual->next && actual->type != LL_ARROW)
 			actual = actual->next;
 		actual = actual->next;
-		file = ft_strdup("tmp/.");
-		ft_strlcat(file, ft_itoa(data->heredoc_nb),
-			6 + ft_strlen(ft_itoa(data->heredoc_nb)));
+		file = concanate(data->heredoc_nb);
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		here_read(buffer, sep[data->heredoc_nb], fd);
 		close(fd);
@@ -77,4 +105,6 @@ void	get_sep(t_data *data)
 	}
 	sep[i] = NULL;
 	ft_heredoc(data, sep);
+	free_tab(sep);
+	free(sep);
 }

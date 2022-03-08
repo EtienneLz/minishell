@@ -64,6 +64,7 @@ static void	do_cd(t_data *data, char **args, int len)
 	{
 		str = if_tilde(data, args[0]);
 		data->cd.ret = chdir(str);
+		str = NULL;
 	}
 	else
 		str = do_cd_next(data, args, path);
@@ -77,7 +78,9 @@ static void	do_cd(t_data *data, char **args, int len)
 		change_pwd_vars(data, pwd, path);
 		data->last_ret = 0;
 	}
-	free(str);
+	free(pwd);
+	if (str)
+		free(str);
 }
 
 int	main_cd(t_data *data, char **args)

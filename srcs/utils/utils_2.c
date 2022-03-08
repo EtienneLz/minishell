@@ -72,6 +72,8 @@ char	*check_quotes(t_data *data, char *str)
 	char	quote;
 	char	*dest;
 
+	if (str[0] == '\"' && str[1] == '\"' && str[2] == '\0')
+		return ("");
 	init_quotes(&i, &quote, &len, str);
 	if (str[0] == '\"')
 		quote = '\"';
@@ -80,7 +82,7 @@ char	*check_quotes(t_data *data, char *str)
 	check_quotes_bis(quote, &len, &i);
 	if (str[len - 2] == quote)
 		len--;
-	dest = mallocer(&dest, sizeof(char) * len);
+	dest = mallocer(dest, sizeof(char) * len);
 	if (!dest)
 		alloc_error(data, NULL);
 	while (i < len - 1)
