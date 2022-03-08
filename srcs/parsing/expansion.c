@@ -56,7 +56,7 @@ char	*check_exist(t_data *data, char *var)
 	return (NULL);
 }
 
-static char	*size_var(t_data *data, char *var)
+char	*size_var(t_data *data, char *var)
 {
 	char	*var_name;
 	char	*convert_var;
@@ -82,7 +82,7 @@ static char	*size_var(t_data *data, char *var)
 	return (treat_var(convert_var));
 }
 
-static char	*unsplit(char **split_str)
+char	*unsplit(char **split_str)
 {
 	int		i;
 	char	*str;

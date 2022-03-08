@@ -218,5 +218,7 @@ void	init_lvl(t_data *data, char **envp);
 char	**init_env(char **envp);
 void	counter(t_data *data);
 t_token	*to_command(t_token *actual, int i);
+char	*unsplit(char **split_str);
+char	*size_var(t_data *data, char *var);
 
 #endif

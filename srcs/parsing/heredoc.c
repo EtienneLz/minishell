@@ -12,8 +12,38 @@
 
 #include "../../includes/minishell.h"
 
-static void	here_read(char *buffer, char *sep, int fd)
+static char	*here_expand(t_data *data, char *buffer)
 {
+	char	**split_str;
+	char	*ret;
+	char	*replaced;
+	int		i;
+
+	i = 0;
+	split_str = ft_split_noskip(buffer, '$');
+	while (split_str[i])
+	{
+		if (split_str[i][0] == '$')
+		{
+			if (split_str[i][1] == '?' && split_str[i][2] == '\0')
+				replaced = ft_itoa(data->ret);
+			else
+				replaced = size_var(data, split_str[i]);
+			free(split_str[i]);
+			split_str[i] = replaced;
+		}
+		i++;
+	}
+	ret = unsplit(split_str);
+	if (split_str)
+		free_tab(split_str);
+	return (ret);
+}
+
+static void	here_read(t_data *data, char *buffer, char *sep, int fd)
+{
+	char	*ret;
+
 	while (1)
 	{
 		buffer = readline("> ");
@@ -25,9 +55,11 @@ static void	here_read(char *buffer, char *sep, int fd)
 		}
 		if (!ft_strcmp(buffer, sep))
 			break ;
-		ft_putstr_fd(buffer, fd);
-		ft_putstr_fd("\n", fd);
+		ret = here_expand(data, buffer);
 		free(buffer);
+		ft_putstr_fd(ret, fd);
+		ft_putstr_fd("\n", fd);
+		free(ret);
 	}
 }
 
@@ -75,7 +107,7 @@ static void	ft_heredoc(t_data *data, char **sep)
 		actual = actual->next;
 		file = concanate(data->heredoc_nb, "tmp/.");
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		here_read(buffer, sep[data->heredoc_nb], fd);
+		here_read(data, buffer, sep[data->heredoc_nb], fd);
 		close(fd);
 		actual->content = ft_strdup(file);
 		free(file);
