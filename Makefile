@@ -59,7 +59,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} -lreadline -lbsd ${OBJS} ${LIB} -o ${NAME}
+		${CC} ${CFLAGS} -lreadline ${OBJS} ${LIB} -o ${NAME}
 
 clean:
 		make -C $(PATH_LIBFT) clean
