@@ -91,3 +91,17 @@ void	*mallocer(void *dest, int size)
 	else
 		return (dest);
 }
+
+void	init_lvl(t_data *data, char **envp)
+{
+	int		lvl;
+	char	*to_export;
+
+	data->envp = init_env(envp);
+	data->cd.home = getenv("HOME");
+	lvl = ft_atoi(getenv("SHLVL"));
+	lvl++;
+	to_export = concanate(lvl, "SHLVL=");
+	cmp_export_arg(data, to_export);
+	free(to_export);
+}

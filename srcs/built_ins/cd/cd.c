@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-static char	*get_env_val(t_data *data, char *str)
+char	*get_env_val(t_data *data, char *str)
 {
 	char	*ret;
 	char	*tmp;

@@ -100,13 +100,9 @@ static int	export_args(t_data *data, char **args)
 			return (1);
 		tmp_env = copy_env(data->export.args, tmp_env, &i);
 		tmp_env[len] = NULL;
-		if (data->env_mal)
-		{
-			free_tab(data->envp);
-			free(data->envp);
-		}
+		free_tab(data->envp);
+		free(data->envp);
 		data->envp = tmp_env;
-		data->env_mal = 1;
 	}
 	return (0);
 }
@@ -116,10 +112,7 @@ int	main_export(t_data *data, char **args)
 	int	ret;
 
 	if (args[1] != NULL)
-	{
 		ret = export_args(data, args);
-		data->is_export = 1;
-	}
 	else
 		ret = export_no_arg(data);
 	if (data->export.args)

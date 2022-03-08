@@ -16,9 +16,9 @@ static void	join_arg_bis(char *s1, char *s2, int *n, int *m)
 {
 	while (s1[*n] && s1[*n] != '=')
 		(*n)++;
-	while (s2[*m] && s2[*m] != '=')
+	while (s2 && s2[*m] && s2[*m] != '=')
 		(*m)++;
-	if (s2[*m] != '=')
+	if (s2 && s2[*m] != '=')
 	{
 		*m = 0;
 		*n += 1;
@@ -43,11 +43,10 @@ char	*join_arg(t_data *data, char *s1, char *s2)
 		return (NULL);
 	while (i < n)
 		dest[j++] = s1[i++];
-	while (s2[m])
+	while (s2 && s2[m])
 		dest[j++] = s2[m++];
 	dest[j] = '\0';
-	if (data->is_export || data->env_mal)
-		free(s1);
+	free(s1);
 	return (dest);
 }
 

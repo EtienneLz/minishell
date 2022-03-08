@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-char	*get_bin_path(char *command)
+char	*get_bin_path(t_data *data, char *command)
 {
 	char	*path;
 	char	**path_split;
@@ -23,10 +23,10 @@ char	*get_bin_path(char *command)
 	bin = NULL;
 	if (!command || command[0] == '\0')
 		return (ft_strdup(""));
-	path = ft_strdup(getenv("PATH"));
-	i = 0;
+	path = get_env_val(data, "PATH");
 	if (!path)
-		path = strdup("/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin");
+		return (NULL);
+	i = 0;
 	if (command[0] != '/' && ft_strncmp(command, "./", 2) != 0)
 	{
 		path_split = ft_split(path, ':');

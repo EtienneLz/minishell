@@ -33,7 +33,7 @@ static void	unlink_heredoc(t_data *data)
 	i = 0;
 	while (i < data->heredoc_nb)
 	{
-		file = concanate(i);
+		file = concanate(i, "tmp/.");
 		unlink(file);
 		free(file);
 		i++;

@@ -24,6 +24,7 @@ SRCS = srcs/minishell.c \
 		srcs/parsing/split_command.c \
 		srcs/parsing/split_command_next.c \
 		srcs/alloc/exit_free.c \
+		srcs/alloc/init_env.c \
 		srcs/parsing/lexer.c \
 		srcs/parsing/lexer_utils.c \
 		srcs/execution/execution.c \

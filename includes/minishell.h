@@ -107,8 +107,6 @@ typedef struct s_data
 	int			heredoc;
 	int			heredoc_nb;
 	pid_t		*pid;
-	int			is_export;
-	int			env_mal;
 }				t_data;
 
 int	g_pid;
@@ -165,7 +163,7 @@ void	unset_main_check(t_data *data, char **args);
 void	redirection(t_token *actual);
 void	redirection2(t_token *actual);
 int		execution(t_data *data);
-char	*get_bin_path(char *command);
+char	*get_bin_path(t_data *data, char *command);
 void	pre_check_builtins(t_data *data, t_token *actual, int i);
 int		check_built_in(t_data *data, char **args);
 int		exe_pipe(t_data *data, t_token *actual, int i);
@@ -213,6 +211,9 @@ t_token	*lasts_commands_2(t_token *actual, int *check);
 int		ret_status(t_data *data, int status, int i);
 void	final_lex(t_data *data);
 void	create_files(t_data *data);
-char	*concanate(int j);
+char	*concanate(int j, char *src);
+char	*get_env_val(t_data *data, char *str);
+void	init_lvl(t_data *data, char **envp);
+char	**init_env(char **envp);
 
 #endif

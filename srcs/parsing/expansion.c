@@ -22,7 +22,7 @@ char	*treat_var(char *var)
 	while (var[i] && var[i] != '=')
 		i++;
 	size = ft_strlen(var) - i;
-	ret = mallocer(&ret, sizeof(char) * size);
+	ret = mallocer(ret, sizeof(char) * size);
 	size = 0;
 	i++;
 	while (var[i])

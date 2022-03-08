@@ -55,7 +55,7 @@ static int	child(t_data *data, t_token *actual)
 	}
 	else if (actual->next_out || actual->next_d_out || actual->next_in)
 		redirection2(actual);
-	bin = get_bin_path(actual->args[0]);
+	bin = get_bin_path(data, actual->args[0]);
 	if (bin == NULL)
 		bin = ft_strdup(actual->args[0]);
 	ret = check_built_in(data, actual->args);

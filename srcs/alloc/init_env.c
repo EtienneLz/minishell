@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elouchez <elouchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/29 03:33:35 by elouchez          #+#    #+#             */
-/*   Updated: 2021/07/27 20:25:02 by elouchez         ###   ########.fr       */
+/*   Created: 2022/03/08 05:00:12 by elouchez          #+#    #+#             */
+/*   Updated: 2022/03/08 05:00:12 by elouchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-size_t	ft_strlen(const char *s)
+char	**init_env(char **envp)
 {
-	size_t	i;
+	int		i;
+	int		size;
+	char	**dest;
 
-	if (!s)
-		return (0);
 	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	size = 0;
+	while (envp[size])
+		size++;
+	dest = malloc(sizeof(char *) * (size + 1));
+	dest = copy_env(envp, dest, &i);
+	dest[i] = NULL;
+	return (dest);
 }

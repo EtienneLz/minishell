@@ -31,22 +31,20 @@ static void	here_read(char *buffer, char *sep, int fd)
 	}
 }
 
-char	*concanate(int j)
+char	*concanate(int j, char *src)
 {
 	char	*num;
 	int		len;
 	char	*dest;
 	int		i;
-	char	*tmp;
 
 	num = ft_itoa(j);
-	tmp = "tmp/.";
 	i = 0;
 	len = ft_strlen(num);
-	dest = mallocer(dest, sizeof(char) * (6 + len));
-	while (tmp[i])
+	dest = mallocer(dest, sizeof(char) * (ft_strlen(src) + len + 1));
+	while (src[i])
 	{
-		dest[i] = tmp[i];
+		dest[i] = src[i];
 		i++;
 	}
 	len = 0;
@@ -75,7 +73,7 @@ static void	ft_heredoc(t_data *data, char **sep)
 		while (actual && actual->next && actual->type != LL_ARROW)
 			actual = actual->next;
 		actual = actual->next;
-		file = concanate(data->heredoc_nb);
+		file = concanate(data->heredoc_nb, "tmp/.");
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		here_read(buffer, sep[data->heredoc_nb], fd);
 		close(fd);

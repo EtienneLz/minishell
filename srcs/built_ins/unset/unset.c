@@ -84,14 +84,10 @@ static int	unset_args(t_data *data, char **args)
 			return (1);
 		tmp_env = copy_unset_env(data, tmp_env, &i);
 		tmp_env[len] = NULL;
-		if (data->env_mal && data->is_export)
-		{
-			free_tab(data->envp);
-			free(data->envp);
-		}
+		free_tab(data->envp);
+		free(data->envp);
 		if (tmp_env)
 			data->envp = tmp_env;
-		data->is_export = 1;
 	}
 	return (0);
 }
