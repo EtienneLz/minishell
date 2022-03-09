@@ -47,9 +47,9 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g -Werror -Wall -Wextra
+CFLAGS = -g3 -Werror -Wall -Wextra
 
-CC = clang 
+CC = clang
 
 LIB = libft/libft.a
 

@@ -54,7 +54,6 @@ static void	here_read(t_data *data, char *buffer, char *sep, int fd)
 
 	while (1)
 	{
-		signal(SIGINT, signal_heredoc);
 		buffer = readline("> ");
 		if (!buffer)
 		{
@@ -122,8 +121,6 @@ static int	ft_heredoc(t_data *data, char **sep)
 		file = concanate(data->heredoc_nb, "tmp/.");
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		here_read(data, buffer, sep[data->heredoc_nb], fd);
-		if (g_pid == -1000)
-			return (1);
 		close(fd);
 		actual->content = ft_strdup(file);
 		free(file);
@@ -153,8 +150,30 @@ int	get_sep(t_data *data)
 	}
 	sep[i] = NULL;
 	ret = ft_heredoc(data, sep);
-	if (ret)
-		data->ret = 128;
 	free_tab(sep);
-	return (ret);
+	minifree(data);
+	exit (ret);
+}
+
+int	process(t_data *data)
+{
+	int		status;
+	int		ret;
+	pid_t	pid;
+
+	status = 0;
+	ret =
+	pid = fork();
+	if (pid == 0)
+		get_sep(data);
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+		{
+			ret = WTERMSIG(status);
+			if(ret != 131)
+				data->ret = 127;
+		}
+	}
 }

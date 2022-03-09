@@ -26,7 +26,7 @@ void	redirection(t_token *actual)
 	if (actual->prev_in)
 		fdin = open(actual->prev_in, O_RDONLY);
 	if (fdout < 0 || fdin < 0)
-		print_error("minishell: error: File opening failed\n");
+		print_error("error: File opening failed\n");
 	if (actual->prev_out || actual->prev_d_out)
 	{
 		dup2(fdout, STDOUT);
@@ -34,9 +34,9 @@ void	redirection(t_token *actual)
 	}
 	if (actual->prev_in)
 		dup2(fdin, STDIN);
-	if (fdout)
+	if (fdout > 0)
 		close(fdout);
-	if (fdin)
+	if (fdin > 0)
 		close(fdin);
 }
 

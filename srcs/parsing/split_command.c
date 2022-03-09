@@ -29,6 +29,8 @@ static int	len_next(char *command, int i)
 		if (command[i] == '\"' || command[i] == '\'')
 		{
 			len = get_quoted(command, i - len, command[i]);
+			if (len == -1)
+				return (-1);
 			return (len);
 		}
 		if (command[i] == '<' || command[i] == '>' || command[i] == '|')
@@ -62,6 +64,8 @@ static int	check_char(t_data *data, char *command, int i)
 		len = 2;
 	else
 		len = len_next(command, i);
+	if (len == -1)
+		return (-1);
 	return (len);
 }
 
@@ -76,6 +80,7 @@ static void	split_command_bis(t_data *data, int len, char *elem)
 			new_token->type = STRING_SIMPLE;
 		data->quote_type = '\0';
 		ft_lstadd_back(&data->first, new_token);
+		data->quote_type = 0;
 	}
 }
 
@@ -93,6 +98,11 @@ int	split_command(t_data *data, char *command)
 		elem = NULL;
 		i = skip_spaces(command, i);
 		len = check_char(data, command, i);
+		if (len == -1)
+		{
+			print_error("Unclosed quote\n");
+			return (1);
+		}
 		if (len == 0)
 			return (0);
 		elem = mallocer(elem, sizeof(char) * (len + 1));
