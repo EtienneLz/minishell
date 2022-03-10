@@ -224,5 +224,6 @@ void	signal_heredoc(int sig);
 int		here_break(t_data *data, char *buffer, int *code, char **sep);
 void	here_free(t_data *data, char *file, char **sep);
 void	*alloc_split(int *j);
+void	define_pipe(int *check, t_token *actual, t_token *tmp);
 
 #endif

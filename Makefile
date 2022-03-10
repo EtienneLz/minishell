@@ -37,6 +37,7 @@ SRCS = srcs/minishell.c \
 		srcs/utils/utils_4.c \
 		srcs/utils/utils_5.c \
 		srcs/parsing/structurationinger.c \
+		srcs/parsing/structure_utils.c \
 		srcs/parsing/heredoc.c \
 		srcs/parsing/heredoc_2.c \
 

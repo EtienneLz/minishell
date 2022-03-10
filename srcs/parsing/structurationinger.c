@@ -62,23 +62,25 @@ static void	check_prev_next(t_data *data)
 	t_token	*actual;
 	t_token	*tmp;
 	int		check;
+	int		i;
 
 	actual = data->first;
 	check = 0;
 	tmp = NULL;
+	i = 0;
 	while (actual)
 	{
 		if (actual->type == COMMAND && check)
-		{
-			check = 0;
-			actual->prev_pipe = 1;
-			if (tmp)
-				tmp->next_pipe = 1;
-		}
+			define_pipe(&check, actual, tmp);
 		if (actual->type == COMMAND)
+		{
 			tmp = actual;
+			i++;
+		}
 		if (actual->type == PIPE && tmp)
 			check = 1;
+		if (actual->type == PIPE && i == data->nb_command)
+			tmp->next_pipe = 1;
 		actual = actual->next;
 	}
 	args_associate(data);
