@@ -59,7 +59,8 @@ static void	find_lasts_commands(t_data *data)
 	check = 0;
 	while (actual)
 	{
-		while (actual->next && is_arrow(actual->content) == 1 && !check)
+		while (actual && actual->next && is_arrow(actual->content) == 1
+			&& !check)
 		{
 			actual = lasts_commands_2(actual, &check);
 		}

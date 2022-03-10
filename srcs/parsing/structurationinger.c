@@ -17,24 +17,24 @@ static void	copy_name(t_token *actual, t_token *to_copy, int dir)
 	if (dir)
 	{
 		if (to_copy->type == L_ARROW)
-			actual->prev_in = ft_strdup(to_copy->next->content);
+			actual->prev_in = to_copy->next->content;
 		if (to_copy->type == LL_ARROW)
-			actual->prev_in = ft_strdup(to_copy->next->content);
+			actual->prev_in = to_copy->next->content;
 		if (to_copy->type == R_ARROW)
-			actual->prev_out = ft_strdup(to_copy->next->content);
+			actual->prev_out = to_copy->next->content;
 		if (to_copy->type == RR_ARROW)
-			actual->prev_d_out = ft_strdup(to_copy->next->content);
+			actual->prev_d_out = to_copy->next->content;
 	}
 	else if (!dir)
 	{
 		if (to_copy->type == L_ARROW)
-			actual->next_in = ft_strdup(to_copy->next->content);
+			actual->next_in = to_copy->next->content;
 		if (to_copy->type == LL_ARROW)
-			actual->next_in = ft_strdup(to_copy->next->content);
+			actual->next_in = to_copy->next->content;
 		if (to_copy->type == R_ARROW)
-			actual->next_out = ft_strdup(to_copy->next->content);
+			actual->next_out = to_copy->next->content;
 		if (to_copy->type == RR_ARROW)
-			actual->next_d_out = ft_strdup(to_copy->next->content);
+			actual->next_d_out = to_copy->next->content;
 	}
 }
 

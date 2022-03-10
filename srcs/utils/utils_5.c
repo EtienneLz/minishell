@@ -104,3 +104,9 @@ char	***split_arg(t_data *data)
 	ret[i] = NULL;
 	return (ret);
 }
+
+void	*alloc_split(int *j)
+{
+	(*j) = 0;
+	return (NULL);
+}

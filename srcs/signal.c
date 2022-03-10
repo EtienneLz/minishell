@@ -33,7 +33,9 @@ static void	signal_handler_bis(int sig)
 void	signal_heredoc(int sig)
 {
 	(void)sig;
-	g_pid = -1000;
+	ft_putstr_fd("\n", STDOUT);
+	g_pid = 128;
+	close (0);
 }
 
 void	signal_handler(int sig)

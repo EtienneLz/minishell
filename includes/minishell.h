@@ -221,6 +221,8 @@ t_token	*to_command(t_token *actual, int i);
 char	*unsplit(char **split_str);
 char	*size_var(t_data *data, char *var);
 void	signal_heredoc(int sig);
-int		process(t_data *data);
+int		here_break(t_data *data, char *buffer, int *code, char **sep);
+void	here_free(t_data *data, char *file, char **sep);
+void	*alloc_split(int *j);
 
 #endif

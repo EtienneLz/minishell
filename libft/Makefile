@@ -17,7 +17,7 @@ CFLAGS = -Wall -Werror -Wextra
 RM  = rm -f
 
 .c.o:
-	clang -g3 ${CFLAGS} -c $< -o ${<:.c=.o}
+	cc -g ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all: ${NAME}
 

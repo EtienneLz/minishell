@@ -33,6 +33,8 @@ t_token	*lasts_commands_2(t_token *actual, int *check)
 	}
 	else if (actual->next && actual->next->next)
 		actual = actual->next->next;
+	else
+		actual = NULL;
 	return (actual);
 }
 

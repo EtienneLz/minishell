@@ -44,18 +44,14 @@ static char	*search_path(char *bin, char *command, char *path)
 char	*get_bin_path(t_data *data, char *command)
 {
 	char	*path;
-	char	**path_split;
 	char	*bin;
-	int		i;
 
-	path_split = NULL;
 	bin = NULL;
 	if (!command || command[0] == '\0')
 		return (ft_strdup(""));
 	path = get_env_val(data, "PATH");
 	if (!path)
 		return (NULL);
-	i = 0;
 	if (command[0] != '/' && ft_strncmp(command, "./", 2) != 0)
 		return (search_path(bin, command, path));
 	else

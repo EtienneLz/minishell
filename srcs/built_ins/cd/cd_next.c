@@ -66,11 +66,7 @@ char	*cd_join(char *dir, char *arg, char *new_dir)
 char	*if_tilde(t_data *data, char *arg)
 {
 	char	*new_dir;
-	int		i;
-	int		j;
 
-	i = 0;
-	j = 0;
 	if (ft_strlen(arg) == 1 || (arg[0] == 'c' && arg[1] == 'd'))
 		return (data->cd.home);
 	new_dir = malloc(ft_strlen(data->cd.home) + ft_strlen(arg));

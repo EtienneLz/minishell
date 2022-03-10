@@ -38,6 +38,7 @@ SRCS = srcs/minishell.c \
 		srcs/utils/utils_5.c \
 		srcs/parsing/structurationinger.c \
 		srcs/parsing/heredoc.c \
+		srcs/parsing/heredoc_2.c \
 
 OBJS = ${SRCS:.c=.o}
 
@@ -47,9 +48,9 @@ PATH_LIBFT = libft
 
 INCLUDES = /includes/minishell.h
 
-CFLAGS = -g3 -Werror -Wall -Wextra
+CFLAGS = -g -Werror -Wall -Wextra
 
-CC = clang
+CC = cc
 
 LIB = libft/libft.a
 
@@ -59,7 +60,7 @@ all: ${NAME}
 
 ${NAME}: ${OBJS}
 		make -C $(PATH_LIBFT)
-		${CC} ${CFLAGS} -lreadline ${OBJS} ${LIB} -o ${NAME}
+		${CC} ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline
 
 clean:
 		make -C $(PATH_LIBFT) clean
