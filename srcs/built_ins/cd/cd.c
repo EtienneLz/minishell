@@ -38,7 +38,7 @@ static char	*do_cd_next(t_data *data, char **args, char *path)
 	char	*str;
 
 	str = NULL;
-	if (args[1][0] == '/' && args[1][1] == '\0')
+	if (args[1][0] == '/')
 			data->cd.ret = chdir(args[1]);
 	else
 	{
@@ -73,8 +73,8 @@ static void	do_cd(t_data *data, char **args, int len)
 		str = only_one(data, args[0]);
 	else
 		str = do_cd_next(data, args, path);
-	if (data->cd.ret != 0 && ((!(args[1][0] == '-') || !(args[1][0] == '~'))
-		&& args[1][1] == '\0'))
+	if (data->cd.ret != 0 && (((!(args[1][0] == '-') || !(args[1][0] == '~'))
+		&& args[1][1] == '\0') || args[1][0] == '/'))
 		cd_error(data, args[1]);
 	else if (data->cd.ret != 0)
 		cd_error(data, str);
