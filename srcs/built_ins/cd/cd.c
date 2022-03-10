@@ -24,12 +24,21 @@ char	*get_env_val(t_data *data, char *str)
 	return (ret);
 }
 
+static char	*only_one(t_data *data, char *s)
+{
+	char	*str;
+
+	str = if_tilde(data, s);
+	data->cd.ret = chdir(str);
+	return (NULL);
+}
+
 static char	*do_cd_next(t_data *data, char **args, char *path)
 {
 	char	*str;
 
 	str = NULL;
-	if (args[1][0] == '/')
+	if (args[1][0] == '/' && args[1][1] == '\0')
 			data->cd.ret = chdir(args[1]);
 	else
 	{
@@ -52,15 +61,6 @@ static char	*do_cd_next(t_data *data, char **args, char *path)
 	return (str);
 }
 
-static char	*only_one(t_data *data, char *s)
-{
-	char	*str;
-
-	str = if_tilde(data, s);
-	data->cd.ret = chdir(str);
-	return (NULL);
-}
-
 static void	do_cd(t_data *data, char **args, int len)
 {
 	char	path[PATH_MAX];
@@ -73,7 +73,8 @@ static void	do_cd(t_data *data, char **args, int len)
 		str = only_one(data, args[0]);
 	else
 		str = do_cd_next(data, args, path);
-	if (data->cd.ret != 0 && !(args[1][0] == '-' && args[1][1] == '\0'))
+	if (data->cd.ret != 0 && ((!(args[1][0] == '-') || !(args[1][0] == '~'))
+		&& args[1][1] == '\0'))
 		cd_error(data, args[1]);
 	else if (data->cd.ret != 0)
 		cd_error(data, str);
@@ -84,7 +85,7 @@ static void	do_cd(t_data *data, char **args, int len)
 		data->last_ret = 0;
 	}
 	free(pwd);
-	if (str)
+	if (str && !(args[1][0] == '~' && args[1][1] == '\0'))
 		free(str);
 }
 

@@ -42,24 +42,26 @@ void	change_pwd_vars(t_data *data, char *oldpwd, char *pwd)
 char	*cd_join(char *dir, char *arg, char *new_dir)
 {
 	int	i;
-	int	j;
+	int	k;
 
 	i = 0;
-	j = 0;
+	k = 0;
 	if (!new_dir)
 		return (NULL);
-	while (dir[i])
-	{
-		new_dir[i] = dir[i];
+	if (dir[0] == '/' && dir[1] == '\0')
 		i++;
-	}
+	while (dir[i])
+		new_dir[k++] = dir[i++];
+	i = 0;
 	if (arg[0] != '~')
-		new_dir[i++] = '/';
+		new_dir[k++] = '/';
 	else
-		j = 1;
-	while (arg[j])
-		new_dir[i++] = arg[j++];
-	new_dir[i] = '\0';
+		i = 1;
+	if (arg[0] == '/')
+		i = 1;
+	while (arg[i])
+		new_dir[k++] = arg[i++];
+	new_dir[k] = '\0';
 	return (new_dir);
 }
 
